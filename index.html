@@ -316,6 +316,41 @@ body {
 
 .vol-warn.is-open { display: block; }
 
+/* Presets rápidos de volumen (Test y configuración de retos) --- */
+
+.preset-row {
+  font-size: 0;
+  margin: 2px -2px 4px -2px;
+}
+
+.preset-btn {
+  display: inline-block;
+  padding: 8px 4px;
+  margin: 0 2px 8px 2px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111111;
+  background: #ffffff;
+  border: 2px solid #ededed;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+.preset-btn.w3 { width: 31%; }
+.preset-btn.w4 { width: 23%; }
+
+.preset-btn.is-active {
+  background: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+
+
 /* Transporte START / PAUSE ----------------------------------- */
 
 .transport {
@@ -436,6 +471,7 @@ body {
 }
 
 .track-ends span { float: right; }
+.track-ends em { float: left; font-style: normal; }
 
 /* Estado grande (reto intermitente / random) ----------------- */
 
@@ -668,6 +704,14 @@ input[type="range"]::-moz-focus-outer {
       <input type="range" id="volSlider" min="50" max="300" step="5" value="50">
       <p class="vol-scale">50%<span>300%</span><em class="clearfix"></em></p>
       <p class="vol-warn" id="volWarn">⚠️ Por encima del 100% puedes provocar clipping, distorsión o daños en los altavoces.</p>
+      <div class="preset-row" id="volPresets">
+        <button type="button" class="preset-btn w3" data-preset="50">50%</button>
+        <button type="button" class="preset-btn w3" data-preset="75">75%</button>
+        <button type="button" class="preset-btn w3" data-preset="100">100%</button>
+        <button type="button" class="preset-btn w3" data-preset="150">150%</button>
+        <button type="button" class="preset-btn w3" data-preset="200">200%</button>
+        <button type="button" class="preset-btn w3" data-preset="300">300%</button>
+      </div>
     </div>
 
     <div class="transport">
@@ -689,6 +733,7 @@ input[type="range"]::-moz-focus-outer {
       <p class="section-title">Elige un reto</p>
       <button type="button" class="card" id="retoSweepBtn">🌊 50 → 80 → 50 Hz<small>Sube y baja progresivamente la frecuencia</small></button>
       <button type="button" class="card" id="retoIntermBtn">🔁 Intermitente<small>Elige una frecuencia y crea ciclos de sonido y silencio</small></button>
+      <button type="button" class="card" id="retoVolBtn">🔊 Volumen Progresivo<small>El volumen sube y baja progresivamente dentro del rango elegido</small></button>
     </div>
 
     <div id="retoSetup" style="display:none">
@@ -780,6 +825,73 @@ input[type="range"]::-moz-focus-outer {
       </div>
       <button type="button" class="mini-btn" id="intermExitBtn">← Salir y guardar tiempo</button>
     </div>
+
+    <div id="volSetup" style="display:none">
+      <p class="section-title">🔊 Volumen Progresivo · frecuencia</p>
+      <div class="grid" id="volFreqGrid">
+        <button type="button" class="freq-btn is-active" data-vfreq="50">50 Hz</button>
+        <button type="button" class="freq-btn" data-vfreq="60">60 Hz</button>
+        <button type="button" class="freq-btn" data-vfreq="70">70 Hz</button>
+        <button type="button" class="freq-btn" data-vfreq="80">80 Hz</button>
+      </div>
+
+      <div class="range-box">
+        <h3>Volumen mínimo</h3>
+        <p class="val" id="volMinVal">50%</p>
+        <input type="range" class="slider" id="volMinSlider" min="50" max="300" step="5" value="50">
+        <p class="slider-tag">50%<span style="float:right">300%</span><em class="clearfix"></em></p>
+        <div class="preset-row">
+          <button type="button" class="preset-btn w4" data-vminpreset="50">50%</button>
+          <button type="button" class="preset-btn w4" data-vminpreset="75">75%</button>
+          <button type="button" class="preset-btn w4" data-vminpreset="100">100%</button>
+          <button type="button" class="preset-btn w4" data-vminpreset="150">150%</button>
+        </div>
+      </div>
+
+      <div class="range-box">
+        <h3>Volumen máximo</h3>
+        <p class="val" id="volMaxVal">200%</p>
+        <input type="range" class="slider" id="volMaxSlider" min="50" max="300" step="5" value="200">
+        <p class="slider-tag">50%<span style="float:right">300%</span><em class="clearfix"></em></p>
+        <div class="preset-row">
+          <button type="button" class="preset-btn w4" data-vmaxpreset="100">100%</button>
+          <button type="button" class="preset-btn w4" data-vmaxpreset="150">150%</button>
+          <button type="button" class="preset-btn w4" data-vmaxpreset="200">200%</button>
+          <button type="button" class="preset-btn w4" data-vmaxpreset="300">300%</button>
+        </div>
+      </div>
+      <p class="hint" id="volRangeHint">&nbsp;</p>
+
+      <p class="section-title">Dificultad</p>
+      <button type="button" class="card is-active" data-vdiff="easy">🟢 Fácil<small>Subida y bajada lenta</small></button>
+      <button type="button" class="card" data-vdiff="normal">🟡 Normal<small>Velocidad media</small></button>
+      <button type="button" class="card" data-vdiff="hard">🔴 Difícil<small>Subida y bajada rápida</small></button>
+      <button type="button" class="card" data-vdiff="extreme">🟣 Extremo<small>Cambios muy rápidos</small></button>
+
+      <div class="warn" id="volWarnHigh">⚠️ Por encima del 100% puedes provocar clipping, distorsión o daños en los altavoces.</div>
+
+      <div class="transport">
+        <button type="button" class="play-btn" id="volGoBtn">▶ COMENZAR RETO</button>
+      </div>
+      <button type="button" class="mini-btn" id="volBackBtn">← Volver</button>
+    </div>
+
+    <div id="volRun" style="display:none">
+      <div class="readout">
+        <div>🔊 <span class="readout-value" id="volFreqLabel">50</span><span class="readout-unit"> Hz</span></div>
+        <p class="big-state" id="volPercent">50%</p>
+        <p class="status" id="volDirLabel">🔊 SUBIENDO</p>
+        <p class="track-ends"><span id="volMaxEnd">200%</span><em id="volMinEnd">50%</em></p>
+        <div class="track"><div class="dot" id="volDot"></div></div>
+        <p class="status" id="volStatus">🟢 <strong>Sonando</strong></p>
+        <div class="clock"><div class="clock-label" id="volDiffLabel">Fácil</div><span id="clockVol">00:00:00</span></div>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="volResumeBtn">▶ START</button>
+        <button type="button" class="play-btn secondary" id="volPauseBtn">⏸ PAUSE</button>
+      </div>
+      <button type="button" class="mini-btn" id="volExitBtn">← Salir y guardar tiempo</button>
+    </div>
   </div>
 
   <!-- ================= RANDOM ================= -->
@@ -850,6 +962,12 @@ input[type="range"]::-moz-focus-outer {
       <h2>🔁 Tiempos Intermitente<button type="button" class="clear-btn" data-clear="interm">🗑️ Borrar</button></h2>
       <ul class="times-list" id="listInterm"></ul>
       <p class="times-total">Tiempo total<span id="totalInterm">00:00:00</span><em class="clearfix"></em></p>
+    </div>
+
+    <div class="times-block">
+      <h2>🔊 Tiempos Volumen Progresivo<button type="button" class="clear-btn" data-clear="volsweep">🗑️ Borrar</button></h2>
+      <ul class="times-list" id="listVolsweep"></ul>
+      <p class="times-total">Tiempo total<span id="totalVolsweep">00:00:00</span><em class="clearfix"></em></p>
     </div>
 
     <button type="button" class="mini-btn" id="clearTimesBtn">🗑️ Borrar todos los tiempos</button>
@@ -1224,7 +1342,8 @@ input[type="range"]::-moz-focus-outer {
       sessions: 'hzjimi.sessions',
       challenges: 'hzjimi.challenges',
       random: 'hzjimi.random',
-      interm: 'hzjimi.interm'
+      interm: 'hzjimi.interm',
+      volsweep: 'hzjimi.volsweep'
     },
 
     init: function () {
@@ -1351,7 +1470,62 @@ input[type="range"]::-moz-focus-outer {
     }
   };
 
-  /* --- Random: frecuencias y silencios aleatorios ------------ */
+  /* --- Reto: volumen progresivo -------------------------------
+     Frecuencia fija; el parámetro que sube y baja es la ganancia
+     de usuario (Engine.vol), entre min y max (0.5 = 50% ... 3 = 300%). */
+  var VolSweepTest = {
+    id: 'volsweep',
+    name: 'Volumen Progresivo',
+    freq: 50,
+    min: 0.5,
+    max: 2.0,
+    speeds: { easy: 45000, normal: 18000, hard: 6000, extreme: 2000 }, // ms por tramo
+    labels: { easy: '🟢 Fácil', normal: '🟡 Normal', hard: '🔴 Difícil', extreme: '🟣 Extremo' },
+    diff: 'easy',
+    pos: 0,            // 0 = mínimo, 1 = máximo
+    dir: 1,
+    tick: null,
+    onFrame: null,     // callback de la interfaz
+
+    /* minPct/maxPct en porcentaje (50-300). Si el máximo queda por
+       debajo del mínimo, no aplica el rango. */
+    setRange: function (minPct, maxPct) {
+      if (maxPct < minPct) { return false; }
+      this.min = minPct / 100;
+      this.max = maxPct / 100;
+      return true;
+    },
+
+    volNow: function () {
+      return this.min + (this.max - this.min) * this.pos;
+    },
+
+    reset: function () { this.pos = 0; this.dir = 1; },
+
+    start: function () {
+      Engine.setFrequency(this.freq, 0.02);
+      Engine.setVolume(this.volNow());
+      var ok = Engine.start();
+      if (!ok) { return false; }
+      if (this.tick) { clearInterval(this.tick); }
+      var self = this;
+      var step = 80;                        // 80 ms: ligero en equipos antiguos
+      this.tick = setInterval(function () {
+        var span = self.speeds[self.diff];
+        self.pos += self.dir * (step / span);
+        if (self.pos >= 1) { self.pos = 1; self.dir = -1; }
+        else if (self.pos <= 0) { self.pos = 0; self.dir = 1; }
+        Engine.setVolume(self.volNow());    // rampa suave incorporada en setVolume
+        if (self.onFrame) { self.onFrame(self.volNow(), self.pos, self.dir); }
+      }, step);
+      return true;
+    },
+
+    stop: function () {
+      if (this.tick) { clearInterval(this.tick); this.tick = null; }
+      Engine.stop(false);
+    }
+  };
   var RandomTest = {
     id: 'random',
     name: 'Random',
@@ -1476,7 +1650,7 @@ input[type="range"]::-moz-focus-outer {
   };
 
   var App = {
-    tests: { tone: ToneTest, sweep: SweepTest, random: RandomTest, interm: IntermTest },
+    tests: { tone: ToneTest, sweep: SweepTest, random: RandomTest, interm: IntermTest, volsweep: VolSweepTest },
     current: ToneTest,
     mode: 'tone'
   };
@@ -1509,7 +1683,7 @@ input[type="range"]::-moz-focus-outer {
       btn.onclick = function () {
         var target = btn.getAttribute('data-panel');
         if (target !== 'test') { stopTest(); }
-        if (target !== 'retos') { stopReto(false); stopInterm(false); }
+        if (target !== 'retos') { stopReto(false); stopInterm(false); stopVolReto(false); }
         if (target !== 'random') { stopRandom(); }
         showPanel(target);
       };
@@ -1521,6 +1695,14 @@ input[type="range"]::-moz-focus-outer {
   var volSlider = $('volSlider');
   var volLabel = $('volLabel');
   var volWarn = $('volWarn');
+  var volPresetBtns = $('volPresets').getElementsByTagName('button');
+
+  function highlightVolPreset(pct) {
+    for (var i = 0; i < volPresetBtns.length; i++) {
+      var v = parseInt(volPresetBtns[i].getAttribute('data-preset'), 10);
+      volPresetBtns[i].className = (v === pct) ? 'preset-btn w3 is-active' : 'preset-btn w3';
+    }
+  }
 
   function applyVolume() {
     var pct = parseInt(volSlider.value, 10);
@@ -1529,12 +1711,22 @@ input[type="range"]::-moz-focus-outer {
     if (pct > 300) { pct = 300; }
     volLabel.innerHTML = '🔊 Volumen: ' + pct + '%';
     volWarn.className = (pct > 100) ? 'vol-warn is-open' : 'vol-warn';
+    highlightVolPreset(pct);
     Engine.setVolume(pct / 100);
   }
 
   volSlider.oninput = applyVolume;
   volSlider.onchange = applyVolume;
   Engine.volume = 0.5;
+
+  for (var vp = 0; vp < volPresetBtns.length; vp++) {
+    (function (btn) {
+      btn.onclick = function () {
+        volSlider.value = btn.getAttribute('data-preset');
+        applyVolume();
+      };
+    })(volPresetBtns[vp]);
+  }
 
   /* --- TEST -------------------------------------------------- */
 
@@ -1640,6 +1832,7 @@ input[type="range"]::-moz-focus-outer {
   startBtn.onclick = function () {
     stopReto(false);
     stopInterm(false);
+    stopVolReto(false);
     stopRandom();
     App.mode = 'tone';
     App.current = ToneTest;
@@ -1731,6 +1924,8 @@ input[type="range"]::-moz-focus-outer {
     retoRun.style.display = (which === 'run') ? 'block' : 'none';
     $('intermSetup').style.display = (which === 'isetup') ? 'block' : 'none';
     $('intermRun').style.display = (which === 'irun') ? 'block' : 'none';
+    $('volSetup').style.display = (which === 'vsetup') ? 'block' : 'none';
+    $('volRun').style.display = (which === 'vrun') ? 'block' : 'none';
   }
 
   $('retoSweepBtn').onclick = function () { renderSweepTitle(); retoView('setup'); };
@@ -1772,6 +1967,7 @@ input[type="range"]::-moz-focus-outer {
   function startReto() {
     stopTest();
     stopInterm(false);
+    stopVolReto(false);
     stopRandom();
     App.mode = 'sweep';
     App.current = SweepTest;
@@ -1911,6 +2107,7 @@ input[type="range"]::-moz-focus-outer {
   function startInterm() {
     stopTest();
     stopReto(false);
+    stopVolReto(false);
     stopRandom();
     App.mode = 'interm';
     App.current = IntermTest;
@@ -1959,6 +2156,219 @@ input[type="range"]::-moz-focus-outer {
   intermResumeBtn.onclick = function () { startInterm(); };
   intermPauseBtn.onclick = function () { stopInterm(false); };
   $('intermExitBtn').onclick = function () { stopInterm(true); retoView('list'); };
+
+  /* --- RETO VOLUMEN PROGRESIVO -------------------------------- */
+
+  var volFreqBtns = $('volFreqGrid').getElementsByTagName('button');
+  var volMinSlider = $('volMinSlider');
+  var volMaxSlider = $('volMaxSlider');
+  var volMaxPresetBtnsList = [];
+  var volMinPresetBtnsList = [];
+  var vsAll = $('volSetup').getElementsByTagName('button');
+  for (var vb = 0; vb < vsAll.length; vb++) {
+    if (vsAll[vb].getAttribute('data-vminpreset')) { volMinPresetBtnsList.push(vsAll[vb]); }
+    if (vsAll[vb].getAttribute('data-vmaxpreset')) { volMaxPresetBtnsList.push(vsAll[vb]); }
+  }
+  var volDiffBtns = [];
+  for (var vd = 0; vd < vsAll.length; vd++) {
+    if (vsAll[vd].getAttribute('data-vdiff')) { volDiffBtns.push(vsAll[vd]); }
+  }
+
+  var volFreqLabel = $('volFreqLabel');
+  var volPercentEl = $('volPercent');
+  var volDirLabel = $('volDirLabel');
+  var volDot = $('volDot');
+  var volStatus = $('volStatus');
+  var volResumeBtn = $('volResumeBtn');
+  var volPauseBtn = $('volPauseBtn');
+  var volTimer = new Timer($('clockVol'));
+  var volSession = null;
+  var volMinPct = 50;
+  var volMaxPct = 200;
+
+  for (var vf = 0; vf < volFreqBtns.length; vf++) {
+    (function (btn) {
+      var hz = btn.getAttribute('data-vfreq');
+      if (!hz) { return; }
+      btn.onclick = function () {
+        for (var q = 0; q < volFreqBtns.length; q++) { volFreqBtns[q].className = 'freq-btn'; }
+        btn.className = 'freq-btn is-active';
+        VolSweepTest.freq = parseInt(hz, 10);
+      };
+    })(volFreqBtns[vf]);
+  }
+
+  function applyVolRange() {
+    var a = parseInt(volMinSlider.value, 10);
+    var b = parseInt(volMaxSlider.value, 10);
+    if (isNaN(a)) { a = 50; }
+    if (isNaN(b)) { b = 200; }
+    if (a < 50) { a = 50; }
+    if (b > 300) { b = 300; }
+    volMinSlider.value = a;
+    volMaxSlider.value = b;
+    volMinPct = a;
+    volMaxPct = b;
+
+    $('volMinVal').innerHTML = a + '%';
+    $('volMaxVal').innerHTML = b + '%';
+
+    for (var i = 0; i < volMinPresetBtnsList.length; i++) {
+      var mv = parseInt(volMinPresetBtnsList[i].getAttribute('data-vminpreset'), 10);
+      volMinPresetBtnsList[i].className = (mv === a) ? 'preset-btn w4 is-active' : 'preset-btn w4';
+    }
+    for (var j = 0; j < volMaxPresetBtnsList.length; j++) {
+      var xv = parseInt(volMaxPresetBtnsList[j].getAttribute('data-vmaxpreset'), 10);
+      volMaxPresetBtnsList[j].className = (xv === b) ? 'preset-btn w4 is-active' : 'preset-btn w4';
+    }
+
+    var hint = $('volRangeHint');
+    var goBtn = $('volGoBtn');
+    if (b < a) {
+      hint.className = 'hint is-error';
+      hint.innerHTML = 'El máximo no puede ser menor que el mínimo.';
+      goBtn.disabled = true;
+    } else {
+      hint.className = 'hint';
+      hint.innerHTML = '&nbsp;';
+      goBtn.disabled = false;
+    }
+    $('volWarnHigh').className = (b > 100) ? 'warn is-open' : 'warn';
+  }
+
+  /* El mínimo nunca puede superar al máximo: cada slider empuja al otro. */
+  volMinSlider.oninput = function () {
+    if (parseInt(volMinSlider.value, 10) > parseInt(volMaxSlider.value, 10)) {
+      volMaxSlider.value = volMinSlider.value;
+    }
+    applyVolRange();
+  };
+  volMinSlider.onchange = volMinSlider.oninput;
+
+  volMaxSlider.oninput = function () {
+    if (parseInt(volMaxSlider.value, 10) < parseInt(volMinSlider.value, 10)) {
+      volMinSlider.value = volMaxSlider.value;
+    }
+    applyVolRange();
+  };
+  volMaxSlider.onchange = volMaxSlider.oninput;
+
+  for (var mp = 0; mp < volMinPresetBtnsList.length; mp++) {
+    (function (btn) {
+      btn.onclick = function () {
+        volMinSlider.value = btn.getAttribute('data-vminpreset');
+        if (parseInt(volMinSlider.value, 10) > parseInt(volMaxSlider.value, 10)) {
+          volMaxSlider.value = volMinSlider.value;
+        }
+        applyVolRange();
+      };
+    })(volMinPresetBtnsList[mp]);
+  }
+
+  for (var xp = 0; xp < volMaxPresetBtnsList.length; xp++) {
+    (function (btn) {
+      btn.onclick = function () {
+        volMaxSlider.value = btn.getAttribute('data-vmaxpreset');
+        if (parseInt(volMaxSlider.value, 10) < parseInt(volMinSlider.value, 10)) {
+          volMinSlider.value = volMaxSlider.value;
+        }
+        applyVolRange();
+      };
+    })(volMaxPresetBtnsList[xp]);
+  }
+
+  for (var vdi = 0; vdi < volDiffBtns.length; vdi++) {
+    (function (btn) {
+      var key = btn.getAttribute('data-vdiff');
+      btn.onclick = function () {
+        for (var q = 0; q < volDiffBtns.length; q++) { volDiffBtns[q].className = 'card'; }
+        btn.className = 'card is-active';
+        VolSweepTest.diff = key;
+      };
+    })(volDiffBtns[vdi]);
+  }
+
+  $('retoVolBtn').onclick = function () { applyVolRange(); retoView('vsetup'); };
+  $('volBackBtn').onclick = function () { retoView('list'); };
+
+  VolSweepTest.onFrame = function (pct, pos, dir) {
+    var shown = Math.round(pct * 100);
+    volPercentEl.innerHTML = shown + '%';
+    var leftPct = Math.round(pos * 100) + '%';
+    volDot.style.left = leftPct;
+    volDirLabel.innerHTML = (dir > 0) ? '🔊 SUBIENDO' : '🔉 BAJANDO';
+  };
+
+  function renderVolStatus() {
+    var on = Engine.playing && App.mode === 'volsweep';
+    volStatus.innerHTML = on ? '🟢 <strong>Sonando</strong>' : '⚪ En pausa';
+    volResumeBtn.disabled = on;
+    volPauseBtn.disabled = !on;
+  }
+
+  function saveVolTime() {
+    if (!volSession) { return; }
+    Store.save('volsweep', volSession.id, volSession.label, volTimer.value());
+  }
+
+  function startVolReto() {
+    stopTest();
+    stopReto(false);
+    stopInterm(false);
+    stopRandom();
+    App.mode = 'volsweep';
+    App.current = VolSweepTest;
+    var ok = VolSweepTest.start();
+    if (!ok) {
+      volStatus.innerHTML = '⚠️ Este navegador no puede generar tonos.';
+      return;
+    }
+    if (!volSession) {
+      volSession = {
+        id: 'v' + new Date().getTime(),
+        label: VolSweepTest.freq + ' Hz · ' + volMinPct + '→' + volMaxPct + '% · ' + VolSweepTest.labels[VolSweepTest.diff]
+      };
+    }
+    volTimer.start();
+    renderVolStatus();
+  }
+
+  function stopVolReto(exiting) {
+    if (App.mode === 'volsweep' && Engine.playing) {
+      VolSweepTest.stop();
+      volTimer.pause();
+      saveVolTime();
+    }
+    if (exiting) {
+      saveVolTime();
+      volSession = null;
+      volTimer.reset();
+      VolSweepTest.reset();
+      volDot.style.left = '0%';
+    }
+    if (App.mode === 'volsweep') { applyVolume(); }   // restaura el volumen del slider de Test
+    renderVolStatus();
+  }
+
+  $('volGoBtn').onclick = function () {
+    if (!VolSweepTest.setRange(volMinPct, volMaxPct)) { return; }
+    VolSweepTest.reset();
+    volSession = null;
+    volTimer.reset();
+    volFreqLabel.innerHTML = String(VolSweepTest.freq);
+    volPercentEl.innerHTML = volMinPct + '%';
+    volDirLabel.innerHTML = '🔊 SUBIENDO';
+    $('volMinEnd').innerHTML = volMinPct + '%';
+    $('volMaxEnd').innerHTML = volMaxPct + '%';
+    $('volDiffLabel').innerHTML = VolSweepTest.labels[VolSweepTest.diff];
+    volDot.style.left = '0%';
+    retoView('vrun');
+    startVolReto();
+  };
+
+  volResumeBtn.onclick = function () { startVolReto(); };
+  volPauseBtn.onclick = function () { stopVolReto(false); };
+  $('volExitBtn').onclick = function () { stopVolReto(true); retoView('list'); };
 
   /* --- RANDOM ------------------------------------------------ */
 
@@ -2072,6 +2482,7 @@ input[type="range"]::-moz-focus-outer {
     stopTest();
     stopReto(false);
     stopInterm(false);
+    stopVolReto(false);
     App.mode = 'random';
     App.current = RandomTest;
     applyVolume();
@@ -2109,6 +2520,7 @@ input[type="range"]::-moz-focus-outer {
     renderList($('listChallenges'), $('totalChallenges'), 'challenges');
     renderList($('listRandom'), $('totalRandom'), 'random');
     renderList($('listInterm'), $('totalInterm'), 'interm');
+    renderList($('listVolsweep'), $('totalVolsweep'), 'volsweep');
     if (!Store.ok) {
       $('storeWarn').innerHTML = 'Este navegador no permite guardar datos locales, así que los tiempos no se conservarán al cerrar la página.';
       $('storeWarn').className = 'warn is-open';
@@ -2121,6 +2533,7 @@ input[type="range"]::-moz-focus-outer {
     retoSession = null;
     rndSession = null;
     intermSession = null;
+    volSession = null;
     renderTimes();
   };
 
@@ -2136,6 +2549,7 @@ input[type="range"]::-moz-focus-outer {
         if (key === 'challenges') { retoSession = null; }
         if (key === 'random') { rndSession = null; }
         if (key === 'interm') { intermSession = null; }
+        if (key === 'volsweep') { volSession = null; }
         renderTimes();
       };
     })(clearBtns[c]);
@@ -2147,6 +2561,7 @@ input[type="range"]::-moz-focus-outer {
     stopTest();
     stopReto(false);
     stopInterm(false);
+    stopVolReto(false);
     stopRandom();
   }
 
@@ -2160,15 +2575,18 @@ input[type="range"]::-moz-focus-outer {
   applyVolume();
   renderStatus();
   renderRetoStatus();
+  renderVolStatus();
   retoView('list');
   RandomTest.onPhase('idle', 0);
   IntermTest.onPhase('idle', 0);
   readIntermSliders();
   applyRndRanges('init');
+  applyVolRange();
   intermTimer.render();
   testTimer.render();
   retoTimer.render();
   rndTimer.render();
+  volTimer.render();
 })();
 </script>
 
