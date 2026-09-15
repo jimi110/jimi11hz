@@ -60,7 +60,7 @@ body {
 .tab {
   display: inline-block;
   width: 23%;
-  margin: 0 1%;
+  margin: 0 1% 8px 1%;
   padding: 10px 2px;
   font-family: inherit;
   font-size: 13px;
@@ -75,6 +75,8 @@ body {
   box-sizing: border-box;
   touch-action: manipulation;
 }
+
+.tab.w5 { width: 31%; }
 
 .tab.is-active {
   color: #111111;
@@ -315,6 +317,20 @@ body {
 }
 
 .vol-warn.is-open { display: block; }
+
+.vol-warn-extreme {
+  display: none;
+  margin: 2px 0 8px 0;
+  padding: 8px 10px;
+  border: 2px solid #111111;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111111;
+  background: #f4f4f4;
+}
+
+.vol-warn-extreme.is-open { display: block; }
 
 /* Presets rápidos de volumen (Test y configuración de retos) --- */
 
@@ -649,6 +665,56 @@ input[type="range"]::-moz-focus-outer {
 
 .clearfix { display: block; clear: both; }
 
+/* Respiración ------------------------------------------------- */
+
+.breath-vis {
+  position: relative;
+  height: 90px;
+  margin: 12px 6px 6px 6px;
+  border-bottom: 2px solid #ededed;
+}
+
+.breath-curve {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: #ededed;
+}
+
+.breath-dot {
+  position: absolute;
+  left: 6%;
+  bottom: 0;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  background: #111111;
+  border-radius: 50%;
+}
+
+/* Escalera ------------------------------------------------------ */
+
+.stair-vis {
+  display: block;
+  font-size: 0;
+  margin: 14px 2px 4px 2px;
+  height: 90px;
+}
+
+.stair-vis .step {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 6%;
+  margin: 0 1px;
+  background: #ededed;
+  border-radius: 4px 4px 0 0;
+}
+
+.stair-vis .step.is-current { background: #111111; }
+.stair-vis .step.is-past { background: #b0b0b0; }
+
 /* Pantallas grandes: cuatro columnas de frecuencia ----------- */
 
 @media (min-width: 420px) {
@@ -665,10 +731,11 @@ input[type="range"]::-moz-focus-outer {
   <p class="tagline">🔊 Tonos sinusoidales para probar altavoces</p>
 
   <div class="tabs" id="tabs">
-    <button type="button" class="tab is-active" data-panel="test">🎵 Test</button>
-    <button type="button" class="tab" data-panel="retos">🏆 Retos</button>
-    <button type="button" class="tab" data-panel="random">🎲 Random</button>
-    <button type="button" class="tab" data-panel="tiempos">⏱️ Tiempos</button>
+    <button type="button" class="tab w5 is-active" data-panel="test">🎵 Test</button>
+    <button type="button" class="tab w5" data-panel="retos">🏆 Retos</button>
+    <button type="button" class="tab w5" data-panel="random">🎲 Random</button>
+    <button type="button" class="tab w5" data-panel="maraton">⏱️ Maratón</button>
+    <button type="button" class="tab w5" data-panel="tiempos">📊 Tiempos</button>
   </div>
 
   <!-- ================= TEST ================= -->
@@ -701,16 +768,19 @@ input[type="range"]::-moz-focus-outer {
 
     <div class="vol">
       <div class="vol-head" id="volLabel">🔊 Volumen: 50%</div>
-      <input type="range" id="volSlider" min="50" max="300" step="5" value="50">
-      <p class="vol-scale">50%<span>300%</span><em class="clearfix"></em></p>
+      <input type="range" id="volSlider" min="50" max="500" step="5" value="50">
+      <p class="vol-scale">50%<span>500%</span><em class="clearfix"></em></p>
       <p class="vol-warn" id="volWarn">⚠️ Por encima del 100% puedes provocar clipping, distorsión o daños en los altavoces.</p>
+      <p class="vol-warn-extreme" id="volWarnExtreme">🚨 NIVEL EXTREMO: a partir de 300% existe un riesgo alto de clipping, distorsión grave o sobrecarga del altavoz, dependiendo de tu dispositivo. Sube con mucha precaución.</p>
       <div class="preset-row" id="volPresets">
-        <button type="button" class="preset-btn w3" data-preset="50">50%</button>
-        <button type="button" class="preset-btn w3" data-preset="75">75%</button>
-        <button type="button" class="preset-btn w3" data-preset="100">100%</button>
-        <button type="button" class="preset-btn w3" data-preset="150">150%</button>
-        <button type="button" class="preset-btn w3" data-preset="200">200%</button>
-        <button type="button" class="preset-btn w3" data-preset="300">300%</button>
+        <button type="button" class="preset-btn w4" data-preset="50">50%</button>
+        <button type="button" class="preset-btn w4" data-preset="75">75%</button>
+        <button type="button" class="preset-btn w4" data-preset="100">100%</button>
+        <button type="button" class="preset-btn w4" data-preset="150">150%</button>
+        <button type="button" class="preset-btn w4" data-preset="200">200%</button>
+        <button type="button" class="preset-btn w4" data-preset="300">300%</button>
+        <button type="button" class="preset-btn w4" data-preset="400">400%</button>
+        <button type="button" class="preset-btn w4" data-preset="500">500%</button>
       </div>
     </div>
 
@@ -734,6 +804,9 @@ input[type="range"]::-moz-focus-outer {
       <button type="button" class="card" id="retoSweepBtn">🌊 50 → 80 → 50 Hz<small>Sube y baja progresivamente la frecuencia</small></button>
       <button type="button" class="card" id="retoIntermBtn">🔁 Intermitente<small>Elige una frecuencia y crea ciclos de sonido y silencio</small></button>
       <button type="button" class="card" id="retoVolBtn">🔊 Volumen Progresivo<small>El volumen sube y baja progresivamente dentro del rango elegido</small></button>
+      <button type="button" class="card" id="retoBreathBtn">🌬️ Respiración<small>El volumen sube y baja suavemente, como una respiración</small></button>
+      <button type="button" class="card" id="retoStairBtn">🪜 Escalera<small>Escalones de volumen · modo Jugar o Personalizado</small></button>
+      <button type="button" class="card" id="retoMemoryBtn">🧠 Memoria<small>Detecta qué frecuencia cambió en la secuencia</small></button>
     </div>
 
     <div id="retoSetup" style="display:none">
@@ -838,8 +911,8 @@ input[type="range"]::-moz-focus-outer {
       <div class="range-box">
         <h3>Volumen mínimo</h3>
         <p class="val" id="volMinVal">50%</p>
-        <input type="range" class="slider" id="volMinSlider" min="50" max="300" step="5" value="50">
-        <p class="slider-tag">50%<span style="float:right">300%</span><em class="clearfix"></em></p>
+        <input type="range" class="slider" id="volMinSlider" min="50" max="500" step="5" value="50">
+        <p class="slider-tag">50%<span style="float:right">500%</span><em class="clearfix"></em></p>
         <div class="preset-row">
           <button type="button" class="preset-btn w4" data-vminpreset="50">50%</button>
           <button type="button" class="preset-btn w4" data-vminpreset="75">75%</button>
@@ -851,13 +924,13 @@ input[type="range"]::-moz-focus-outer {
       <div class="range-box">
         <h3>Volumen máximo</h3>
         <p class="val" id="volMaxVal">200%</p>
-        <input type="range" class="slider" id="volMaxSlider" min="50" max="300" step="5" value="200">
-        <p class="slider-tag">50%<span style="float:right">300%</span><em class="clearfix"></em></p>
+        <input type="range" class="slider" id="volMaxSlider" min="50" max="500" step="5" value="200">
+        <p class="slider-tag">50%<span style="float:right">500%</span><em class="clearfix"></em></p>
         <div class="preset-row">
-          <button type="button" class="preset-btn w4" data-vmaxpreset="100">100%</button>
-          <button type="button" class="preset-btn w4" data-vmaxpreset="150">150%</button>
           <button type="button" class="preset-btn w4" data-vmaxpreset="200">200%</button>
           <button type="button" class="preset-btn w4" data-vmaxpreset="300">300%</button>
+          <button type="button" class="preset-btn w4" data-vmaxpreset="400">400%</button>
+          <button type="button" class="preset-btn w4" data-vmaxpreset="500">500%</button>
         </div>
       </div>
       <p class="hint" id="volRangeHint">&nbsp;</p>
@@ -869,6 +942,7 @@ input[type="range"]::-moz-focus-outer {
       <button type="button" class="card" data-vdiff="extreme">🟣 Extremo<small>Cambios muy rápidos</small></button>
 
       <div class="warn" id="volWarnHigh">⚠️ Por encima del 100% puedes provocar clipping, distorsión o daños en los altavoces.</div>
+      <div class="warn" id="volWarnExtremeHigh">🚨 NIVEL EXTREMO: a partir de 300% existe un riesgo alto de clipping, distorsión grave o sobrecarga del altavoz, dependiendo de tu dispositivo.</div>
 
       <div class="transport">
         <button type="button" class="play-btn" id="volGoBtn">▶ COMENZAR RETO</button>
@@ -891,6 +965,210 @@ input[type="range"]::-moz-focus-outer {
         <button type="button" class="play-btn secondary" id="volPauseBtn">⏸ PAUSE</button>
       </div>
       <button type="button" class="mini-btn" id="volExitBtn">← Salir y guardar tiempo</button>
+    </div>
+
+    <!-- ---- RESPIRACIÓN ---- -->
+    <div id="breathSetup" style="display:none">
+      <p class="section-title">🌬️ Respiración · frecuencia</p>
+      <div class="grid" id="breathFreqGrid">
+        <button type="button" class="freq-btn is-active" data-bfreq="50">50 Hz</button>
+        <button type="button" class="freq-btn" data-bfreq="60">60 Hz</button>
+        <button type="button" class="freq-btn" data-bfreq="70">70 Hz</button>
+        <button type="button" class="freq-btn" data-bfreq="80">80 Hz</button>
+      </div>
+
+      <div class="range-box">
+        <h3>Volumen máximo</h3>
+        <p class="val" id="breathMaxVal">150%</p>
+        <input type="range" class="slider" id="breathMaxSlider" min="50" max="500" step="5" value="150">
+        <p class="slider-tag">50%<span style="float:right">500%</span><em class="clearfix"></em></p>
+        <div class="preset-row">
+          <button type="button" class="preset-btn w4" data-bmaxpreset="100">100%</button>
+          <button type="button" class="preset-btn w4" data-bmaxpreset="150">150%</button>
+          <button type="button" class="preset-btn w4" data-bmaxpreset="250">250%</button>
+          <button type="button" class="preset-btn w4" data-bmaxpreset="400">400%</button>
+        </div>
+      </div>
+      <div class="warn" id="breathWarnExtreme">🚨 NIVEL EXTREMO: a partir de 300% existe un riesgo alto de clipping, distorsión grave o sobrecarga del altavoz, dependiendo de tu dispositivo.</div>
+
+      <div class="range-box">
+        <h3>Duración del ciclo</h3>
+        <p class="val" id="breathCycleVal">6 segundos</p>
+        <input type="range" class="slider" id="breathCycleSlider" min="2" max="20" step="1" value="6">
+        <p class="slider-tag">2s<span style="float:right">20s</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="transport">
+        <button type="button" class="play-btn" id="breathGoBtn">▶ COMENZAR RETO</button>
+      </div>
+      <button type="button" class="mini-btn" id="breathBackBtn">← Volver</button>
+    </div>
+
+    <div id="breathRun" style="display:none">
+      <div class="readout">
+        <div>🌬️ <span class="readout-value" id="breathFreqLabel">50</span><span class="readout-unit"> Hz</span></div>
+        <p class="big-state" id="breathPercent">0%</p>
+        <div class="breath-vis" id="breathVis">
+          <div class="breath-curve"></div>
+          <div class="breath-dot" id="breathDot"></div>
+        </div>
+        <p class="status" id="breathStatus">🟢 <strong>Sonando</strong></p>
+        <div class="clock"><div class="clock-label" id="breathCfgLabel">6s de ciclo</div><span id="clockBreath">00:00:00</span></div>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="breathResumeBtn">▶ START</button>
+        <button type="button" class="play-btn secondary" id="breathPauseBtn">⏸ PAUSE</button>
+      </div>
+      <button type="button" class="mini-btn" id="breathExitBtn">← Salir y guardar tiempo</button>
+    </div>
+
+    <!-- ---- ESCALERA ---- -->
+    <div id="stairModePick" style="display:none">
+      <p class="section-title">🪜 Escalera · elige un modo</p>
+      <button type="button" class="card" id="stairPlayModeBtn">🎮 Jugar<small>Escalera aleatoria: adivina cuántos escalones hubo</small></button>
+      <button type="button" class="card" id="stairCustomModeBtn">🎛️ Personalizado<small>Configura tu propia escalera de volumen</small></button>
+      <button type="button" class="mini-btn" id="stairModeBackBtn">← Volver</button>
+    </div>
+
+    <div id="stairPlaySetup" style="display:none">
+      <p class="section-title">🎮 Escalera · Jugar · frecuencia</p>
+      <div class="grid" id="stairPlayFreqGrid">
+        <button type="button" class="freq-btn is-active" data-spfreq="50">50 Hz</button>
+        <button type="button" class="freq-btn" data-spfreq="60">60 Hz</button>
+        <button type="button" class="freq-btn" data-spfreq="70">70 Hz</button>
+        <button type="button" class="freq-btn" data-spfreq="80">80 Hz</button>
+      </div>
+      <p class="note">La aplicación generará una escalera con entre 5 y 20 escalones, sin decirte cuántos hay. Al terminar tendrás que adivinarlo.</p>
+      <div class="transport">
+        <button type="button" class="play-btn" id="stairPlayGoBtn">▶ COMENZAR</button>
+      </div>
+      <button type="button" class="mini-btn" id="stairPlayBackBtn">← Volver</button>
+    </div>
+
+    <div id="stairPlayRun" style="display:none">
+      <div class="readout">
+        <div class="clock-label">🎮 ESCALERA · JUGAR</div>
+        <div><span class="readout-value" id="stairPlayFreqLabel">50</span><span class="readout-unit"> Hz</span></div>
+        <div class="stair-vis" id="stairPlayVis"></div>
+        <p class="status" id="stairPlayStatus">🟢 <strong>Sonando</strong></p>
+      </div>
+      <button type="button" class="mini-btn" id="stairPlayStopBtn">⏹️ Detener</button>
+    </div>
+
+    <div id="stairPlayGuess" style="display:none">
+      <p class="section-title">¿Cuántos escalones hubo?</p>
+      <div class="grid" id="stairGuessGrid"></div>
+    </div>
+
+    <div id="stairPlayResult" style="display:none">
+      <div class="readout" id="stairResultBox">
+        <p class="big-state" id="stairResultTitle">✅ ¡Correcto!</p>
+        <p class="status" id="stairResultDetail">Había 13 escalones. Respondiste 13.</p>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="stairPlayAgainBtn">🔄 Jugar otra vez</button>
+      </div>
+      <button type="button" class="mini-btn" id="stairResultBackBtn">← Volver</button>
+    </div>
+
+    <div id="stairCustomSetup" style="display:none">
+      <p class="section-title">🎛️ Escalera · Personalizado · frecuencia</p>
+      <div class="grid" id="stairCustomFreqGrid">
+        <button type="button" class="freq-btn is-active" data-scfreq="50">50 Hz</button>
+        <button type="button" class="freq-btn" data-scfreq="60">60 Hz</button>
+        <button type="button" class="freq-btn" data-scfreq="70">70 Hz</button>
+        <button type="button" class="freq-btn" data-scfreq="80">80 Hz</button>
+      </div>
+
+      <div class="range-box">
+        <h3>Volumen inicial</h3>
+        <p class="val" id="stairMinVal">50%</p>
+        <input type="range" class="slider" id="stairMinSlider" min="50" max="500" step="5" value="50">
+        <p class="slider-tag">50%<span style="float:right">500%</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="range-box">
+        <h3>Volumen final</h3>
+        <p class="val" id="stairMaxVal">300%</p>
+        <input type="range" class="slider" id="stairMaxSlider" min="50" max="500" step="5" value="300">
+        <p class="slider-tag">50%<span style="float:right">500%</span><em class="clearfix"></em></p>
+      </div>
+      <p class="hint" id="stairRangeHint">&nbsp;</p>
+      <div class="warn" id="stairWarnExtreme">🚨 NIVEL EXTREMO: a partir de 300% existe un riesgo alto de clipping, distorsión grave o sobrecarga del altavoz, dependiendo de tu dispositivo.</div>
+
+      <div class="range-box">
+        <h3>Número de escalones</h3>
+        <p class="val" id="stairStepsVal">6 escalones</p>
+        <input type="range" class="slider" id="stairStepsSlider" min="2" max="20" step="1" value="6">
+        <p class="slider-tag">2<span style="float:right">20</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="range-box">
+        <h3>Duración de cada escalón</h3>
+        <p class="val" id="stairDurVal">3 segundos</p>
+        <input type="range" class="slider" id="stairDurSlider" min="1" max="10" step="1" value="3">
+        <p class="slider-tag">1s<span style="float:right">10s</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="transport">
+        <button type="button" class="play-btn" id="stairCustomGoBtn">▶ COMENZAR RETO</button>
+      </div>
+      <button type="button" class="mini-btn" id="stairCustomBackBtn">← Volver</button>
+    </div>
+
+    <div id="stairCustomRun" style="display:none">
+      <div class="readout">
+        <div>🪜 <span class="readout-value" id="stairCustomFreqLabel">50</span><span class="readout-unit"> Hz</span></div>
+        <p class="big-state" id="stairCustomPercent">50%</p>
+        <p class="status" id="stairCustomStepLabel">Escalón 1 / 6</p>
+        <div class="stair-vis" id="stairCustomVis"></div>
+        <p class="countdown" id="stairCustomCountdown">3.0 s</p>
+        <p class="status" id="stairCustomStatus">🟢 <strong>Sonando</strong></p>
+        <div class="clock"><div class="clock-label">Escalera</div><span id="clockStair">00:00:00</span></div>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="stairCustomResumeBtn">▶ START</button>
+        <button type="button" class="play-btn secondary" id="stairCustomPauseBtn">⏸ PAUSE</button>
+      </div>
+      <button type="button" class="mini-btn" id="stairCustomExitBtn">← Salir y guardar tiempo</button>
+    </div>
+
+    <!-- ---- MEMORIA ---- -->
+    <div id="memorySetup" style="display:none">
+      <p class="section-title">🧠 Memoria · dificultad</p>
+      <button type="button" class="card is-active" data-mdiff="easy">🟢 Fácil<small>3 posiciones</small></button>
+      <button type="button" class="card" data-mdiff="normal">🟡 Medio<small>4 posiciones</small></button>
+      <button type="button" class="card" data-mdiff="hard">🔴 Difícil<small>5 posiciones</small></button>
+      <button type="button" class="card" data-mdiff="extreme">🟣 Extremo<small>6 posiciones</small></button>
+      <div class="transport">
+        <button type="button" class="play-btn" id="memoryGoBtn">▶ COMENZAR RETO</button>
+      </div>
+      <button type="button" class="mini-btn" id="memoryBackBtn">← Volver</button>
+    </div>
+
+    <div id="memoryRun" style="display:none">
+      <div class="readout">
+        <div class="clock-label">🧠 MEMORIA</div>
+        <p class="big-state" id="memoryStateLabel">Escuchando secuencia 1…</p>
+        <p class="status" id="memoryFreqNow">—</p>
+      </div>
+      <button type="button" class="mini-btn" id="memoryStopBtn">⏹️ Detener</button>
+    </div>
+
+    <div id="memoryGuess" style="display:none">
+      <p class="section-title">¿Qué posición cambió?</p>
+      <div class="grid" id="memoryGuessGrid"></div>
+    </div>
+
+    <div id="memoryResult" style="display:none">
+      <div class="readout" id="memoryResultBox">
+        <p class="big-state" id="memoryResultTitle">✅ ¡Correcto!</p>
+        <p class="status" id="memoryResultDetail">Posición 3: 60 Hz → 80 Hz</p>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="memoryPlayAgainBtn">🔄 Jugar otra vez</button>
+      </div>
+      <button type="button" class="mini-btn" id="memoryResultBackBtn">← Volver</button>
     </div>
   </div>
 
@@ -937,6 +1215,93 @@ input[type="range"]::-moz-focus-outer {
     <p class="note">El primer control marca el mínimo y el segundo el máximo de cada intervalo.</p>
   </div>
 
+  <!-- ================= MARATÓN ================= -->
+  <div class="panel" id="panel-maraton">
+
+    <div id="marathonSetup">
+      <p class="section-title">⏱️ Maratón · configuración</p>
+
+      <div class="range-box">
+        <h3>🔊 Volumen (fijo durante toda la sesión)</h3>
+        <p class="val" id="marVolVal">100%</p>
+        <input type="range" class="slider" id="marVolSlider" min="50" max="500" step="5" value="100">
+        <p class="slider-tag">50%<span style="float:right">500%</span><em class="clearfix"></em></p>
+        <div class="preset-row">
+          <button type="button" class="preset-btn w4" data-mvpreset="100">100%</button>
+          <button type="button" class="preset-btn w4" data-mvpreset="150">150%</button>
+          <button type="button" class="preset-btn w4" data-mvpreset="200">200%</button>
+          <button type="button" class="preset-btn w4" data-mvpreset="300">300%</button>
+        </div>
+      </div>
+      <div class="warn" id="marVolWarnExtreme">🚨 NIVEL EXTREMO: a partir de 300% existe un riesgo alto de clipping, distorsión grave o sobrecarga del altavoz, dependiendo de tu dispositivo.</div>
+
+      <div class="range-box">
+        <h3>🔄 Número de vueltas</h3>
+        <p class="val" id="marLapsVal">2 vueltas</p>
+        <input type="range" class="slider" id="marLapsSlider" min="1" max="10" step="1" value="2">
+        <p class="slider-tag">1<span style="float:right">10</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="range-box">
+        <h3>🎵 Duración del Test Normal</h3>
+        <p class="val" id="marTestDurVal">15 segundos</p>
+        <input type="range" class="slider" id="marTestDurSlider" min="5" max="120" step="5" value="15">
+        <p class="slider-tag">5s<span style="float:right">120s</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="range-box">
+        <h3>🏆 Duración de cada reto automático</h3>
+        <p class="val" id="marRetoDurVal">20 segundos</p>
+        <input type="range" class="slider" id="marRetoDurSlider" min="5" max="120" step="5" value="20">
+        <p class="slider-tag">5s<span style="float:right">120s</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="range-box">
+        <h3>🎲 Duración de Random</h3>
+        <p class="val" id="marRndDurVal">20 segundos</p>
+        <input type="range" class="slider" id="marRndDurSlider" min="5" max="120" step="5" value="20">
+        <p class="slider-tag">5s<span style="float:right">120s</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="range-box">
+        <h3>🪜 Escalones en la Escalera automática</h3>
+        <p class="val" id="marStairStepsVal">10 escalones</p>
+        <input type="range" class="slider" id="marStairStepsSlider" min="5" max="20" step="1" value="10">
+        <p class="slider-tag">5<span style="float:right">20</span><em class="clearfix"></em></p>
+      </div>
+
+      <p class="note">Cada vuelta ejecuta automáticamente: Test Normal → 50→80→50 Hz → Intermitente → Volumen Progresivo → Respiración → Escalera → Random. La frecuencia, dificultad y otros parámetros internos de cada reto se eligen al azar (siempre entre 50, 60, 70 y 80 Hz); el volumen se mantiene fijo durante toda la Maratón.</p>
+
+      <div class="transport">
+        <button type="button" class="play-btn" id="marStartBtn">▶ COMENZAR MARATÓN</button>
+      </div>
+    </div>
+
+    <div id="marathonRun" style="display:none">
+      <div class="readout">
+        <div class="clock-label" id="marPhaseLabel">🎵 TEST NORMAL</div>
+        <p class="big-state" id="marPhaseState">Preparando…</p>
+        <p class="status" id="marPhaseDetail">&nbsp;</p>
+        <div class="track"><div class="dot" id="marPhaseDot" style="left:0%"></div></div>
+        <p class="countdown" id="marPhaseCountdown">&nbsp;</p>
+        <div class="clock"><div class="clock-label" id="marLapLabel">Vuelta 1 / 2</div><span id="clockMarathon">00:00:00</span></div>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn secondary" id="marPauseBtn">⏸ PAUSAR</button>
+        <button type="button" class="play-btn secondary" id="marResumeBtn" style="display:none">▶ REANUDAR</button>
+      </div>
+      <button type="button" class="mini-btn" id="marStopBtn">⏹️ Detener Maratón</button>
+    </div>
+
+    <div id="marathonSummary" style="display:none">
+      <div class="times-block">
+        <h2>MARATÓN COMPLETADA ✓</h2>
+        <ul class="times-list" id="marSummaryList"></ul>
+      </div>
+      <button type="button" class="mini-btn" id="marSummaryBackBtn">← Volver a la configuración</button>
+    </div>
+  </div>
+
   <!-- ================= TIEMPOS ================= -->
   <div class="panel" id="panel-tiempos">
 
@@ -968,6 +1333,12 @@ input[type="range"]::-moz-focus-outer {
       <h2>🔊 Tiempos Volumen Progresivo<button type="button" class="clear-btn" data-clear="volsweep">🗑️ Borrar</button></h2>
       <ul class="times-list" id="listVolsweep"></ul>
       <p class="times-total">Tiempo total<span id="totalVolsweep">00:00:00</span><em class="clearfix"></em></p>
+    </div>
+
+    <div class="times-block">
+      <h2>⏱️ Sesiones de Maratón<button type="button" class="clear-btn" data-clear="marathon">🗑️ Borrar</button></h2>
+      <ul class="times-list" id="listMarathon"></ul>
+      <p class="times-total">Tiempo total<span id="totalMarathon">00:00:00</span><em class="clearfix"></em></p>
     </div>
 
     <button type="button" class="mini-btn" id="clearTimesBtn">🗑️ Borrar todos los tiempos</button>
@@ -1343,7 +1714,8 @@ input[type="range"]::-moz-focus-outer {
       challenges: 'hzjimi.challenges',
       random: 'hzjimi.random',
       interm: 'hzjimi.interm',
-      volsweep: 'hzjimi.volsweep'
+      volsweep: 'hzjimi.volsweep',
+      marathon: 'hzjimi.marathon'
     },
 
     init: function () {
@@ -1649,8 +2021,201 @@ input[type="range"]::-moz-focus-outer {
     }
   };
 
+  /* --- Reto: Respiración --------------------------------------
+     Frecuencia fija; el volumen sube y baja siguiendo una curva
+     sinusoidal (0 -> máximo -> 0) durante un ciclo de N segundos. */
+  var BreathTest = {
+    id: 'breath',
+    name: 'Respiración',
+    freq: 50,
+    maxVol: 1.5,        // 1.5 = 150%
+    cycleMs: 6000,
+    tick: null,
+    startedAt: 0,
+    onFrame: null,      // callback de la interfaz: (pct01, volPct)
+
+    volNow: function (elapsed) {
+      var phase = (elapsed % this.cycleMs) / this.cycleMs;   // 0..1
+      var s = (Math.sin(phase * Math.PI * 2 - Math.PI / 2) + 1) / 2; // curva 0->1->0 suave
+      return s;
+    },
+
+    start: function () {
+      Engine.setFrequency(this.freq, 0.02);
+      Engine.setVolume(0.001);
+      var ok = Engine.start();
+      if (!ok) { return false; }
+      if (this.tick) { clearInterval(this.tick); }
+      this.startedAt = new Date().getTime();
+      var self = this;
+      var step = 60;
+      this.tick = setInterval(function () {
+        var elapsed = new Date().getTime() - self.startedAt;
+        var s = self.volNow(elapsed);
+        var v = Math.max(0.001, s * self.maxVol);
+        Engine.setVolume(v);
+        if (self.onFrame) { self.onFrame(s, Math.round(v * 100)); }
+      }, step);
+      return true;
+    },
+
+    stop: function () {
+      if (this.tick) { clearInterval(this.tick); this.tick = null; }
+      Engine.stop(false);
+    },
+
+    reset: function () { this.startedAt = new Date().getTime(); }
+  };
+
+  /* --- Reto: Escalera -------------------------------------------
+     Escalones de volumen de duración fija. Modo Jugar genera una
+     escalera aleatoria (5-20 escalones) y pide adivinar cuántos hubo;
+     Modo Personalizado usa parámetros elegidos por el jugador y puede
+     usarse dentro de la Maratón (automático, sin preguntar). */
+  var StairTest = {
+    id: 'stair',
+    name: 'Escalera',
+    freq: 50,
+    minVol: 0.5,
+    maxVol: 3.0,
+    steps: 6,
+    stepMs: 3000,
+    idx: 0,
+    tick: null,
+    phaseEnd: 0,
+    onStep: null,        // callback: (idx, total, volPct)
+    onDone: null,        // callback al terminar todos los escalones
+
+    volForStep: function (i) {
+      if (this.steps <= 1) { return this.maxVol; }
+      return this.minVol + (this.maxVol - this.minVol) * (i / (this.steps - 1));
+    },
+
+    clearTimer: function () {
+      if (this.tick) { clearTimeout(this.tick); this.tick = null; }
+    },
+
+    start: function () {
+      this.idx = 0;
+      Engine.setFrequency(this.freq, 0.02);
+      Engine.setVolume(this.volForStep(0));
+      var ok = Engine.start();
+      if (!ok) { return false; }
+      this.playStep();
+      return true;
+    },
+
+    playStep: function () {
+      var v = this.volForStep(this.idx);
+      Engine.setVolume(v);
+      this.phaseEnd = new Date().getTime() + this.stepMs;
+      if (this.onStep) { this.onStep(this.idx, this.steps, Math.round(v * 100)); }
+      var self = this;
+      this.clearTimer();
+      this.tick = setTimeout(function () {
+        self.idx++;
+        if (self.idx >= self.steps) {
+          self.stop();
+          if (self.onDone) { self.onDone(); }
+          return;
+        }
+        self.playStep();
+      }, this.stepMs);
+    },
+
+    remaining: function () {
+      var left = (this.phaseEnd - new Date().getTime()) / 1000;
+      return left > 0 ? left : 0;
+    },
+
+    stop: function () {
+      this.clearTimer();
+      Engine.stop(false);
+    }
+  };
+
+  /* --- Reto: Memoria ----------------------------------------------
+     Reproduce una secuencia de frecuencias (50/60/70/80), luego una
+     segunda secuencia casi idéntica salvo en UNA posición, y el
+     jugador debe indicar cuál cambió. No participa en la Maratón. */
+  var MemoryTest = {
+    id: 'memory',
+    name: 'Memoria',
+    pool: [50, 60, 70, 80],
+    lengths: { easy: 3, normal: 4, hard: 5, extreme: 6 },
+    diff: 'easy',
+    seqA: [],
+    seqB: [],
+    changedIdx: -1,
+    noteMs: 900,
+    gapMs: 350,
+    onNote: null,       // callback: (seqLabel, idx, hz)
+    onReady: null,       // callback al terminar de reproducir ambas secuencias
+    timer: null,
+
+    randHz: function (excludeHz) {
+      var opts = [];
+      for (var i = 0; i < this.pool.length; i++) {
+        if (this.pool[i] !== excludeHz) { opts.push(this.pool[i]); }
+      }
+      return opts[Math.floor(Math.random() * opts.length)];
+    },
+
+    buildSequences: function () {
+      var n = this.lengths[this.diff] || 3;
+      var seq = [];
+      for (var i = 0; i < n; i++) {
+        seq.push(this.pool[Math.floor(Math.random() * this.pool.length)]);
+      }
+      this.seqA = seq;
+      this.changedIdx = Math.floor(Math.random() * n);
+      var seqB = seq.slice();
+      seqB[this.changedIdx] = this.randHz(seq[this.changedIdx]);
+      this.seqB = seqB;
+    },
+
+    clearTimer: function () { if (this.timer) { clearTimeout(this.timer); this.timer = null; } },
+
+    /* Reproduce ambas secuencias en orden, con pausas entre notas. */
+    start: function () {
+      this.buildSequences();
+      var all = [];
+      for (var i = 0; i < this.seqA.length; i++) { all.push({ label: 'A', idx: i, hz: this.seqA[i] }); }
+      for (var j = 0; j < this.seqB.length; j++) { all.push({ label: 'B', idx: j, hz: this.seqB[j] }); }
+      var self = this;
+      var n = 0;
+
+      function playNext() {
+        if (n >= all.length) {
+          Engine.stop(false);
+          if (self.onReady) { self.onReady(); }
+          return;
+        }
+        var note = all[n];
+        Engine.setFrequency(note.hz, 0.02);
+        Engine.start();
+        if (self.onNote) { self.onNote(note.label, note.idx, note.hz); }
+        self.timer = setTimeout(function () {
+          Engine.stop(false);
+          self.timer = setTimeout(function () { n++; playNext(); }, self.gapMs);
+        }, self.noteMs);
+      }
+
+      var ok = Engine.start();
+      Engine.stop(true);
+      if (!ok) { return false; }
+      playNext();
+      return true;
+    },
+
+    stop: function () {
+      this.clearTimer();
+      Engine.stop(false);
+    }
+  };
+
   var App = {
-    tests: { tone: ToneTest, sweep: SweepTest, random: RandomTest, interm: IntermTest, volsweep: VolSweepTest },
+    tests: { tone: ToneTest, sweep: SweepTest, random: RandomTest, interm: IntermTest, volsweep: VolSweepTest, breath: BreathTest, stair: StairTest, memory: MemoryTest },
     current: ToneTest,
     mode: 'tone'
   };
@@ -1666,14 +2231,14 @@ input[type="range"]::-moz-focus-outer {
   /* --- Pestañas --------------------------------------------- */
 
   var tabs = $('tabs').getElementsByTagName('button');
-  var panels = ['test', 'retos', 'random', 'tiempos'];
+  var panels = ['test', 'retos', 'random', 'maraton', 'tiempos'];
 
   function showPanel(name) {
     for (var i = 0; i < panels.length; i++) {
       $('panel-' + panels[i]).className = (panels[i] === name) ? 'panel is-open' : 'panel';
     }
     for (var j = 0; j < tabs.length; j++) {
-      tabs[j].className = (tabs[j].getAttribute('data-panel') === name) ? 'tab is-active' : 'tab';
+      tabs[j].className = (tabs[j].getAttribute('data-panel') === name) ? 'tab w5 is-active' : 'tab w5';
     }
     if (name === 'tiempos') { renderTimes(); }
   }
@@ -1683,8 +2248,9 @@ input[type="range"]::-moz-focus-outer {
       btn.onclick = function () {
         var target = btn.getAttribute('data-panel');
         if (target !== 'test') { stopTest(); }
-        if (target !== 'retos') { stopReto(false); stopInterm(false); stopVolReto(false); }
+        if (target !== 'retos') { stopReto(false); stopInterm(false); stopVolReto(false); stopBreathReto(false); stopStairReto(false); stopMemory(); }
         if (target !== 'random') { stopRandom(); }
+        if (target !== 'maraton') { Marathon.stop(); }
         showPanel(target);
       };
     })(tabs[t]);
@@ -1695,12 +2261,14 @@ input[type="range"]::-moz-focus-outer {
   var volSlider = $('volSlider');
   var volLabel = $('volLabel');
   var volWarn = $('volWarn');
+  var volWarnExtreme = $('volWarnExtreme');
   var volPresetBtns = $('volPresets').getElementsByTagName('button');
+  var VOL_MAX_PCT = 500;
 
   function highlightVolPreset(pct) {
     for (var i = 0; i < volPresetBtns.length; i++) {
       var v = parseInt(volPresetBtns[i].getAttribute('data-preset'), 10);
-      volPresetBtns[i].className = (v === pct) ? 'preset-btn w3 is-active' : 'preset-btn w3';
+      volPresetBtns[i].className = (v === pct) ? 'preset-btn w4 is-active' : 'preset-btn w4';
     }
   }
 
@@ -1708,9 +2276,10 @@ input[type="range"]::-moz-focus-outer {
     var pct = parseInt(volSlider.value, 10);
     if (isNaN(pct)) { pct = 50; }
     if (pct < 50) { pct = 50; }
-    if (pct > 300) { pct = 300; }
+    if (pct > VOL_MAX_PCT) { pct = VOL_MAX_PCT; }
     volLabel.innerHTML = '🔊 Volumen: ' + pct + '%';
     volWarn.className = (pct > 100) ? 'vol-warn is-open' : 'vol-warn';
+    volWarnExtreme.className = (pct >= 300) ? 'vol-warn-extreme is-open' : 'vol-warn-extreme';
     highlightVolPreset(pct);
     Engine.setVolume(pct / 100);
   }
@@ -1834,6 +2403,9 @@ input[type="range"]::-moz-focus-outer {
     stopInterm(false);
     stopVolReto(false);
     stopRandom();
+    stopBreathReto(false);
+    stopStairReto(false);
+    stopMemory();
     App.mode = 'tone';
     App.current = ToneTest;
     applyVolume();
@@ -1918,14 +2490,21 @@ input[type="range"]::-moz-focus-outer {
   bindSweepPick(sweepFromBtns, 'data-sfrom', function (v) { sweepFrom = v; });
   bindSweepPick(sweepToBtns, 'data-sto', function (v) { sweepTo = v; });
 
+  var retoViews = [
+    ['retoList', 'list'], ['retoSetup', 'setup'], ['retoRun', 'run'],
+    ['intermSetup', 'isetup'], ['intermRun', 'irun'],
+    ['volSetup', 'vsetup'], ['volRun', 'vrun'],
+    ['breathSetup', 'bsetup'], ['breathRun', 'brun'],
+    ['stairModePick', 'stmodepick'],
+    ['stairPlaySetup', 'stpsetup'], ['stairPlayRun', 'stprun'], ['stairPlayGuess', 'stpguess'], ['stairPlayResult', 'stpresult'],
+    ['stairCustomSetup', 'stcsetup'], ['stairCustomRun', 'stcrun'],
+    ['memorySetup', 'msetup'], ['memoryRun', 'mrun'], ['memoryGuess', 'mguess'], ['memoryResult', 'mresult']
+  ];
+
   function retoView(which) {
-    retoList.style.display = (which === 'list') ? 'block' : 'none';
-    retoSetup.style.display = (which === 'setup') ? 'block' : 'none';
-    retoRun.style.display = (which === 'run') ? 'block' : 'none';
-    $('intermSetup').style.display = (which === 'isetup') ? 'block' : 'none';
-    $('intermRun').style.display = (which === 'irun') ? 'block' : 'none';
-    $('volSetup').style.display = (which === 'vsetup') ? 'block' : 'none';
-    $('volRun').style.display = (which === 'vrun') ? 'block' : 'none';
+    for (var i = 0; i < retoViews.length; i++) {
+      $(retoViews[i][0]).style.display = (retoViews[i][1] === which) ? 'block' : 'none';
+    }
   }
 
   $('retoSweepBtn').onclick = function () { renderSweepTitle(); retoView('setup'); };
@@ -1969,6 +2548,9 @@ input[type="range"]::-moz-focus-outer {
     stopInterm(false);
     stopVolReto(false);
     stopRandom();
+    stopBreathReto(false);
+    stopStairReto(false);
+    stopMemory();
     App.mode = 'sweep';
     App.current = SweepTest;
     applyVolume();
@@ -2109,6 +2691,9 @@ input[type="range"]::-moz-focus-outer {
     stopReto(false);
     stopVolReto(false);
     stopRandom();
+    stopBreathReto(false);
+    stopStairReto(false);
+    stopMemory();
     App.mode = 'interm';
     App.current = IntermTest;
     applyVolume();
@@ -2204,7 +2789,7 @@ input[type="range"]::-moz-focus-outer {
     if (isNaN(a)) { a = 50; }
     if (isNaN(b)) { b = 200; }
     if (a < 50) { a = 50; }
-    if (b > 300) { b = 300; }
+    if (b > 500) { b = 500; }
     volMinSlider.value = a;
     volMaxSlider.value = b;
     volMinPct = a;
@@ -2234,6 +2819,7 @@ input[type="range"]::-moz-focus-outer {
       goBtn.disabled = false;
     }
     $('volWarnHigh').className = (b > 100) ? 'warn is-open' : 'warn';
+    $('volWarnExtremeHigh').className = (b >= 300) ? 'warn is-open' : 'warn';
   }
 
   /* El mínimo nunca puede superar al máximo: cada slider empuja al otro. */
@@ -2316,6 +2902,9 @@ input[type="range"]::-moz-focus-outer {
     stopReto(false);
     stopInterm(false);
     stopRandom();
+    stopBreathReto(false);
+    stopStairReto(false);
+    stopMemory();
     App.mode = 'volsweep';
     App.current = VolSweepTest;
     var ok = VolSweepTest.start();
@@ -2369,6 +2958,562 @@ input[type="range"]::-moz-focus-outer {
   volResumeBtn.onclick = function () { startVolReto(); };
   volPauseBtn.onclick = function () { stopVolReto(false); };
   $('volExitBtn').onclick = function () { stopVolReto(true); retoView('list'); };
+
+  /* --- RETO RESPIRACIÓN --------------------------------------- */
+
+  var breathFreqBtns = $('breathFreqGrid').getElementsByTagName('button');
+  var breathMaxSlider = $('breathMaxSlider');
+  var breathCycleSlider = $('breathCycleSlider');
+  var breathMaxPresetBtns = [];
+  var bsAll = $('breathSetup').getElementsByTagName('button');
+  for (var bb = 0; bb < bsAll.length; bb++) {
+    if (bsAll[bb].getAttribute('data-bmaxpreset')) { breathMaxPresetBtns.push(bsAll[bb]); }
+  }
+  var breathFreqLabel = $('breathFreqLabel');
+  var breathPercentEl = $('breathPercent');
+  var breathDot = $('breathDot');
+  var breathStatus = $('breathStatus');
+  var breathResumeBtn = $('breathResumeBtn');
+  var breathPauseBtn = $('breathPauseBtn');
+  var breathTimer = new Timer($('clockBreath'));
+  var breathSession = null;
+  var breathMaxPct = 150;
+  var breathCycleSec = 6;
+
+  for (var bf = 0; bf < breathFreqBtns.length; bf++) {
+    (function (btn) {
+      var hz = btn.getAttribute('data-bfreq');
+      if (!hz) { return; }
+      btn.onclick = function () {
+        for (var q = 0; q < breathFreqBtns.length; q++) { breathFreqBtns[q].className = 'freq-btn'; }
+        btn.className = 'freq-btn is-active';
+        BreathTest.freq = parseInt(hz, 10);
+      };
+    })(breathFreqBtns[bf]);
+  }
+
+  function applyBreathMax() {
+    var v = parseInt(breathMaxSlider.value, 10);
+    if (isNaN(v)) { v = 150; }
+    if (v < 50) { v = 50; }
+    if (v > 500) { v = 500; }
+    breathMaxSlider.value = v;
+    breathMaxPct = v;
+    $('breathMaxVal').innerHTML = v + '%';
+    BreathTest.maxVol = v / 100;
+    $('breathWarnExtreme').className = (v >= 300) ? 'warn is-open' : 'warn';
+    for (var i = 0; i < breathMaxPresetBtns.length; i++) {
+      var pv = parseInt(breathMaxPresetBtns[i].getAttribute('data-bmaxpreset'), 10);
+      breathMaxPresetBtns[i].className = (pv === v) ? 'preset-btn w4 is-active' : 'preset-btn w4';
+    }
+  }
+  breathMaxSlider.oninput = applyBreathMax;
+  breathMaxSlider.onchange = applyBreathMax;
+  for (var bmp = 0; bmp < breathMaxPresetBtns.length; bmp++) {
+    (function (btn) {
+      btn.onclick = function () { breathMaxSlider.value = btn.getAttribute('data-bmaxpreset'); applyBreathMax(); };
+    })(breathMaxPresetBtns[bmp]);
+  }
+
+  function applyBreathCycle() {
+    var v = parseInt(breathCycleSlider.value, 10);
+    if (isNaN(v)) { v = 6; }
+    breathCycleSec = v;
+    $('breathCycleVal').innerHTML = v + ' segundos';
+    BreathTest.cycleMs = v * 1000;
+  }
+  breathCycleSlider.oninput = applyBreathCycle;
+  breathCycleSlider.onchange = applyBreathCycle;
+
+  $('retoBreathBtn').onclick = function () { retoView('bsetup'); };
+  $('breathBackBtn').onclick = function () { retoView('list'); };
+
+  BreathTest.onFrame = function (s01, volPct) {
+    breathPercentEl.innerHTML = volPct + '%';
+    var leftPct = Math.round(s01 * 88); // recorrido dentro de .breath-vis
+    breathDot.style.left = (6 + leftPct) + '%';
+    breathDot.style.bottom = Math.round(s01 * 68) + 'px';
+  };
+
+  function renderBreathStatus() {
+    var on = Engine.playing && App.mode === 'breath';
+    breathStatus.innerHTML = on ? '🟢 <strong>Sonando</strong>' : '⚪ En pausa';
+    breathResumeBtn.disabled = on;
+    breathPauseBtn.disabled = !on;
+  }
+
+  function saveBreathTime() {
+    if (!breathSession) { return; }
+    Store.save('challenges', breathSession.id, breathSession.label, breathTimer.value());
+  }
+
+  function startBreathReto() {
+    stopTest(); stopReto(false); stopInterm(false); stopVolReto(false); stopRandom();
+    stopStairReto(false); stopMemory();
+    App.mode = 'breath';
+    App.current = BreathTest;
+    var ok = BreathTest.start();
+    if (!ok) {
+      breathStatus.innerHTML = '⚠️ Este navegador no puede generar tonos.';
+      return;
+    }
+    if (!breathSession) {
+      breathSession = { id: 'br' + new Date().getTime(), label: '🌬️ Respiración · ' + BreathTest.freq + ' Hz · ' + breathMaxPct + '% · ' + breathCycleSec + 's' };
+    }
+    breathTimer.start();
+    renderBreathStatus();
+  }
+
+  function stopBreathReto(exiting) {
+    if (App.mode === 'breath' && Engine.playing) {
+      BreathTest.stop();
+      breathTimer.pause();
+      saveBreathTime();
+    }
+    if (exiting) {
+      saveBreathTime();
+      breathSession = null;
+      breathTimer.reset();
+      breathDot.style.left = '6%';
+      breathDot.style.bottom = '0px';
+    }
+    if (App.mode === 'breath') { applyVolume(); }
+    renderBreathStatus();
+  }
+
+  $('breathGoBtn').onclick = function () {
+    applyBreathMax();
+    applyBreathCycle();
+    breathSession = null;
+    breathTimer.reset();
+    breathFreqLabel.innerHTML = String(BreathTest.freq);
+    $('breathCfgLabel').innerHTML = breathCycleSec + 's de ciclo';
+    breathDot.style.left = '6%';
+    breathDot.style.bottom = '0px';
+    retoView('brun');
+    startBreathReto();
+  };
+
+  breathResumeBtn.onclick = function () { startBreathReto(); };
+  breathPauseBtn.onclick = function () { stopBreathReto(false); };
+  $('breathExitBtn').onclick = function () { stopBreathReto(true); retoView('list'); };
+
+  /* --- RETO ESCALERA ------------------------------------------- */
+
+  $('retoStairBtn').onclick = function () { retoView('stmodepick'); };
+  $('stairModeBackBtn').onclick = function () { retoView('list'); };
+  $('stairPlayModeBtn').onclick = function () { retoView('stpsetup'); };
+  $('stairCustomModeBtn').onclick = function () { retoView('stcsetup'); };
+  $('stairPlayBackBtn').onclick = function () { retoView('stmodepick'); };
+  $('stairCustomBackBtn').onclick = function () { retoView('stmodepick'); };
+
+  /* Visualización compartida: dibuja N barras y marca el estado. */
+  function renderStairVis(container, total, currentIdx, minVol, maxVol) {
+    var html = '';
+    for (var i = 0; i < total; i++) {
+      var h = 10 + Math.round((i / Math.max(1, total - 1)) * 80);
+      var cls = 'step';
+      if (i < currentIdx) { cls += ' is-past'; }
+      if (i === currentIdx) { cls += ' is-current'; }
+      html += '<div class="' + cls + '" style="height:' + h + 'px"></div>';
+    }
+    container.innerHTML = html;
+  }
+
+  /* ---- Escalera: modo Jugar ---- */
+
+  var stairPlayFreqBtns = $('stairPlayFreqGrid').getElementsByTagName('button');
+  var stairPlayFreq = 50;
+  var stairPlayTotal = 0;
+  var stairPlayCountTimer = null;
+
+  for (var spf = 0; spf < stairPlayFreqBtns.length; spf++) {
+    (function (btn) {
+      var hz = btn.getAttribute('data-spfreq');
+      if (!hz) { return; }
+      btn.onclick = function () {
+        for (var q = 0; q < stairPlayFreqBtns.length; q++) { stairPlayFreqBtns[q].className = 'freq-btn'; }
+        btn.className = 'freq-btn is-active';
+        stairPlayFreq = parseInt(hz, 10);
+      };
+    })(stairPlayFreqBtns[spf]);
+  }
+
+  function stopStairPlayVis() {
+    if (stairPlayCountTimer) { clearInterval(stairPlayCountTimer); stairPlayCountTimer = null; }
+  }
+
+  StairTest.onStep = null; // se asigna dinámicamente según el modo activo
+
+  function startStairPlay() {
+    stopTest(); stopReto(false); stopInterm(false); stopVolReto(false); stopRandom();
+    stopBreathReto(false); stopMemory();
+    App.mode = 'stair-play';
+    App.current = StairTest;
+    applyVolume();
+
+    stairPlayTotal = 5 + Math.floor(Math.random() * 16); // 5..20
+    StairTest.freq = stairPlayFreq;
+    StairTest.steps = stairPlayTotal;
+    StairTest.minVol = Engine.volume;
+    StairTest.maxVol = Engine.volume; // en modo Jugar el volumen del usuario no varía; solo cambia visualmente
+    // Para que los escalones "se distingan" auditivamente, variamos ligeramente
+    // el volumen alrededor del volumen elegido por el usuario en Test.
+    var base = Engine.volume;
+    StairTest.minVol = Math.max(0.1, base * 0.5);
+    StairTest.maxVol = base * 1.5;
+
+    $('stairPlayFreqLabel').innerHTML = String(stairPlayFreq);
+    renderStairVis($('stairPlayVis'), stairPlayTotal, 0);
+    $('stairPlayStatus').innerHTML = '🟢 <strong>Sonando</strong>';
+
+    StairTest.onStep = function (idx, total, volPct) {
+      renderStairVis($('stairPlayVis'), total, idx);
+    };
+    StairTest.onDone = function () {
+      showStairGuess(stairPlayTotal);
+    };
+
+    var ok = StairTest.start();
+    if (!ok) {
+      $('stairPlayStatus').innerHTML = '⚠️ Este navegador no puede generar tonos.';
+      return;
+    }
+  }
+
+  function stopStairPlayOnly() {
+    if (App.mode === 'stair-play') {
+      StairTest.stop();
+      applyVolume();
+    }
+  }
+
+  $('stairPlayGoBtn').onclick = function () { retoView('stprun'); startStairPlay(); };
+  $('stairPlayStopBtn').onclick = function () { stopStairPlayOnly(); retoView('stmodepick'); };
+
+  function showStairGuess(correct) {
+    stopStairPlayOnly();
+    var opts = buildGuessOptions(correct, 5, 20);
+    var html = '';
+    for (var i = 0; i < opts.length; i++) {
+      html += '<button type="button" class="freq-btn" data-guess="' + opts[i] + '">' + opts[i] + '</button>';
+    }
+    $('stairGuessGrid').innerHTML = html;
+    var btns = $('stairGuessGrid').getElementsByTagName('button');
+    for (var j = 0; j < btns.length; j++) {
+      (function (btn) {
+        btn.onclick = function () {
+          var guess = parseInt(btn.getAttribute('data-guess'), 10);
+          var ok = (guess === correct);
+          $('stairResultTitle').innerHTML = ok ? '✅ ¡Correcto!' : '❌ Fallaste';
+          $('stairResultDetail').innerHTML = 'Había ' + correct + ' escalones. Respondiste ' + guess + '.';
+          retoView('stpresult');
+        };
+      })(btns[j]);
+    }
+    retoView('stpguess');
+  }
+
+  /* Genera 3 opciones (correcta + 2 distintas), dentro del rango dado. */
+  function buildGuessOptions(correct, min, max) {
+    var set = {};
+    set[correct] = true;
+    while (Object.prototype.hasOwnProperty.call(set, correct) && countKeys(set) < 3) {
+      var delta = 1 + Math.floor(Math.random() * 4);
+      var sign = Math.random() < 0.5 ? -1 : 1;
+      var candidate = correct + sign * delta;
+      if (candidate < min) { candidate = min + delta; }
+      if (candidate > max) { candidate = max - delta; }
+      if (candidate < min) { candidate = min; }
+      if (candidate > max) { candidate = max; }
+      if (!set[candidate]) { set[candidate] = true; }
+    }
+    var arr = [];
+    for (var k in set) { if (set.hasOwnProperty(k)) { arr.push(parseInt(k, 10)); } }
+    arr.sort(function (a, b) { return a - b; });
+    return arr;
+  }
+
+  function countKeys(obj) {
+    var n = 0;
+    for (var k in obj) { if (obj.hasOwnProperty(k)) { n++; } }
+    return n;
+  }
+
+  $('stairPlayAgainBtn').onclick = function () { retoView('stprun'); startStairPlay(); };
+  $('stairResultBackBtn').onclick = function () { retoView('stmodepick'); };
+
+  /* ---- Escalera: modo Personalizado ---- */
+
+  var stairCustomFreqBtns = $('stairCustomFreqGrid').getElementsByTagName('button');
+  var stairMinSlider = $('stairMinSlider');
+  var stairMaxSlider = $('stairMaxSlider');
+  var stairStepsSlider = $('stairStepsSlider');
+  var stairDurSlider = $('stairDurSlider');
+  var stairMinPct = 50;
+  var stairMaxPct = 300;
+  var stairStepsCount = 6;
+  var stairDurSec = 3;
+  var stairCustomFreq = 50;
+  var stairCustomTimer = new Timer($('clockStair'));
+  var stairCustomSession = null;
+  var stairCustomCountTick = null;
+
+  for (var scf = 0; scf < stairCustomFreqBtns.length; scf++) {
+    (function (btn) {
+      var hz = btn.getAttribute('data-scfreq');
+      if (!hz) { return; }
+      btn.onclick = function () {
+        for (var q = 0; q < stairCustomFreqBtns.length; q++) { stairCustomFreqBtns[q].className = 'freq-btn'; }
+        btn.className = 'freq-btn is-active';
+        stairCustomFreq = parseInt(hz, 10);
+      };
+    })(stairCustomFreqBtns[scf]);
+  }
+
+  function applyStairCustomRange() {
+    var a = parseInt(stairMinSlider.value, 10);
+    var b = parseInt(stairMaxSlider.value, 10);
+    if (isNaN(a)) { a = 50; }
+    if (isNaN(b)) { b = 300; }
+    if (a < 50) { a = 50; }
+    if (b > 500) { b = 500; }
+    stairMinSlider.value = a;
+    stairMaxSlider.value = b;
+    stairMinPct = a;
+    stairMaxPct = b;
+    $('stairMinVal').innerHTML = a + '%';
+    $('stairMaxVal').innerHTML = b + '%';
+    var hint = $('stairRangeHint');
+    var goBtn = $('stairCustomGoBtn');
+    if (b < a) {
+      hint.className = 'hint is-error';
+      hint.innerHTML = 'El volumen final no puede ser menor que el inicial.';
+      goBtn.disabled = true;
+    } else {
+      hint.className = 'hint';
+      hint.innerHTML = '&nbsp;';
+      goBtn.disabled = false;
+    }
+    $('stairWarnExtreme').className = (b >= 300) ? 'warn is-open' : 'warn';
+  }
+  stairMinSlider.oninput = function () {
+    if (parseInt(stairMinSlider.value, 10) > parseInt(stairMaxSlider.value, 10)) { stairMaxSlider.value = stairMinSlider.value; }
+    applyStairCustomRange();
+  };
+  stairMinSlider.onchange = stairMinSlider.oninput;
+  stairMaxSlider.oninput = function () {
+    if (parseInt(stairMaxSlider.value, 10) < parseInt(stairMinSlider.value, 10)) { stairMinSlider.value = stairMaxSlider.value; }
+    applyStairCustomRange();
+  };
+  stairMaxSlider.onchange = stairMaxSlider.oninput;
+
+  function applyStairSteps() {
+    var v = parseInt(stairStepsSlider.value, 10);
+    if (isNaN(v)) { v = 6; }
+    stairStepsCount = v;
+    $('stairStepsVal').innerHTML = v + ' escalones';
+  }
+  stairStepsSlider.oninput = applyStairSteps;
+  stairStepsSlider.onchange = applyStairSteps;
+
+  function applyStairDur() {
+    var v = parseInt(stairDurSlider.value, 10);
+    if (isNaN(v)) { v = 3; }
+    stairDurSec = v;
+    $('stairDurVal').innerHTML = v + ' segundos';
+  }
+  stairDurSlider.oninput = applyStairDur;
+  stairDurSlider.onchange = applyStairDur;
+
+  function stairCustomCountdown() {
+    if (stairCustomCountTick) { return; }
+    stairCustomCountTick = setInterval(function () {
+      if (App.mode !== 'stair-custom' || !Engine.playing) { return; }
+      var left = StairTest.remaining();
+      $('stairCustomCountdown').innerHTML = (Math.round(left * 10) / 10).toFixed(1) + ' s';
+    }, 100);
+  }
+  function stopStairCustomCountdown() {
+    if (stairCustomCountTick) { clearInterval(stairCustomCountTick); stairCustomCountTick = null; }
+  }
+
+  function saveStairCustomTime() {
+    if (!stairCustomSession) { return; }
+    Store.save('challenges', stairCustomSession.id, stairCustomSession.label, stairCustomTimer.value());
+  }
+
+  /* isMarathon: si es true, no marca sesión propia (la gestiona Marathon) */
+  function startStairCustom(isMarathon, doneCb) {
+    if (!isMarathon) {
+      stopTest(); stopReto(false); stopInterm(false); stopVolReto(false); stopRandom();
+      stopBreathReto(false); stopMemory();
+      applyVolume();
+    }
+    App.mode = 'stair-custom';
+    App.current = StairTest;
+
+    StairTest.freq = stairCustomFreq;
+    StairTest.steps = stairStepsCount;
+    StairTest.minVol = stairMinPct / 100;
+    StairTest.maxVol = stairMaxPct / 100;
+    StairTest.stepMs = stairDurSec * 1000;
+
+    $('stairCustomFreqLabel').innerHTML = String(stairCustomFreq);
+
+    StairTest.onStep = function (idx, total, volPct) {
+      renderStairVis($('stairCustomVis'), total, idx);
+      $('stairCustomStepLabel').innerHTML = 'Escalón ' + (idx + 1) + ' / ' + total;
+      $('stairCustomPercent').innerHTML = volPct + '%';
+    };
+    StairTest.onDone = function () {
+      if (isMarathon) {
+        if (doneCb) { doneCb(); }
+      } else {
+        stopStairReto(true);
+        retoView('stmodepick');
+      }
+    };
+
+    var ok = StairTest.start();
+    if (!ok) {
+      if (!isMarathon) { $('stairCustomStatus').innerHTML = '⚠️ Este navegador no puede generar tonos.'; }
+      return false;
+    }
+    if (!isMarathon) {
+      if (!stairCustomSession) {
+        stairCustomSession = { id: 'stc' + new Date().getTime(), label: '🪜 Escalera · ' + stairCustomFreq + ' Hz · ' + stairStepsCount + ' escalones' };
+      }
+      stairCustomTimer.start();
+      stairCustomCountdown();
+      renderStairCustomStatus();
+    }
+    return true;
+  }
+
+  function renderStairCustomStatus() {
+    var on = Engine.playing && App.mode === 'stair-custom';
+    $('stairCustomStatus').innerHTML = on ? '🟢 <strong>Sonando</strong>' : '⚪ En pausa';
+    $('stairCustomResumeBtn').disabled = on;
+    $('stairCustomPauseBtn').disabled = !on;
+  }
+
+  function stopStairReto(exiting) {
+    if (App.mode === 'stair-custom' && Engine.playing) {
+      StairTest.stop();
+      stairCustomTimer.pause();
+      saveStairCustomTime();
+    }
+    stopStairCustomCountdown();
+    if (App.mode === 'stair-play') { StairTest.stop(); }
+    if (exiting) {
+      saveStairCustomTime();
+      stairCustomSession = null;
+      stairCustomTimer.reset();
+    }
+    if (App.mode === 'stair-custom' || App.mode === 'stair-play') { applyVolume(); }
+    renderStairCustomStatus();
+  }
+
+  $('stairCustomGoBtn').onclick = function () {
+    applyStairCustomRange();
+    applyStairSteps();
+    applyStairDur();
+    if (stairMaxPct < stairMinPct) { return; }
+    stairCustomSession = null;
+    stairCustomTimer.reset();
+    retoView('stcrun');
+    startStairCustom(false);
+  };
+  $('stairCustomResumeBtn').onclick = function () { startStairCustom(false); };
+  $('stairCustomPauseBtn').onclick = function () { stopStairReto(false); };
+  $('stairCustomExitBtn').onclick = function () { stopStairReto(true); retoView('stmodepick'); };
+
+  /* --- RETO MEMORIA --------------------------------------------- */
+
+  var memoryDiffBtns = $('memorySetup').getElementsByTagName('button');
+  var memoryDiffKeys = [];
+  for (var mdb = 0; mdb < memoryDiffBtns.length; mdb++) {
+    var mk = memoryDiffBtns[mdb].getAttribute('data-mdiff');
+    if (mk) { memoryDiffKeys.push(memoryDiffBtns[mdb]); }
+  }
+  for (var mdi = 0; mdi < memoryDiffKeys.length; mdi++) {
+    (function (btn) {
+      var key = btn.getAttribute('data-mdiff');
+      btn.onclick = function () {
+        for (var q = 0; q < memoryDiffKeys.length; q++) { memoryDiffKeys[q].className = 'card'; }
+        btn.className = 'card is-active';
+        MemoryTest.diff = key;
+      };
+    })(memoryDiffKeys[mdi]);
+  }
+
+  $('retoMemoryBtn').onclick = function () { retoView('msetup'); };
+  $('memoryBackBtn').onclick = function () { retoView('list'); };
+
+  function startMemory() {
+    stopTest(); stopReto(false); stopInterm(false); stopVolReto(false); stopRandom();
+    stopBreathReto(false); stopStairReto(false);
+    App.mode = 'memory';
+    App.current = MemoryTest;
+    applyVolume();
+
+    $('memoryStateLabel').innerHTML = 'Escuchando secuencia 1…';
+    $('memoryFreqNow').innerHTML = '—';
+
+    MemoryTest.onNote = function (label, idx, hz) {
+      $('memoryStateLabel').innerHTML = (label === 'A') ? 'Escuchando secuencia 1…' : 'Escuchando secuencia 2…';
+      $('memoryFreqNow').innerHTML = hz + ' Hz (posición ' + (idx + 1) + ')';
+    };
+    MemoryTest.onReady = function () {
+      showMemoryGuess();
+    };
+
+    var ok = MemoryTest.start();
+    if (!ok) {
+      $('memoryStateLabel').innerHTML = '⚠️ Este navegador no puede generar tonos.';
+      return;
+    }
+  }
+
+  function stopMemory() {
+    if (App.mode === 'memory') {
+      MemoryTest.stop();
+      applyVolume();
+    }
+  }
+
+  $('memoryGoBtn').onclick = function () { retoView('mrun'); startMemory(); };
+  $('memoryStopBtn').onclick = function () { stopMemory(); retoView('msetup'); };
+
+  function showMemoryGuess() {
+    var n = MemoryTest.seqA.length;
+    var html = '';
+    for (var i = 0; i < n; i++) {
+      html += '<button type="button" class="freq-btn" data-mguess="' + i + '">Posición ' + (i + 1) + '</button>';
+    }
+    $('memoryGuessGrid').innerHTML = html;
+    var btns = $('memoryGuessGrid').getElementsByTagName('button');
+    for (var j = 0; j < btns.length; j++) {
+      (function (btn) {
+        btn.onclick = function () {
+          var guess = parseInt(btn.getAttribute('data-mguess'), 10);
+          var correctIdx = MemoryTest.changedIdx;
+          var ok = (guess === correctIdx);
+          $('memoryResultTitle').innerHTML = ok ? '✅ ¡Correcto!' : '❌ Fallaste';
+          $('memoryResultDetail').innerHTML =
+            'Posición correcta: ' + (correctIdx + 1) + '. ' +
+            MemoryTest.seqA[correctIdx] + ' Hz → ' + MemoryTest.seqB[correctIdx] + ' Hz.' +
+            (ok ? '' : ' Respondiste posición ' + (guess + 1) + '.');
+          retoView('mresult');
+        };
+      })(btns[j]);
+    }
+    retoView('mguess');
+  }
+
+  $('memoryPlayAgainBtn').onclick = function () { retoView('mrun'); startMemory(); };
+  $('memoryResultBackBtn').onclick = function () { retoView('msetup'); };
 
   /* --- RANDOM ------------------------------------------------ */
 
@@ -2483,6 +3628,9 @@ input[type="range"]::-moz-focus-outer {
     stopReto(false);
     stopInterm(false);
     stopVolReto(false);
+    stopBreathReto(false);
+    stopStairReto(false);
+    stopMemory();
     App.mode = 'random';
     App.current = RandomTest;
     applyVolume();
@@ -2499,6 +3647,525 @@ input[type="range"]::-moz-focus-outer {
   };
 
   rndPauseBtn.onclick = function () { stopRandom(); };
+
+  /* --- MARATÓN ------------------------------------------------
+     Orquesta, vuelta tras vuelta y sin pulsar START entre fases:
+     Test Normal -> 50-80-50 -> Intermitente -> Volumen Progresivo
+     -> Respiración -> Escalera (personalizada) -> Random.
+     El volumen es fijo (elegido antes de empezar); el resto de
+     parámetros de cada fase se sortea entre 50/60/70/80 Hz y las
+     dificultades existentes. Memoria y Escalera->Jugar NO participan. */
+
+  var marVolSlider = $('marVolSlider');
+  var marLapsSlider = $('marLapsSlider');
+  var marTestDurSlider = $('marTestDurSlider');
+  var marRetoDurSlider = $('marRetoDurSlider');
+  var marRndDurSlider = $('marRndDurSlider');
+  var marStairStepsSlider = $('marStairStepsSlider');
+  var marVolPresetBtns = [];
+  var msAll = $('marathonSetup').getElementsByTagName('button');
+  for (var mspb = 0; mspb < msAll.length; mspb++) {
+    if (msAll[mspb].getAttribute('data-mvpreset')) { marVolPresetBtns.push(msAll[mspb]); }
+  }
+
+  var marConfig = {
+    volPct: 100,
+    laps: 2,
+    testDurMs: 15000,
+    retoDurMs: 20000,
+    rndDurMs: 20000,
+    stairSteps: 10
+  };
+
+  function applyMarVol() {
+    var v = parseInt(marVolSlider.value, 10);
+    if (isNaN(v)) { v = 100; }
+    if (v < 50) { v = 50; }
+    if (v > 500) { v = 500; }
+    marVolSlider.value = v;
+    marConfig.volPct = v;
+    $('marVolVal').innerHTML = v + '%';
+    $('marVolWarnExtreme').className = (v >= 300) ? 'warn is-open' : 'warn';
+    for (var i = 0; i < marVolPresetBtns.length; i++) {
+      var pv = parseInt(marVolPresetBtns[i].getAttribute('data-mvpreset'), 10);
+      marVolPresetBtns[i].className = (pv === v) ? 'preset-btn w4 is-active' : 'preset-btn w4';
+    }
+  }
+  marVolSlider.oninput = applyMarVol;
+  marVolSlider.onchange = applyMarVol;
+  for (var mvp = 0; mvp < marVolPresetBtns.length; mvp++) {
+    (function (btn) {
+      btn.onclick = function () { marVolSlider.value = btn.getAttribute('data-mvpreset'); applyMarVol(); };
+    })(marVolPresetBtns[mvp]);
+  }
+
+  function applyMarLaps() {
+    var v = parseInt(marLapsSlider.value, 10);
+    if (isNaN(v)) { v = 2; }
+    marConfig.laps = v;
+    $('marLapsVal').innerHTML = v + (v === 1 ? ' vuelta' : ' vueltas');
+  }
+  marLapsSlider.oninput = applyMarLaps;
+  marLapsSlider.onchange = applyMarLaps;
+
+  function applyMarTestDur() {
+    var v = parseInt(marTestDurSlider.value, 10);
+    if (isNaN(v)) { v = 15; }
+    marConfig.testDurMs = v * 1000;
+    $('marTestDurVal').innerHTML = v + ' segundos';
+  }
+  marTestDurSlider.oninput = applyMarTestDur;
+  marTestDurSlider.onchange = applyMarTestDur;
+
+  function applyMarRetoDur() {
+    var v = parseInt(marRetoDurSlider.value, 10);
+    if (isNaN(v)) { v = 20; }
+    marConfig.retoDurMs = v * 1000;
+    $('marRetoDurVal').innerHTML = v + ' segundos';
+  }
+  marRetoDurSlider.oninput = applyMarRetoDur;
+  marRetoDurSlider.onchange = applyMarRetoDur;
+
+  function applyMarRndDur() {
+    var v = parseInt(marRndDurSlider.value, 10);
+    if (isNaN(v)) { v = 20; }
+    marConfig.rndDurMs = v * 1000;
+    $('marRndDurVal').innerHTML = v + ' segundos';
+  }
+  marRndDurSlider.oninput = applyMarRndDur;
+  marRndDurSlider.onchange = applyMarRndDur;
+
+  function applyMarStairSteps() {
+    var v = parseInt(marStairStepsSlider.value, 10);
+    if (isNaN(v)) { v = 10; }
+    marConfig.stairSteps = v;
+    $('marStairStepsVal').innerHTML = v + ' escalones';
+  }
+  marStairStepsSlider.oninput = applyMarStairSteps;
+  marStairStepsSlider.onchange = applyMarStairSteps;
+
+  var FREQ_POOL = [50, 60, 70, 80];
+  var DIFF_POOL = ['easy', 'normal', 'hard', 'extreme'];
+  var DIFF_LABELS = { easy: '🟢 Fácil', normal: '🟡 Normal', hard: '🔴 Difícil', extreme: '🟣 Extremo' };
+
+  function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  var marTimer = new Timer($('clockMarathon'));
+  var marPhaseCountTick = null;
+  var marSession = null;
+
+  var Marathon = {
+    running: false,
+    paused: false,
+    lap: 1,
+    totalLaps: 2,
+    phaseSeq: ['test', 'sweep', 'interm', 'volsweep', 'breath', 'stair', 'random'],
+    phaseIdx: 0,
+    log: [],           // registro de lo ocurrido en cada fase, para el resumen
+    phaseTimer: null,
+    volPct: 100,
+
+    phaseLabels: {
+      test: '🎵 TEST NORMAL', sweep: '🌊 50 → 80 → 50', interm: '🔁 INTERMITENTE',
+      volsweep: '🔊 VOLUMEN PROGRESIVO', breath: '🌬️ RESPIRACIÓN', stair: '🪜 ESCALERA', random: '🎲 RANDOM'
+    },
+
+    savedRndSelected: null,
+
+    start: function () {
+      if (this.running) { return; }
+      panicAllButMarathon();
+      this.running = true;
+      this.paused = false;
+      this.lap = 1;
+      this.totalLaps = marConfig.laps;
+      this.phaseIdx = 0;
+      this.log = [];
+      this.volPct = marConfig.volPct;
+      // Guarda la selección de frecuencias del usuario en la pestaña Random,
+      // porque la fase Random de la Maratón activa siempre las 4 frecuencias.
+      this.savedRndSelected = {};
+      for (var k in RandomTest.selected) {
+        if (RandomTest.selected.hasOwnProperty(k)) { this.savedRndSelected[k] = RandomTest.selected[k]; }
+      }
+      marSession = { id: 'mar' + new Date().getTime(), label: '⏱️ Maratón · ' + this.totalLaps + ' vueltas · ' + this.volPct + '%' };
+      marTimer.reset();
+      marTimer.start();
+      $('marLapLabel').innerHTML = 'Vuelta ' + this.lap + ' / ' + this.totalLaps;
+      retoView('list');       // limpia cualquier pantalla de reto abierta
+      showMarathonScreen('run');
+      this.runPhase();
+    },
+
+    /* Avanza automáticamente de fase sin pedir intervención. */
+    nextPhase: function () {
+      this.phaseIdx++;
+      if (this.phaseIdx >= this.phaseSeq.length) {
+        this.phaseIdx = 0;
+        this.lap++;
+        if (this.lap > this.totalLaps) {
+          this.finish();
+          return;
+        }
+        $('marLapLabel').innerHTML = 'Vuelta ' + this.lap + ' / ' + this.totalLaps;
+      }
+      this.runPhase();
+    },
+
+    clearPhaseTimer: function () {
+      if (this.phaseTimer) { clearTimeout(this.phaseTimer); this.phaseTimer = null; }
+      stopMarPhaseCountdown();
+    },
+
+    runPhase: function () {
+      if (!this.running || this.paused) { return; }
+      var phase = this.phaseSeq[this.phaseIdx];
+      $('marPhaseLabel').innerHTML = this.phaseLabels[phase];
+      $('marPhaseDot').style.left = '0%';
+      var self = this;
+
+      Engine.setVolume(this.volPct / 100);
+
+      if (phase === 'test') {
+        var hz = pickRandom(FREQ_POOL);
+        ToneTest.setFreq(hz);
+        App.mode = 'tone';
+        App.current = ToneTest;
+        var ok = ToneTest.start();
+        $('marPhaseState').innerHTML = hz + ' Hz';
+        $('marPhaseDetail').innerHTML = 'Test Normal';
+        this.log.push({ phase: 'test', text: hz + ' Hz · ' + fmtSecShort(marConfig.testDurMs) });
+        this.runTimedPhase(marConfig.testDurMs, function () { ToneTest.stop(); self.nextPhase(); });
+        return;
+      }
+
+      if (phase === 'sweep') {
+        var lo = pickRandom(FREQ_POOL);
+        var hiOpts = FREQ_POOL.slice().filter(function (v) { return v !== lo; });
+        var hi = pickRandom(hiOpts);
+        var diff = pickRandom(DIFF_POOL);
+        SweepTest.setRange(lo, hi);
+        SweepTest.diff = diff;
+        SweepTest.reset();
+        App.mode = 'sweep';
+        App.current = SweepTest;
+        SweepTest.onFrame = function (hzNow, pos) {
+          $('marPhaseState').innerHTML = Math.round(hzNow * 10) / 10 + ' Hz';
+          $('marPhaseDot').style.left = Math.round(pos * 100) + '%';
+        };
+        SweepTest.start();
+        $('marPhaseDetail').innerHTML = SweepTest.low + ' → ' + SweepTest.high + ' Hz · ' + DIFF_LABELS[diff];
+        this.log.push({ phase: 'sweep', text: SweepTest.low + ' → ' + SweepTest.high + ' Hz · ' + DIFF_LABELS[diff] + ' · ' + fmtSecShort(marConfig.retoDurMs) });
+        this.runTimedPhase(marConfig.retoDurMs, function () { SweepTest.stop(); self.nextPhase(); });
+        return;
+      }
+
+      if (phase === 'interm') {
+        var ifreq = pickRandom(FREQ_POOL);
+        var ion = 2 + Math.floor(Math.random() * 6);   // 2..7 s
+        var ioff = 1 + Math.floor(Math.random() * 4);  // 1..4 s
+        IntermTest.freq = ifreq;
+        IntermTest.on = ion * 1000;
+        IntermTest.off = ioff * 1000;
+        App.mode = 'interm';
+        App.current = IntermTest;
+        IntermTest.onPhase = function (p, hz) {
+          $('marPhaseState').innerHTML = (p === 'play') ? '🔊 ' + hz + ' Hz' : '🔇 silencio';
+        };
+        IntermTest.start();
+        $('marPhaseDetail').innerHTML = ifreq + ' Hz · ' + ion + 's / ' + ioff + 's';
+        this.log.push({ phase: 'interm', text: ifreq + ' Hz · ' + ion + 's / ' + ioff + 's · ' + fmtSecShort(marConfig.retoDurMs) });
+        this.runTimedPhase(marConfig.retoDurMs, function () { IntermTest.stop(); self.nextPhase(); });
+        return;
+      }
+
+      if (phase === 'volsweep') {
+        var vfreq = pickRandom(FREQ_POOL);
+        var vdiff = pickRandom(DIFF_POOL);
+        VolSweepTest.freq = vfreq;
+        VolSweepTest.diff = vdiff;
+        VolSweepTest.setRange(Math.max(50, this.volPct - 50), Math.min(500, this.volPct + 100));
+        VolSweepTest.reset();
+        App.mode = 'volsweep';
+        App.current = VolSweepTest;
+        VolSweepTest.onFrame = function (volMult, pos) {
+          $('marPhaseState').innerHTML = Math.round(volMult * 100) + '%';
+          $('marPhaseDot').style.left = Math.round(pos * 100) + '%';
+        };
+        VolSweepTest.start();
+        $('marPhaseDetail').innerHTML = vfreq + ' Hz · ' + DIFF_LABELS[vdiff];
+        this.log.push({ phase: 'volsweep', text: vfreq + ' Hz · ' + DIFF_LABELS[vdiff] + ' · ' + fmtSecShort(marConfig.retoDurMs) });
+        this.runTimedPhase(marConfig.retoDurMs, function () {
+          VolSweepTest.stop();
+          Engine.setVolume(self.volPct / 100);  // el volumen de la Maratón se mantiene fijo
+          self.nextPhase();
+        });
+        return;
+      }
+
+      if (phase === 'breath') {
+        var bfreq = pickRandom(FREQ_POOL);
+        var bcycle = 4 + Math.floor(Math.random() * 6); // 4..9 s
+        BreathTest.freq = bfreq;
+        BreathTest.cycleMs = bcycle * 1000;
+        BreathTest.maxVol = this.volPct / 100;
+        App.mode = 'breath';
+        App.current = BreathTest;
+        BreathTest.onFrame = function (s01, volPct) {
+          $('marPhaseState').innerHTML = volPct + '%';
+        };
+        BreathTest.start();
+        $('marPhaseDetail').innerHTML = bfreq + ' Hz · ciclo ' + bcycle + 's';
+        this.log.push({ phase: 'breath', text: bfreq + ' Hz · ciclo ' + bcycle + 's · ' + fmtSecShort(marConfig.retoDurMs) });
+        this.runTimedPhase(marConfig.retoDurMs, function () {
+          BreathTest.stop();
+          Engine.setVolume(self.volPct / 100);
+          self.nextPhase();
+        });
+        return;
+      }
+
+      if (phase === 'stair') {
+        var stfreq = pickRandom(FREQ_POOL);
+        var steps = marConfig.stairSteps;
+        var dur = 2000;
+        StairTest.freq = stfreq;
+        StairTest.steps = steps;
+        StairTest.stepMs = dur;
+        StairTest.minVol = Math.max(0.5, (this.volPct - 50) / 100);
+        StairTest.maxVol = Math.min(5, (this.volPct + 100) / 100);
+        App.mode = 'stair-custom';
+        App.current = StairTest;
+        StairTest.onStep = function (idx, total, volPct) {
+          $('marPhaseState').innerHTML = 'Escalón ' + (idx + 1) + ' / ' + total + ' · ' + volPct + '%';
+          $('marPhaseDot').style.left = Math.round((idx / Math.max(1, total - 1)) * 100) + '%';
+        };
+        StairTest.onDone = function () {
+          Engine.setVolume(self.volPct / 100);
+          self.nextPhase();
+        };
+        $('marPhaseDetail').innerHTML = stfreq + ' Hz · ' + steps + ' escalones';
+        this.log.push({ phase: 'stair', text: stfreq + ' Hz · ' + steps + ' escalones' });
+        StairTest.start();
+        // La Escalera no usa runTimedPhase: termina sola vía onDone.
+        startMarPhaseCountdownIndefinite();
+        return;
+      }
+
+      if (phase === 'random') {
+        RandomTest.selected = { 50: true, 60: true, 70: true, 80: true };
+        RandomTest.onMin = 2000; RandomTest.onMax = 8000;
+        RandomTest.offMin = 1000; RandomTest.offMax = 3000;
+        App.mode = 'random';
+        App.current = RandomTest;
+        RandomTest.onPhase = function (p, hz) {
+          $('marPhaseState').innerHTML = (p === 'play') ? '🔊 ' + hz + ' Hz' : (p === 'pause' ? '🔇 silencio' : '—');
+        };
+        RandomTest.start();
+        $('marPhaseDetail').innerHTML = 'Frecuencias: 50, 60, 70, 80 Hz';
+        this.log.push({ phase: 'random', text: fmtSecShort(marConfig.rndDurMs) });
+        this.runTimedPhase(marConfig.rndDurMs, function () { RandomTest.stop(); self.nextPhase(); });
+        return;
+      }
+    },
+
+    /* Fases con duración fija: cuenta atrás visual + callback al terminar. */
+    runTimedPhase: function (durMs, onEnd) {
+      var self = this;
+      this.clearPhaseTimer();
+      var endAt = new Date().getTime() + durMs;
+      startMarPhaseCountdown(endAt);
+      this.phaseTimer = setTimeout(function () {
+        if (!self.running || self.paused) { return; }
+        onEnd();
+      }, durMs);
+    },
+
+    pause: function () {
+      if (!this.running || this.paused) { return; }
+      this.paused = true;
+      this.clearPhaseTimer();
+      Engine.stop(false);
+      if (App.current && App.current.stop) { App.current.stop(); }
+      marTimer.pause();
+      $('marPauseBtn').style.display = 'none';
+      $('marResumeBtn').style.display = 'inline-block';
+    },
+
+    resume: function () {
+      if (!this.running || !this.paused) { return; }
+      this.paused = false;
+      marTimer.start();
+      $('marPauseBtn').style.display = 'inline-block';
+      $('marResumeBtn').style.display = 'none';
+      this.runPhase();
+    },
+
+    stop: function () {
+      if (!this.running) { return; }
+      this.running = false;
+      this.paused = false;
+      this.clearPhaseTimer();
+      Engine.stop(true);
+      if (App.current && App.current.stop) { App.current.stop(); }
+      marTimer.pause();
+      restoreIndividualCallbacks();
+    },
+
+    finish: function () {
+      this.running = false;
+      this.clearPhaseTimer();
+      Engine.stop(false);
+      marTimer.pause();
+      if (marSession) { Store.save('marathon', marSession.id, marSession.label, marTimer.value()); }
+      renderMarathonSummary();
+      showMarathonScreen('summary');
+      restoreIndividualCallbacks();
+    }
+  };
+
+  /* Los callbacks onFrame/onStep/onPhase de cada prueba son globales
+     (una única propiedad en el objeto de la prueba). La Maratón los
+     sobrescribe temporalmente para actualizar su propia pantalla;
+     al terminar o detenerse hay que devolverlos a la UI individual
+     de cada reto, o esa pantalla dejaría de actualizarse. */
+  function restoreIndividualCallbacks() {
+    SweepTest.onFrame = function (hz, pos, dir) {
+      retoFreqEl.innerHTML = String(Math.round(hz * 10) / 10);
+      retoDot.style.left = Math.round(pos * 100) + '%';
+      retoFromEl.innerHTML = SweepTest.low + ' Hz';
+      retoToEl.innerHTML = SweepTest.high + ' Hz' + (dir > 0 ? ' ▲' : ' ▼');
+    };
+    IntermTest.onPhase = function (phase) {
+      if (phase === 'play') {
+        intermState.innerHTML = '🔊 SONANDO';
+      } else if (phase === 'pause') {
+        intermState.innerHTML = '🔇 PAUSA';
+      } else {
+        intermState.innerHTML = '⚪ Detenido';
+        intermCount.innerHTML = '0.0 s';
+      }
+      intermResumeBtn.disabled = IntermTest.running;
+      intermPauseBtn.disabled = !IntermTest.running;
+    };
+    VolSweepTest.onFrame = function (pct, pos, dir) {
+      var shown = Math.round(pct * 100);
+      volPercentEl.innerHTML = shown + '%';
+      var leftPct = Math.round(pos * 100) + '%';
+      volDot.style.left = leftPct;
+      volDirLabel.innerHTML = (dir > 0) ? '🔊 SUBIENDO' : '🔉 BAJANDO';
+    };
+    BreathTest.onFrame = function (s01, volPct) {
+      breathPercentEl.innerHTML = volPct + '%';
+      var leftPct = Math.round(s01 * 88);
+      breathDot.style.left = (6 + leftPct) + '%';
+      breathDot.style.bottom = Math.round(s01 * 68) + 'px';
+    };
+    RandomTest.onPhase = function (phase, hz) {
+      if (phase === 'play') {
+        rndFreq.innerHTML = String(hz);
+        rndUnit.innerHTML = ' Hz';
+        rndStatus.innerHTML = '🟢 <strong>Sonando</strong>';
+      } else if (phase === 'pause') {
+        rndFreq.innerHTML = '—';
+        rndUnit.innerHTML = '';
+        rndStatus.innerHTML = '⏸ Silencio';
+      } else {
+        rndFreq.innerHTML = '—';
+        rndUnit.innerHTML = '';
+        rndStatus.innerHTML = '⚪ En pausa';
+      }
+      rndStartBtn.disabled = RandomTest.running;
+      rndPauseBtn.disabled = !RandomTest.running;
+    };
+    StairTest.onStep = null;
+    StairTest.onDone = null;
+    applyRndRanges('restore');   // RandomTest.on/offMin/Max vuelven a coincidir con los sliders de la pestaña Random
+
+    if (Marathon.savedRndSelected) {
+      RandomTest.selected = Marathon.savedRndSelected;
+      for (var r2 = 0; r2 < rndCards.length; r2++) {
+        var hz2 = rndCards[r2].getAttribute('data-rnd');
+        if (!hz2) { continue; }
+        var on2 = !!RandomTest.selected[hz2];
+        rndCards[r2].className = on2 ? 'card is-active' : 'card';
+        rndCards[r2].innerHTML = hz2 + ' Hz<span class="check">' + (on2 ? '✅' : '⬜') + '</span>';
+      }
+    }
+  }
+
+  function fmtSecShort(ms) { return Math.round(ms / 1000) + 's'; }
+
+  function startMarPhaseCountdown(endAt) {
+    stopMarPhaseCountdown();
+    marPhaseCountTick = setInterval(function () {
+      var left = (endAt - new Date().getTime()) / 1000;
+      if (left < 0) { left = 0; }
+      $('marPhaseCountdown').innerHTML = (Math.round(left * 10) / 10).toFixed(1) + ' s restantes';
+    }, 100);
+  }
+  function startMarPhaseCountdownIndefinite() {
+    stopMarPhaseCountdown();
+    $('marPhaseCountdown').innerHTML = '&nbsp;';
+  }
+  function stopMarPhaseCountdown() {
+    if (marPhaseCountTick) { clearInterval(marPhaseCountTick); marPhaseCountTick = null; }
+  }
+
+  /* Detiene todo lo que no sea la propia Maratón, sin marcar sesiones
+     de los modos individuales (evita duplicar registros en Tiempos). */
+  function panicAllButMarathon() {
+    Engine.stop(true);
+    if (Engine.playing) { Engine.stop(true); }
+    if (ToneTest && Engine.playing) { ToneTest.stop(); }
+    SweepTest.stop();
+    IntermTest.stop();
+    VolSweepTest.stop();
+    BreathTest.stop();
+    StairTest.stop();
+    RandomTest.stop();
+    MemoryTest.stop();
+  }
+
+  function showMarathonScreen(which) {
+    $('marathonSetup').style.display = (which === 'setup') ? 'block' : 'none';
+    $('marathonRun').style.display = (which === 'run') ? 'block' : 'none';
+    $('marathonSummary').style.display = (which === 'summary') ? 'block' : 'none';
+  }
+
+  function renderMarathonSummary() {
+    var byPhase = { test: [], sweep: [], interm: [], volsweep: [], breath: [], stair: [], random: [] };
+    for (var i = 0; i < Marathon.log.length; i++) {
+      byPhase[Marathon.log[i].phase].push(Marathon.log[i].text);
+    }
+    var titles = {
+      test: '🎵 Test Normal', sweep: '🌊 Reto 50 → 80 → 50', interm: '🔁 Intermitente',
+      volsweep: '🔊 Volumen Progresivo', breath: '🌬️ Respiración', stair: '🪜 Escalera', random: '🎲 Random'
+    };
+    var order = ['test', 'sweep', 'interm', 'volsweep', 'breath', 'stair', 'random'];
+    var html = '';
+    html += '<li>⏱️ Tiempo total<span>' + fmt(marTimer.value()) + '</span><em class="clearfix"></em></li>';
+    html += '<li>🔊 Volumen<span>' + Marathon.volPct + '%</span><em class="clearfix"></em></li>';
+    html += '<li>🔄 Vueltas<span>' + Marathon.totalLaps + '</span><em class="clearfix"></em></li>';
+    for (var j = 0; j < order.length; j++) {
+      var key = order[j];
+      if (!byPhase[key].length) { continue; }
+      html += '<li>' + titles[key] + '<span>' + byPhase[key].length + 'x</span><em class="clearfix"></em></li>';
+      for (var k = 0; k < byPhase[key].length; k++) {
+        html += '<li style="padding-left:14px;color:#b0b0b0;font-size:13px">' + byPhase[key][k] + '</li>';
+      }
+    }
+    $('marSummaryList').innerHTML = html;
+  }
+
+  $('marStartBtn').onclick = function () {
+    applyMarVol(); applyMarLaps(); applyMarTestDur(); applyMarRetoDur(); applyMarRndDur(); applyMarStairSteps();
+    Marathon.start();
+  };
+  $('marPauseBtn').onclick = function () { Marathon.pause(); };
+  $('marResumeBtn').onclick = function () { Marathon.resume(); };
+  $('marStopBtn').onclick = function () { Marathon.stop(); showMarathonScreen('setup'); };
+  $('marSummaryBackBtn').onclick = function () { showMarathonScreen('setup'); };
 
   /* --- TIEMPOS ----------------------------------------------- */
 
@@ -2521,6 +4188,7 @@ input[type="range"]::-moz-focus-outer {
     renderList($('listRandom'), $('totalRandom'), 'random');
     renderList($('listInterm'), $('totalInterm'), 'interm');
     renderList($('listVolsweep'), $('totalVolsweep'), 'volsweep');
+    renderList($('listMarathon'), $('totalMarathon'), 'marathon');
     if (!Store.ok) {
       $('storeWarn').innerHTML = 'Este navegador no permite guardar datos locales, así que los tiempos no se conservarán al cerrar la página.';
       $('storeWarn').className = 'warn is-open';
@@ -2563,6 +4231,10 @@ input[type="range"]::-moz-focus-outer {
     stopInterm(false);
     stopVolReto(false);
     stopRandom();
+    stopBreathReto(false);
+    stopStairReto(false);
+    stopMemory();
+    Marathon.stop();
   }
 
   if (window.addEventListener) {
