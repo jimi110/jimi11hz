@@ -1,2395 +1,2176 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-slate-950 text-slate-100">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LogiExpress Hub - Simulador Logístico</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <style>
-    /* Estilos personalizados para animaciones y scrollbars */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0f172a;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #475569;
-    }
-    @keyframes pulse-ring {
-      0% { transform: scale(0.33); opacity: 1; }
-      80%, 100% { transform: scale(1.6); opacity: 0; }
-    }
-    .pulse-node {
-      position: relative;
-    }
-    .pulse-node::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: inherit;
-      border-radius: 50%;
-      animation: pulse-ring 2s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
-    }
-    .map-glow {
-      filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.3));
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="description" content="Generador de tonos sinusoidales para probar altavoces y sistemas de audio.">
+<meta name="theme-color" content="#ffffff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Hz Jimi</title>
+<style>
+/* -------------------------------------------------------------
+   Hz Jimi - estilos
+   Sin variables CSS, sin gradientes, sin fuentes externas.
+   Compatible con navegadores antiguos (iOS 7+, Android 4+, IE10+).
+   ------------------------------------------------------------- */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #111111;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 18px 40px 18px;
+  text-align: center;
+}
+
+.brand {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.tagline {
+  margin: 6px 0 16px 0;
+  font-size: 14px;
+  color: #8a8a8a;
+}
+
+/* Navegación ------------------------------------------------- */
+
+.tabs {
+  font-size: 0;
+  margin: 0 -1% 20px -1%;
+}
+
+.tab {
+  display: inline-block;
+  width: 23%;
+  margin: 0 1%;
+  padding: 10px 2px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6f6f6f;
+  background: #ffffff;
+  border: 2px solid #ededed;
+  border-radius: 12px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+.tab.is-active {
+  color: #111111;
+  border-color: #111111;
+}
+
+.panel { display: none; }
+.panel.is-open { display: block; }
+
+/* Lectura de frecuencia -------------------------------------- */
+
+.readout {
+  border: 2px solid #ededed;
+  border-radius: 18px;
+  padding: 18px 12px 14px 12px;
+  margin-bottom: 20px;
+}
+
+.readout-value {
+  font-size: 54px;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.readout-unit {
+  font-size: 26px;
+  font-weight: 600;
+  color: #6f6f6f;
+}
+
+.status {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #6f6f6f;
+}
+
+.status strong {
+  font-weight: 600;
+  color: #111111;
+}
+
+.clock {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid #f4f4f4;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.clock-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: #8a8a8a;
+  letter-spacing: 0;
+}
+
+/* Botones de frecuencia -------------------------------------- */
+
+.section-title {
+  text-align: left;
+  font-size: 14px;
+  color: #8a8a8a;
+  margin: 0 0 8px 2px;
+}
+
+.grid {
+  font-size: 0; /* elimina el hueco entre inline-block */
+  margin: 0 -4px;
+}
+
+.freq-btn {
+  display: inline-block;
+  width: 48%;
+  margin: 0 1% 8px 1%;
+  padding: 16px 4px;
+  font-family: inherit;
+  font-size: 19px;
+  font-weight: 600;
+  color: #111111;
+  background: #ffffff;
+  border: 2px solid #e4e4e4;
+  border-bottom-width: 4px;
+  border-radius: 14px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+.freq-btn.wide { width: 98%; }
+
+.freq-btn.is-active {
+  background: #111111;
+  border-color: #111111;
+  color: #ffffff;
+}
+
+/* Frecuencia personalizada ----------------------------------- */
+
+.custom {
+  display: none;
+  margin: 4px 1% 8px 1%;
+  padding: 14px;
+  border: 2px solid #ededed;
+  border-radius: 14px;
+  text-align: left;
+  font-size: 15px;
+}
+
+.custom.is-open { display: block; }
+
+.custom label {
+  display: block;
+  color: #6f6f6f;
+  margin-bottom: 8px;
+}
+
+.custom-row { font-size: 0; }
+
+#customInput {
+  display: inline-block;
+  width: 60%;
+  padding: 12px 10px;
+  font-family: inherit;
+  font-size: 18px;
+  color: #111111;
+  background: #ffffff;
+  border: 2px solid #e4e4e4;
+  border-radius: 12px;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#customApply {
+  display: inline-block;
+  width: 36%;
+  margin-left: 4%;
+  padding: 12px 6px;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #111111;
+  border: 2px solid #111111;
+  border-radius: 12px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+.hint {
+  margin: 8px 0 0 0;
+  font-size: 13px;
+  color: #8a8a8a;
+}
+
+.hint.is-error { color: #111111; font-weight: 600; }
+
+/* Volumen ---------------------------------------------------- */
+
+.vol {
+  margin: 18px 0 4px 0;
+  padding: 14px 14px 6px 14px;
+  border: 2px solid #ededed;
+  border-radius: 14px;
+  text-align: left;
+}
+
+.vol-head {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.vol-scale {
+  overflow: hidden;
+  font-size: 12px;
+  color: #b0b0b0;
+  margin-top: -4px;
+}
+
+.vol-scale span { float: right; }
+
+#volSlider {
+  display: block;
+  width: 100%;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#volSlider::-webkit-slider-runnable-track {
+  height: 8px;
+  background: #ededed;
+  border-radius: 6px;
+  border: 0;
+}
+
+#volSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  margin-top: -11px;
+  background: #111111;
+  border: 0;
+  border-radius: 50%;
+}
+
+#volSlider::-moz-range-track {
+  height: 8px;
+  background: #ededed;
+  border-radius: 6px;
+  border: 0;
+}
+
+#volSlider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  background: #111111;
+  border: 0;
+  border-radius: 50%;
+}
+
+.vol-warn {
+  display: none;
+  margin: 2px 0 8px 0;
+  font-size: 13px;
+  color: #6f6f6f;
+}
+
+.vol-warn.is-open { display: block; }
+
+/* Transporte START / PAUSE ----------------------------------- */
+
+.transport {
+  margin-top: 18px;
+  font-size: 0;
+}
+
+.play-btn {
+  display: inline-block;
+  width: 48%;
+  margin: 0 1%;
+  padding: 22px 4px;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  touch-action: manipulation;
+  border: 2px solid #111111;
+  border-bottom-width: 5px;
+  background: #111111;
+  color: #ffffff;
+}
+
+.play-btn.secondary {
+  background: #ffffff;
+  color: #111111;
+  border-color: #d9d9d9;
+}
+
+.play-btn[disabled] { opacity: 0.35; cursor: default; }
+
+.mini-btn {
+  margin-top: 12px;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #6f6f6f;
+  background: #ffffff;
+  border: 2px solid #ededed;
+  border-radius: 12px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  touch-action: manipulation;
+}
+
+/* Tarjetas (retos, dificultad, random) ----------------------- */
+
+.card {
+  display: block;
+  width: 100%;
+  margin: 0 0 10px 0;
+  padding: 18px 16px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111111;
+  background: #ffffff;
+  border: 2px solid #e4e4e4;
+  border-bottom-width: 4px;
+  border-radius: 16px;
+  text-align: left;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+.card small {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #8a8a8a;
+}
+
+.card.is-active {
+  border-color: #111111;
+}
+
+.card.is-active small { color: #6f6f6f; }
+
+.check {
+  float: right;
+  font-size: 18px;
+}
+
+/* Barra de progreso del reto --------------------------------- */
+
+.track {
+  position: relative;
+  height: 10px;
+  margin: 16px 6px 10px 6px;
+  background: #ededed;
+  border-radius: 6px;
+}
+
+.dot {
+  position: absolute;
+  top: -7px;
+  left: 0;
+  margin-left: -12px;
+  width: 24px;
+  height: 24px;
+  background: #111111;
+  border-radius: 50%;
+}
+
+.track-ends {
+  overflow: hidden;
+  font-size: 13px;
+  color: #8a8a8a;
+  margin-bottom: 4px;
+}
+
+.track-ends span { float: right; }
+
+/* Estado grande (reto intermitente / random) ----------------- */
+
+.big-state {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 4px 0 2px 0;
+}
+
+.countdown {
+  font-size: 20px;
+  font-weight: 600;
+  color: #6f6f6f;
+}
+
+/* Sliders de rango ------------------------------------------- */
+
+.range-box {
+  margin: 0 0 14px 0;
+  padding: 12px 14px 4px 14px;
+  border: 2px solid #ededed;
+  border-radius: 14px;
+  text-align: left;
+}
+
+.range-box h3 {
+  margin: 0 0 2px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.range-box .val {
+  font-size: 14px;
+  color: #6f6f6f;
+  margin: 0 0 4px 0;
+}
+
+.rvis {
+  position: relative;
+  height: 8px;
+  margin: 8px 4px 2px 4px;
+  background: #ededed;
+  border-radius: 6px;
+}
+
+.rvis i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 8px;
+  background: #111111;
+  border-radius: 6px;
+}
+
+.slider {
+  display: block;
+  width: 100%;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.slider::-webkit-slider-runnable-track { height: 6px; background: #ededed; border-radius: 6px; border: 0; }
+.slider::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -10px; background: #111111; border: 0; border-radius: 50%; }
+.slider::-moz-range-track { height: 6px; background: #ededed; border-radius: 6px; border: 0; }
+.slider::-moz-range-thumb { width: 24px; height: 24px; background: #111111; border: 0; border-radius: 50%; }
+
+.slider-tag {
+  font-size: 12px;
+  color: #b0b0b0;
+  margin: 0;
+}
+
+/* Tiempos ---------------------------------------------------- */
+
+.times-block {
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  border: 2px solid #ededed;
+  border-radius: 16px;
+  text-align: left;
+}
+
+.times-block h2 {
+  margin: 0 0 10px 0;
+  overflow: hidden;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.times-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  color: #6f6f6f;
+}
+
+.times-list li {
+  overflow: hidden;
+  padding: 7px 0;
+  border-top: 1px solid #f2f2f2;
+}
+
+.times-list li span { float: right; color: #111111; font-weight: 600; }
+
+.times-total {
+  overflow: hidden;
+  margin: 12px 0 0 0;
+  padding-top: 10px;
+  border-top: 2px solid #f2f2f2;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.times-total span { float: right; }
+
+.empty { color: #b0b0b0; font-size: 14px; }
+
+.clear-btn {
+  float: right;
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  color: #8a8a8a;
+  background: #ffffff;
+  border: 2px solid #ededed;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  touch-action: manipulation;
+}
+
+/* Estados de interacción ------------------------------------- */
+
+button:focus,
+input:focus {
+  outline: 3px solid #a8a8a8;
+  outline-offset: 2px;
+}
+
+/* Los sliders llevan su propio indicador (el thumb oscuro), así que el
+   recuadro de foco del navegador -que en táctil rodea todo el control-
+   se quita aquí para no verse como un rectángulo gris de fondo. */
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-moz-focus-outer {
+  border: 0;
+}
+
+.note {
+  margin-top: 26px;
+  font-size: 13px;
+  color: #8a8a8a;
+}
+
+.warn {
+  display: none;
+  margin-top: 16px;
+  padding: 12px;
+  border: 2px solid #ededed;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #6f6f6f;
+}
+
+.warn.is-open { display: block; }
+
+.clearfix { display: block; clear: both; }
+
+/* Pantallas grandes: cuatro columnas de frecuencia ----------- */
+
+@media (min-width: 420px) {
+  .freq-btn { width: 23%; margin: 0 1% 8px 1%; }
+  .freq-btn.wide { width: 98%; }
+}
+</style>
 </head>
-<body class="min-h-screen flex flex-col font-sans select-none bg-slate-950 text-slate-100 antialiased">
+<body>
 
-  <!-- Audio Synth para efectos de sonido retro sin recursos externos -->
-  <script>
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-      if (!audioCtx) return;
-      try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        
-        if (type === 'success') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-          osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
-          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.3);
-        } else if (type === 'click') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.08);
-        } else if (type === 'warning') {
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-          osc.frequency.linearRampToValueAtTime(110, audioCtx.currentTime + 0.4);
-          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.4);
-        } else if (type === 'buy') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(330, audioCtx.currentTime);
-          osc.frequency.setValueAtTime(440, audioCtx.currentTime + 0.08);
-          osc.frequency.setValueAtTime(660, audioCtx.currentTime + 0.16);
-          gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.25);
-        }
-      } catch (e) {
-        console.log("Audio no iniciado por políticas del navegador");
-      }
-    }
-  </script>
+<div class="wrap">
 
-  <!-- Barra Superior / Panel de Control Rápido -->
-  <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-wrap justify-between items-center gap-4 shrink-0 shadow-lg animate-fade-in">
-    <div class="flex items-center gap-3">
-      <div class="bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 p-2.5 rounded-xl font-black tracking-wider shadow-md flex items-center gap-2">
-        <i class="fa-solid fa-boxes-packing animate-bounce text-lg"></i>
-        <span>ALI-LOGISTICS</span>
-      </div>
-      <div>
-        <h1 class="text-lg font-bold tracking-wide text-slate-100">Hub Central de Pedidos</h1>
-        <p class="text-xs text-slate-400">Control global de fletes y logística internacional</p>
-      </div>
+  <h1 class="brand">Hz Jimi</h1>
+  <p class="tagline">🔊 Tonos sinusoidales para probar altavoces</p>
+
+  <div class="tabs" id="tabs">
+    <button type="button" class="tab is-active" data-panel="test">🎵 Test</button>
+    <button type="button" class="tab" data-panel="retos">🏆 Retos</button>
+    <button type="button" class="tab" data-panel="random">🎲 Random</button>
+    <button type="button" class="tab" data-panel="tiempos">⏱️ Tiempos</button>
+  </div>
+
+  <!-- ================= TEST ================= -->
+  <div class="panel is-open" id="panel-test">
+
+    <div class="readout">
+      <div><span class="readout-value" id="freqValue">50</span><span class="readout-unit"> Hz</span></div>
+      <p class="status" id="status">⚪ En pausa</p>
+      <div class="clock"><div class="clock-label">Sesión actual</div><span id="clockTest">00:00:00</span></div>
     </div>
 
-    <!-- Estadísticas Financieras en Vivo -->
-    <div class="flex items-center gap-4 sm:gap-6 flex-wrap">
-      <div class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 flex items-center gap-3 shadow-md">
-        <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
-          <i class="fa-solid fa-wallet text-lg"></i>
-        </div>
-        <div>
-          <span class="text-[10px] uppercase text-slate-400 block font-bold tracking-wider">Capital de Hub</span>
-          <span class="text-xl font-black text-emerald-400" id="balance-display">1,500.00 €</span>
-        </div>
-      </div>
+    <p class="section-title">Frecuencia</p>
 
-      <!-- Indicador de deuda (Oculto si no hay deuda) -->
-      <div id="loan-display" class="hidden bg-rose-950/20 border border-rose-900/50 rounded-xl px-4 py-2 flex items-center gap-3 shadow-md">
-        <div class="w-10 h-10 rounded-full bg-rose-500/10 flex items-center justify-center text-rose-400 border border-rose-500/20">
-          <i class="fa-solid fa-building-columns text-lg"></i>
-        </div>
-        <div>
-          <span class="text-[10px] uppercase text-rose-400 block font-bold tracking-wider">Deuda Activa</span>
-          <span class="text-xl font-black text-rose-500" id="debt-display">0.00 €</span>
-        </div>
-      </div>
-
-      <div class="hidden md:flex items-center gap-4 bg-slate-900/40 p-1 rounded-xl">
-        <div class="text-right px-3">
-          <span class="text-[10px] uppercase text-slate-400 block font-semibold">Envíos Activos</span>
-          <span class="text-sm font-bold text-amber-400" id="active-count">0 en tránsito</span>
-        </div>
-        <div class="text-right border-l border-slate-800 px-3">
-          <span class="text-[10px] uppercase text-slate-400 block font-semibold">Completados</span>
-          <span class="text-sm font-bold text-indigo-400" id="completed-count">0 entregas</span>
-        </div>
-      </div>
-
-      <!-- Botón de Parámetros -->
-      <button onclick="toggleConfigModal(true); playSound('click')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-4 py-2.5 rounded-xl border border-slate-700 flex items-center gap-2 text-sm transition-all shadow-md">
-        <i class="fa-solid fa-sliders text-amber-400"></i>
-        <span>Ajustes</span>
-      </button>
+    <div class="grid" id="freqGrid">
+      <button type="button" class="freq-btn is-active" data-freq="50">50 Hz</button>
+      <button type="button" class="freq-btn" data-freq="60">60 Hz</button>
+      <button type="button" class="freq-btn" data-freq="70">70 Hz</button>
+      <button type="button" class="freq-btn" data-freq="80">80 Hz</button>
+      <button type="button" class="freq-btn wide" id="customBtn">✏️ Personalizado</button>
     </div>
-  </header>
 
-  <!-- Cuerpo Principal de la Aplicación -->
-  <main class="flex-1 flex flex-col lg:flex-row lg:h-[calc(100vh-76px)] overflow-hidden relative">
-    
-    <!-- COLUMNA IZQUIERDA: Envío de Paquetes y Mercado de Importación -->
-    <section class="order-2 lg:order-1 w-full lg:w-[380px] bg-slate-900 lg:border-r border-slate-800 flex flex-col lg:overflow-y-auto shrink-0 divide-y divide-slate-800/80">
-      
-      <!-- ENVÍO DE PAQUETES (PERSONALIZADO) -->
-      <div class="p-5 bg-gradient-to-b from-slate-900 to-slate-900/40">
-        <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2 mb-4">
-          <i class="fa-solid fa-box-open text-emerald-400 text-base"></i> Envío de Paquetes (Custom)
-        </h2>
+    <div class="custom" id="customPanel">
+      <label for="customInput">Escribe una frecuencia entre 20 y 20000 Hz</label>
+      <div class="custom-row">
+        <input type="number" id="customInput" inputmode="numeric" step="1" min="20" max="20000" placeholder="125">
+        <button type="button" id="customApply">Aplicar</button>
+      </div>
+      <p class="hint" id="customHint">Ejemplo: 125</p>
+    </div>
 
-        <form id="custom-package-form" class="space-y-4" onsubmit="event.preventDefault(); createCustomPackage();">
-          <!-- Nombre del producto -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Contenido del Paquete</label>
-            <input type="text" id="pkg-name" placeholder="Ej. Lote de Electrónica, Ropa..." oninput="calculateCustomCosts()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors" required>
-          </div>
+    <div class="vol">
+      <div class="vol-head" id="volLabel">🔊 Volumen: 50%</div>
+      <input type="range" id="volSlider" min="50" max="300" step="5" value="50">
+      <p class="vol-scale">50%<span>300%</span><em class="clearfix"></em></p>
+      <p class="vol-warn" id="volWarn">⚠️ Por encima del 100% puedes provocar clipping, distorsión o daños en los altavoces.</p>
+    </div>
 
-          <!-- Selección de Destino / Distancia -->
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="block text-xs font-semibold text-slate-400">Destino de Envío</label>
-              <span class="text-xs text-amber-400 font-bold" id="pkg-distance-val">1,500 km</span>
-            </div>
-            <select id="pkg-destination" onchange="updateCustomDistance()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors">
-              <option value="Madrid" data-dist="1500" selected>Madrid, España (1,500 km)</option>
-              <option value="Londres" data-dist="1200">Londres, Reino Unido (1,200 km)</option>
-              <option value="París" data-dist="1350">París, Francia (1,350 km)</option>
-              <option value="Reikiavik" data-dist="2200">Reikiavik, Islandia (2,200 km)</option>
-              <option value="Tokio" data-dist="3000">Tokio, Japón (3,000 km)</option>
-              <option value="Dubái" data-dist="5000">Dubái, EAU (5,000 km)</option>
-              <option value="El Cairo" data-dist="5600">El Cairo, Egipto (5,600 km)</option>
-              <option value="Los Ángeles" data-dist="7000">Los Ángeles, EE.UU. (7,000 km)</option>
-              <option value="Nueva York" data-dist="8000">Nueva York, EE.UU. (8,000 km)</option>
-              <option value="Nairobi" data-dist="9500">Nairobi, Kenia (9,500 km)</option>
-              <option value="Ciudad de México" data-dist="11000">Ciudad de México, MX (11,000 km)</option>
-              <option value="Johannesburgo" data-dist="11500">Johannesburgo, ZA (11,500 km)</option>
-              <option value="Sídney" data-dist="12000">Sídney, Australia (12,000 km)</option>
-              <option value="Río de Janeiro" data-dist="15500">Río de Janeiro, Brasil (15,500 km)</option>
-              <option value="Buenos Aires" data-dist="18000">Buenos Aires, Argentina (18,000 km)</option>
-              <option value="custom_node">➕ Crear Destino Personalizado...</option>
-            </select>
-          </div>
+    <div class="transport">
+      <button type="button" class="play-btn" id="startBtn">▶ START</button>
+      <button type="button" class="play-btn secondary" id="pauseBtn">⏸ PAUSE</button>
+    </div>
 
-          <!-- Campos para Destino Personalizado -->
-          <div id="custom-dest-config" class="hidden space-y-3 bg-slate-950 p-3 rounded-xl border border-slate-850/80">
-            <div>
-              <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nombre del Destino</label>
-              <input type="text" id="custom-dest-name" value="Base Logística Alfa" oninput="updateCustomDestinationPreview()" class="w-full bg-slate-900 border border-slate-800 rounded px-2.5 py-1 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-[10px] text-slate-400">Coordenada X (Mapa)</label>
-                <input type="range" id="custom-dest-x" min="50" max="800" value="200" oninput="updateCustomDestinationPreview()" class="w-full accent-amber-500 bg-slate-900 h-1.5 rounded">
-              </div>
-              <div>
-                <label class="block text-[10px] text-slate-400">Coordenada Y (Mapa)</label>
-                <input type="range" id="custom-dest-y" min="50" max="380" value="200" oninput="updateCustomDestinationPreview()" class="w-full accent-amber-500 bg-slate-900 h-1.5 rounded">
-              </div>
-            </div>
-            <div>
-              <label class="block text-[10px] text-slate-400 mb-1">Distancia del Trayecto (km)</label>
-              <input type="number" id="custom-dest-dist" value="1500" oninput="updateCustomDistanceOnly()" class="w-full bg-slate-900 border border-slate-800 rounded px-2.5 py-1 text-xs text-amber-400 font-bold focus:outline-none focus:border-amber-500">
-            </div>
-            <span class="text-[9px] text-amber-500 font-semibold block leading-tight">Mueve los deslizadores para posicionarlo y ajusta la distancia real calculada.</span>
-          </div>
+    <button type="button" class="mini-btn" id="newSessionBtn">🔄 Guardar y empezar nueva sesión</button>
 
-          <!-- Peso del Paquete -->
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="block text-xs font-semibold text-slate-400">Peso del Paquete</label>
-              <div class="flex items-center gap-1">
-                <input type="number" id="pkg-weight-num" value="5" min="0.01" max="100000000" step="any" oninput="syncWeight('num')" class="w-20 bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-xs text-right text-indigo-400 font-bold focus:outline-none focus:border-indigo-500">
-                <span class="text-xs text-slate-500">kg</span>
-              </div>
-            </div>
-            <input type="range" id="pkg-weight" min="0.5" max="1000" step="0.5" value="5" oninput="syncWeight('range')" class="w-full accent-indigo-500 cursor-pointer bg-slate-950 h-2 rounded-lg">
-          </div>
+    <div class="warn" id="warn"></div>
 
-          <!-- Medio de Transporte -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Vía de Transporte</label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div>
-                <input type="radio" id="trans-road" name="transport-mode" value="carretera" checked onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="trans-road" class="border border-slate-800 rounded-lg p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-colors peer-checked:bg-cyan-950/40 peer-checked:border-cyan-500">
-                  <i class="fa-solid fa-truck text-cyan-400 text-sm"></i>
-                  <span class="text-[10px] font-bold text-slate-300">Carretera</span>
-                </label>
-              </div>
-              <div>
-                <input type="radio" id="trans-ship" name="transport-mode" value="barco" onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="trans-ship" class="border border-slate-800 rounded-lg p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-colors peer-checked:bg-blue-950/40 peer-checked:border-blue-500">
-                  <i class="fa-solid fa-ship text-blue-400 text-sm"></i>
-                  <span class="text-[10px] font-bold text-slate-300">Marítimo</span>
-                </label>
-              </div>
-              <div>
-                <input type="radio" id="trans-plane" name="transport-mode" value="avion" onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="trans-plane" class="border border-slate-800 rounded-lg p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-colors peer-checked:bg-purple-950/40 peer-checked:border-purple-500">
-                  <i class="fa-solid fa-plane text-purple-400 text-sm"></i>
-                  <span class="text-[10px] font-bold text-slate-300">Aéreo</span>
-                </label>
-              </div>
-              <div>
-                <input type="radio" id="trans-priv" name="transport-mode" value="privado" onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="trans-priv" class="border border-slate-800 rounded-lg p-2.5 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-colors peer-checked:bg-rose-950/40 peer-checked:border-rose-500 shadow-rose-500/10">
-                  <i class="fa-solid fa-helicopter text-rose-400 text-sm"></i>
-                  <span class="text-[10px] font-bold text-rose-500">Privado</span>
-                </label>
-              </div>
-            </div>
-          </div>
+    <p class="note">Sube el volumen poco a poco. Los tonos graves mantenidos a alto volumen pueden dañar los altavoces.</p>
+  </div>
 
-          <!-- Prioridad de Servicio -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Prioridad del Servicio</label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <div>
-                <input type="radio" id="tier-std" name="service-tier" value="standard" checked onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="tier-std" class="border border-slate-800 rounded-lg p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-all peer-checked:bg-slate-800 peer-checked:border-slate-400">
-                  <i class="fa-solid fa-box text-slate-400"></i>
-                  <span class="text-[10px] font-bold text-slate-300">Estándar</span>
-                </label>
-              </div>
-              <div>
-                <input type="radio" id="tier-exp" name="service-tier" value="express" onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="tier-exp" class="border border-slate-800 rounded-lg p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-all peer-checked:bg-amber-950/30 peer-checked:border-amber-500">
-                  <i class="fa-solid fa-bolt text-amber-400"></i>
-                  <span class="text-[10px] font-bold text-amber-500">Express</span>
-                </label>
-              </div>
-              <div>
-                <input type="radio" id="tier-prm" name="service-tier" value="premium" onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="tier-prm" class="border border-slate-800 rounded-lg p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-all peer-checked:bg-fuchsia-950/30 peer-checked:border-fuchsia-500">
-                  <i class="fa-solid fa-crown text-fuchsia-400"></i>
-                  <span class="text-[10px] font-bold text-fuchsia-500">Premium</span>
-                </label>
-              </div>
-              <div>
-                <input type="radio" id="tier-vip" name="service-tier" value="vip" onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="tier-vip" class="border border-slate-800 rounded-lg p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-all peer-checked:bg-yellow-950/30 peer-checked:border-yellow-500 shadow-yellow-500/20">
-                  <i class="fa-solid fa-star text-yellow-400"></i>
-                  <span class="text-[10px] font-bold text-yellow-500">Diplomático</span>
-                </label>
-              </div>
-            </div>
-          </div>
+  <!-- ================= RETOS ================= -->
+  <div class="panel" id="panel-retos">
 
-          <!-- Escolta de Seguridad y Fuerzas Especiales -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Escolta de Seguridad (Bloquea Accidentes y Aduanas)</label>
-            <div class="grid grid-cols-3 gap-2">
-              <div>
-                <input type="radio" id="escort-none" name="escort-tier" value="none" checked onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="escort-none" class="border border-slate-800 rounded-lg p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-colors peer-checked:bg-slate-800 peer-checked:border-slate-500 text-center h-full">
-                  <i class="fa-solid fa-shield-halved text-slate-400 text-xs"></i>
-                  <span class="text-[9px] font-bold text-slate-300">Ninguna</span>
-                  <span class="text-[8px] text-slate-500">Riesgo normal</span>
-                </label>
-              </div>
-              <div>
-                <input type="radio" id="escort-light" name="escort-tier" value="light" onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="escort-light" class="border border-slate-800 rounded-lg p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-colors peer-checked:bg-amber-950/40 peer-checked:border-amber-500 text-center h-full">
-                  <i class="fa-solid fa-user-shield text-amber-400 text-xs"></i>
-                  <span class="text-[9px] font-bold text-amber-400">Ligera</span>
-                  <span class="text-[8px] text-slate-400">Coste x15</span>
-                </label>
-              </div>
-              <div>
-                <input type="radio" id="escort-heavy" name="escort-tier" value="heavy" onchange="calculateCustomCosts()" class="peer sr-only">
-                <label for="escort-heavy" class="border border-slate-800 rounded-lg p-2 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-slate-850 transition-colors peer-checked:bg-red-950/40 peer-checked:border-red-500 text-center h-full">
-                  <i class="fa-solid fa-person-military-pointing text-red-400 text-xs animate-pulse"></i>
-                  <span class="text-[9px] font-bold text-red-500">Pesada (Soldados)</span>
-                  <span class="text-[8px] text-slate-400">Coste x120</span>
-                </label>
-              </div>
-            </div>
-          </div>
+    <div id="retoList">
+      <p class="section-title">Elige un reto</p>
+      <button type="button" class="card" id="retoSweepBtn">🌊 50 → 80 → 50 Hz<small>Sube y baja progresivamente la frecuencia</small></button>
+      <button type="button" class="card" id="retoIntermBtn">🔁 Intermitente<small>Elige una frecuencia y crea ciclos de sonido y silencio</small></button>
+    </div>
 
-          <!-- Resumen y Botón -->
-          <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800/85 space-y-2 shadow-inner">
-            <div class="flex justify-between text-xs">
-              <span class="text-slate-400">Coste de Logística:</span>
-              <span class="font-bold text-red-400" id="custom-cost-display">-- €</span>
-            </div>
-            <div class="flex justify-between items-center pt-1.5 border-t border-slate-900/60">
-              <span class="text-xs text-slate-300 font-bold">Cobro Estimado (Ingreso):</span>
-              <span class="text-base font-black text-emerald-400 text-right" id="custom-reward-display">-- €</span>
-            </div>
-          </div>
+    <div id="retoSetup" style="display:none">
+      <p class="section-title" id="sweepRangeTitle">🌊 50 → 80 → 50 Hz</p>
 
-          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-slate-950 font-black py-3 rounded-xl shadow-lg shadow-emerald-950/20 transition-all flex items-center justify-center gap-2">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>CREAR Y ENVIAR PAQUETE</span>
-          </button>
-        </form>
+      <p class="section-title">Desde</p>
+      <div class="grid" id="sweepFromGrid">
+        <button type="button" class="freq-btn is-active" data-sfrom="50">50 Hz</button>
+        <button type="button" class="freq-btn" data-sfrom="60">60 Hz</button>
+        <button type="button" class="freq-btn" data-sfrom="70">70 Hz</button>
+        <button type="button" class="freq-btn" data-sfrom="80">80 Hz</button>
       </div>
 
-      <!-- MERCADO DE IMPORTACIÓN / COMPRA RÁPIDA -->
-      <div class="p-5 flex-1 bg-gradient-to-b from-slate-900/10 to-slate-900/80">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-            <i class="fa-solid fa-shop text-amber-500"></i> Lotes Rápidos (Mayorista)
-          </h2>
-        </div>
-        <p class="text-xs text-slate-400 mb-4">Adquiere lotes comerciales al por mayor. Los lotes de alto coste tienen menor velocidad y menor margen de rentabilidad relativa, además de un alto riesgo de inspección o retención permanente.</p>
-        
-        <div class="space-y-3.5" id="catalog-list">
-          <!-- Dinámico -->
-        </div>
+      <p class="section-title">Hasta</p>
+      <div class="grid" id="sweepToGrid">
+        <button type="button" class="freq-btn" data-sto="50">50 Hz</button>
+        <button type="button" class="freq-btn" data-sto="60">60 Hz</button>
+        <button type="button" class="freq-btn" data-sto="70">70 Hz</button>
+        <button type="button" class="freq-btn is-active" data-sto="80">80 Hz</button>
+      </div>
+      <p class="hint" id="sweepHint">&nbsp;</p>
+
+      <p class="section-title">Dificultad</p>
+      <button type="button" class="card is-active" data-diff="easy">🟢 Fácil<small>Transición lenta · 45 s por tramo</small></button>
+      <button type="button" class="card" data-diff="normal">🟡 Normal<small>Transición media · 18 s por tramo</small></button>
+      <button type="button" class="card" data-diff="hard">🔴 Difícil<small>Transición rápida · 6 s por tramo</small></button>
+      <button type="button" class="card" data-diff="extreme">🟣 Extremo<small>Transición muy rápida · 2 s por tramo</small></button>
+      <div class="transport">
+        <button type="button" class="play-btn" id="retoGoBtn">▶ COMENZAR RETO</button>
+      </div>
+      <button type="button" class="mini-btn" id="retoBackBtn">← Volver</button>
+    </div>
+
+    <div id="retoRun" style="display:none">
+      <div class="readout">
+        <div>🌊 <span class="readout-value" id="retoFreq">50</span><span class="readout-unit"> Hz</span></div>
+        <p class="track-ends"><span id="retoTo">80 Hz</span><em id="retoFrom">50 Hz</em></p>
+        <div class="track"><div class="dot" id="retoDot"></div></div>
+        <p class="status" id="retoStatus">🟢 <strong>Sonando</strong></p>
+        <div class="clock"><div class="clock-label" id="retoDiffLabel">Fácil</div><span id="clockReto">00:00:00</span></div>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="retoResumeBtn">▶ START</button>
+        <button type="button" class="play-btn secondary" id="retoPauseBtn">⏸ PAUSE</button>
+      </div>
+      <button type="button" class="mini-btn" id="retoExitBtn">← Salir y guardar tiempo</button>
+    </div>
+
+    <div id="intermSetup" style="display:none">
+      <p class="section-title">🔁 Intermitente · frecuencia</p>
+      <div class="grid" id="intermGrid">
+        <button type="button" class="freq-btn" data-ifreq="50">50 Hz</button>
+        <button type="button" class="freq-btn is-active" data-ifreq="60">60 Hz</button>
+        <button type="button" class="freq-btn" data-ifreq="70">70 Hz</button>
+        <button type="button" class="freq-btn" data-ifreq="80">80 Hz</button>
       </div>
 
-    </section>
-
-    <!-- COLUMNA CENTRAL: MAPA INTERACTIVO, GRÁFICO Y ENCARGOS AUTOMÁTICOS -->
-    <section class="order-1 lg:order-2 flex-1 w-full lg:h-full bg-slate-950 flex flex-col relative border-b lg:border-b-0 lg:border-x border-slate-800 shrink-0 shadow-xl lg:shadow-none overflow-y-auto">
-      
-      <!-- Cabecera del Mapa -->
-      <div class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800/90 px-4 py-3 flex flex-wrap justify-between items-center shrink-0 z-10 absolute top-0 left-0 right-0 gap-2">
-        <div class="flex items-center gap-2">
-          <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300">Monitoreo de Rutas Satelital (En Tiempo Real)</h2>
-        </div>
-        <div class="flex items-center gap-4 text-[10px] sm:text-xs">
-          <span class="text-slate-400 flex items-center gap-1"><i class="fa-solid fa-truck text-cyan-400"></i> Carretera</span>
-          <span class="text-slate-400 flex items-center gap-1"><i class="fa-solid fa-ship text-blue-400"></i> Marítimo</span>
-          <span class="text-slate-400 flex items-center gap-1"><i class="fa-solid fa-plane text-purple-400"></i> Aéreo</span>
-          <span class="text-slate-400 flex items-center gap-1"><i class="fa-solid fa-helicopter text-rose-400"></i> Privado</span>
-        </div>
+      <div class="range-box">
+        <h3>🔊 Sonido</h3>
+        <p class="val" id="intermOnVal">5 segundos</p>
+        <input type="range" class="slider" id="intermOn" min="1" max="10" step="1" value="5">
+        <p class="slider-tag">1s<span style="float:right">10s</span><em class="clearfix"></em></p>
       </div>
 
-      <!-- Lienzo del Mapa (SVG Interactivo) -->
-      <div class="w-full shrink-0 min-h-[350px] flex-1 relative overflow-hidden bg-slate-950/95 pt-12 flex flex-col">
-        <div class="flex-1 w-full relative flex items-center justify-center overflow-hidden">
-          <!-- Fondo de Mapa de Red de Nodos Logísticos en un SVG -->
-          <svg id="world-map" class="w-full h-full min-w-[850px] min-h-[420px] map-glow" viewBox="0 0 850 420" xmlns="http://www.w3.org/2000/svg">
-          <!-- Océanos y Grilla Cartográfica de Fondo -->
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#161e2e" stroke-width="0.75" />
-            </pattern>
-            <!-- Sombra de nodos -->
-            <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-
-          <!-- Rutas Comerciales de Fondo (Líneas Discontinuas) -->
-          <!-- Shenzhen (600, 250) es el Hub de Origen Principal en Asia -->
-          <g stroke="#1e293b" stroke-width="1.25" stroke-dasharray="4,6" fill="none">
-            <!-- Shenzhen a Madrid -->
-            <path d="M 600 250 Q 490 120 380 160" />
-            <!-- Shenzhen a Londres -->
-            <path d="M 600 250 Q 480 100 360 140" />
-            <!-- Shenzhen a París -->
-            <path d="M 600 250 Q 485 110 370 130" />
-            <!-- Shenzhen a Reikiavik -->
-            <path d="M 600 250 Q 450 60 310 70" />
-            <!-- Shenzhen a Nueva York -->
-            <path d="M 600 250 Q 410 80 220 150" />
-            <!-- Shenzhen a Los Ángeles -->
-            <path d="M 600 250 Q 360 100 120 170" />
-            <!-- Shenzhen a Tokio -->
-            <path d="M 600 250 Q 640 210 680 150" />
-            <!-- Shenzhen a Dubái -->
-            <path d="M 600 250 Q 560 220 520 200" />
-            <!-- Shenzhen a El Cairo -->
-            <path d="M 600 250 Q 520 220 440 190" />
-            <!-- Shenzhen a Sídney -->
-            <path d="M 600 250 Q 660 280 720 320" />
-            <!-- Shenzhen a Buenos Aires -->
-            <path d="M 600 250 Q 430 360 260 320" />
-            <!-- Shenzhen a Río de Janeiro -->
-            <path d="M 600 250 Q 450 300 310 310" />
-            <!-- Shenzhen a Nairobi -->
-            <path d="M 600 250 Q 530 250 470 260" />
-            <!-- Shenzhen a Johannesburgo -->
-            <path d="M 600 250 Q 530 330 460 340" />
-            <!-- Shenzhen a Ciudad de México -->
-            <path d="M 600 250 Q 380 100 160 220" />
-          </g>
-
-          <!-- Nodos de Destinos Internacionales (Ciudades de Distribución) -->
-          <!-- Shenzhen (Sede Principal) -->
-          <g transform="translate(600, 250)" class="pulse-node cursor-pointer group">
-            <circle r="9" fill="#f59e0b" filter="url(#glow)"/>
-            <text y="-14" text-anchor="middle" class="text-[10px] fill-amber-400 font-black uppercase tracking-wide">Shenzhen Hub (HQ)</text>
-          </g>
-          
-          <!-- Madrid -->
-          <g transform="translate(380, 160)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Madrid</text>
-          </g>
-
-          <!-- Londres -->
-          <g transform="translate(360, 140)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Londres</text>
-          </g>
-
-          <!-- París -->
-          <g transform="translate(370, 130)" class="cursor-pointer group">
-            <circle r="5" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-11" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">París</text>
-          </g>
-
-          <!-- Reikiavik -->
-          <g transform="translate(310, 70)" class="cursor-pointer group">
-            <circle r="5" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-11" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Reikiavik</text>
-          </g>
-
-          <!-- Nueva York -->
-          <g transform="translate(220, 150)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">N. York</text>
-          </g>
-
-          <!-- Los Ángeles -->
-          <g transform="translate(120, 170)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">L.A.</text>
-          </g>
-
-          <!-- Ciudad de México -->
-          <g transform="translate(160, 220)" class="cursor-pointer group">
-            <circle r="5" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-11" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">C. México</text>
-          </g>
-
-          <!-- Tokio -->
-          <g transform="translate(680, 150)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Tokio</text>
-          </g>
-
-          <!-- Dubái -->
-          <g transform="translate(520, 200)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Dubái</text>
-          </g>
-
-          <!-- El Cairo -->
-          <g transform="translate(440, 190)" class="cursor-pointer group">
-            <circle r="5" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-11" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">El Cairo</text>
-          </g>
-
-          <!-- Sídney -->
-          <g transform="translate(720, 320)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Sídney</text>
-          </g>
-
-          <!-- Río de Janeiro -->
-          <g transform="translate(310, 310)" class="cursor-pointer group">
-            <circle r="5" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-11" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Río Jan.</text>
-          </g>
-
-          <!-- Buenos Aires -->
-          <g transform="translate(260, 320)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">B. Aires</text>
-          </g>
-
-          <!-- Nairobi -->
-          <g transform="translate(470, 260)" class="cursor-pointer group">
-            <circle r="6" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-12" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Nairobi</text>
-          </g>
-
-          <!-- Johannesburgo -->
-          <g transform="translate(460, 340)" class="cursor-pointer group">
-            <circle r="5" fill="#3b82f6" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-emerald-400" />
-            <text y="-11" text-anchor="middle" class="text-[9px] fill-slate-300 font-medium tracking-tight">Joburg</text>
-          </g>
-
-          <!-- Nodo de previsualización para el destino personalizado -->
-          <g id="custom-dest-preview-node" class="hidden">
-            <circle r="12" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3" class="animate-pulse"></circle>
-            <circle r="5" fill="#f59e0b"></circle>
-            <text y="-14" text-anchor="middle" font-size="9" fill="#f59e0b" font-weight="black" id="custom-preview-text">Mi Destino</text>
-          </g>
-
-          <!-- Capa dinámica para líneas de destinos personalizados -->
-          <g id="dynamic-lines-layer" stroke="#10b981" stroke-width="1.25" stroke-dasharray="4,6" fill="none" opacity="0.6"></g>
-
-          <!-- Capa dinámica para destinos personalizados activos -->
-          <g id="dynamic-destinations-layer"></g>
-
-          <!-- Capa dinámica de paquetes en movimiento -->
-          <g id="dynamic-packages-layer"></g>
-        </svg>
-
-        <!-- Indicador flotante informativo de aduanas -->
-        <div class="absolute bottom-4 left-4 bg-slate-900/90 border border-slate-800 p-3 rounded-lg text-xs max-w-xs space-y-1 backdrop-blur-sm shadow-md pointer-events-none">
-          <div class="flex items-center gap-1.5 text-amber-400 font-bold">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span>Alerta de Aduanas & Incautaciones</span>
-          </div>
-          <p class="text-[11px] text-slate-400">Los lotes ultra valiosos o pesados aumentan exponencialmente la probabilidad de retención o incautación permanente por parte de la aduana internacional.</p>
-        </div>
+      <div class="range-box">
+        <h3>🔇 Pausa</h3>
+        <p class="val" id="intermOffVal">3 segundos</p>
+        <input type="range" class="slider" id="intermOff" min="0.25" max="10" step="0.25" value="3">
+        <p class="slider-tag">0.25s<span style="float:right">10s</span><em class="clearfix"></em></p>
       </div>
 
-      <!-- GRÁFICO DE FINANZAS EN VIVO -->
-      <div class="shrink-0 h-[300px] bg-slate-950 border-t border-slate-800 p-4 flex gap-4 z-20 relative">
-        <!-- Panel Izquierdo: Resumen Operacional Financiero -->
-        <div class="w-1/4 bg-slate-900/60 rounded-xl border border-slate-850 p-4 flex flex-col text-xs shrink-0 overflow-hidden">
-          <div class="mb-auto">
-            <span class="text-[10px] uppercase text-slate-500 font-bold block mb-1">Última Operación</span>
-            <div class="font-bold text-slate-200 line-clamp-2" id="chart-last-op">Ninguna aún</div>
-            <div class="text-xl font-black mt-1" id="chart-last-amount">0.00 €</div>
-          </div>
-          <div class="border-t border-slate-800/80 pt-3 mt-3">
-            <div class="flex justify-between items-center text-[11px] mb-2">
-              <span class="text-slate-400">Volumen Trx:</span>
-              <span class="font-bold text-sky-400" id="chart-session-vol">0 €</span>
-            </div>
-            <div class="flex justify-between items-center text-[11px]">
-              <span class="text-slate-400">Flujo Neto:</span>
-              <span class="font-bold" id="chart-net-margin">0 €</span>
-            </div>
-          </div>
-        </div>
-        <!-- Panel Derecho: Gráfico Área + Velas + Volumen -->
-        <div class="flex-1 flex flex-col min-w-0">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-chart-line text-amber-500 text-xs animate-pulse"></i>
-              <span class="text-[11px] uppercase tracking-wider text-slate-200 font-bold">Balance Global Histórico y Volumen</span>
-            </div>
-            <span class="text-[9px] text-slate-500 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">100 Trx</span>
-          </div>
-          <div class="flex-1 w-full relative bg-slate-900/20 rounded-lg overflow-hidden border border-slate-900/50">
-            <canvas id="finance-chart" class="absolute inset-0 w-full h-full"></canvas>
-          </div>
-        </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="intermGoBtn">▶ COMENZAR RETO</button>
       </div>
+      <button type="button" class="mini-btn" id="intermBackBtn">← Volver</button>
+    </div>
 
-      <!-- SECCIÓN DE ENCARGOS / LICITACIONES (AUTOMÁTICOS) -->
-      <div class="shrink-0 bg-slate-950 p-4 border-t border-slate-800 relative z-20">
-        <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
-          <div>
-            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
-              <i class="fa-solid fa-file-signature text-amber-500"></i> ENCARGOS DE CLIENTES (AUTO-AJUSTADOS POR CAPITAL)
-            </h2>
-            <p class="text-[10px] text-slate-400 mt-1">Licitaciones y contratos automatizados que cambian en coste de flete según tu capital disponible.</p>
-          </div>
-          <button onclick="buscarLicitaciones(); playSound('click')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-lg flex items-center gap-2 transition-all shadow-md text-xs shrink-0 whitespace-nowrap active:scale-95">
-            <i class="fa-solid fa-rotate"></i> Buscar Licitación
-          </button>
-        </div>
-        
-        <div id="encargos-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="col-span-1 md:col-span-3 text-center py-8 text-slate-500 text-xs border border-slate-800 border-dashed rounded-xl bg-slate-900/30">
-            <i class="fa-solid fa-inbox text-2xl mb-2 opacity-50"></i>
-            <p>No hay contratos pendientes.</p>
-            <p class="text-[10px] opacity-70">Haz clic en "Buscar Licitación" para generar nuevos encargos adaptados a tu cuenta.</p>
-          </div>
-        </div>
+    <div id="intermRun" style="display:none">
+      <div class="readout">
+        <div class="clock-label">🔁 INTERMITENTE</div>
+        <div><span class="readout-value" id="intermFreq">60</span><span class="readout-unit"> Hz</span></div>
+        <p class="big-state" id="intermState">🔇 PAUSA</p>
+        <p class="countdown" id="intermCount">0.0 s</p>
+        <div class="clock"><div class="clock-label" id="intermCfg">5s / 3s</div><span id="clockInterm">00:00:00</span></div>
       </div>
-
-    </section>
-
-    <!-- COLUMNA DERECHA: SEGUIMIENTO Y COMPLETADOS -->
-    <section class="order-3 lg:order-3 w-full lg:w-[400px] bg-slate-900 lg:border-l border-slate-800 flex flex-col shrink-0 lg:overflow-y-auto">
-      
-      <!-- PANEL SUPERIOR: ACTIVOS EN TRÁNSITO -->
-      <div class="flex-1 flex flex-col border-b border-slate-800 min-h-[350px] lg:min-h-0">
-        <div class="p-3 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/80 flex justify-between items-center sticky top-0 z-10">
-          <div>
-            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300">Activos en Tránsito</h2>
-          </div>
-          <span class="bg-indigo-950 text-indigo-400 text-[10px] font-bold px-2 py-1 rounded border border-indigo-900/50">Tracking</span>
-        </div>
-
-        <div class="p-4 flex-1 overflow-y-auto space-y-3.5" id="shipments-container">
-          <!-- Contenedor dinámico de envíos en tránsito -->
-          <div class="text-center py-12 text-slate-500" id="empty-shipments-msg">
-            <i class="fa-solid fa-box-open text-4xl mb-3 text-slate-700"></i>
-            <p class="text-xs font-semibold">No hay envíos en tránsito.</p>
-            <p class="text-[11px] text-slate-600 mt-1">Usa la columna izquierda para preparar un envío.</p>
-          </div>
-        </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="intermResumeBtn">▶ START</button>
+        <button type="button" class="play-btn secondary" id="intermPauseBtn">⏸ PAUSE</button>
       </div>
-
-      <!-- PANEL INFERIOR: HISTORIAL DE ENTREGAS COMPLETADAS -->
-      <div class="flex-1 flex flex-col bg-slate-900/30 min-h-[300px] lg:min-h-0">
-        <div class="p-3 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/80 flex justify-between items-center sticky top-0 z-10">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300">Envíos Completados</h2>
-          <span class="bg-emerald-950 text-emerald-400 text-[10px] font-bold px-2 py-1 rounded border border-emerald-900/50">Historial</span>
-        </div>
-
-        <div class="p-4 flex-1 overflow-y-auto space-y-2.5" id="completed-container">
-          <!-- Contenedor dinámico de completados -->
-          <div class="text-center py-10 text-slate-500 text-xs" id="empty-completed-msg">
-            <i class="fa-solid fa-clipboard-check text-3xl mb-2 text-slate-700"></i>
-            <p>El historial de entregas está vacío.</p>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- MODAL DE CONFIGURACIÓN DE PARÁMETLES GLOBALES -->
-  <div id="config-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
-      <button onclick="toggleConfigModal(false); playSound('click')" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-
-      <div class="flex items-center gap-3 mb-4">
-        <div class="bg-amber-500/10 text-amber-400 p-2.5 rounded-xl">
-          <i class="fa-solid fa-gears text-lg animate-spin"></i>
-        </div>
-        <div>
-          <h3 class="text-lg font-bold text-slate-100">Modificadores Globales</h3>
-          <p class="text-xs text-slate-400">Configura las físicas, costes y riesgos del juego</p>
-        </div>
-      </div>
-
-      <div class="space-y-4 text-sm">
-        
-        <!-- Multiplicador de Velocidad global -->
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs text-slate-400 font-semibold">Velocidad del Tránsito de Envíos</span>
-            <span class="text-xs text-amber-400 font-bold" id="cfg-speed-val">1.0x</span>
-          </div>
-          <input type="range" id="cfg-speed" min="0.2" max="50.0" step="0.1" value="1.0" oninput="updateConfigValues()" class="w-full accent-amber-500 cursor-pointer bg-slate-950 h-2 rounded-lg">
-          <span class="text-[10px] text-slate-500 text-slate-400">Modifica qué tan rápido se completan los envíos por tierra, mar y aire.</span>
-        </div>
-
-        <!-- Multiplicador de Recompensas -->
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs text-slate-400 font-semibold">Multiplicador de Recompensas (€)</span>
-            <span class="text-xs text-emerald-400 font-bold" id="cfg-reward-val">1.0x</span>
-          </div>
-          <input type="range" id="cfg-reward" min="0.1" max="20.0" step="0.1" value="1.0" oninput="updateConfigValues()" class="w-full accent-emerald-500 cursor-pointer bg-slate-950 h-2 rounded-lg">
-          <span class="text-[10px] text-slate-500 text-slate-400">Incrementa o decrementa el margen neto de beneficio obtenido por cada envío.</span>
-        </div>
-
-        <!-- Tasa de Retenciones de Aduana -->
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs text-slate-400 font-semibold">Tasa Global de Incidencias de Aduana</span>
-            <span class="text-xs text-red-400 font-bold" id="cfg-risk-val">1.0x</span>
-          </div>
-          <input type="range" id="cfg-risk" min="0.0" max="10.0" step="0.1" value="1.0" oninput="updateConfigValues()" class="w-full accent-red-500 cursor-pointer bg-slate-950 h-2 rounded-lg">
-          <span class="text-[10px] text-slate-500 text-slate-400">Configura la probabilidad de retención fronteriza y multas de inspección.</span>
-        </div>
-
-        <!-- Tasa de Accidentes / Daños -->
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs text-slate-400 font-semibold">Riesgo de Accidentes (Daños Graves)</span>
-            <span class="text-xs text-orange-400 font-bold" id="cfg-damage-val">1.0x</span>
-          </div>
-          <input type="range" id="cfg-damage" min="0.0" max="10.0" step="0.1" value="1.0" oninput="updateConfigValues()" class="w-full accent-orange-500 cursor-pointer bg-slate-950 h-2 rounded-lg">
-          <span class="text-[10px] text-slate-500 text-slate-400">Modifica la propensión a sufrir siniestros requiriendo reembolsos y reenvíos masivos.</span>
-        </div>
-
-        <!-- Multiplicador de Costes -->
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <span class="text-xs text-slate-400 font-semibold">Multiplicador de Costes Base</span>
-            <span class="text-xs text-sky-400 font-bold" id="cfg-cost-val">1.0x</span>
-          </div>
-          <input type="range" id="cfg-cost" min="0.1" max="20.0" step="0.1" value="1.0" oninput="updateConfigValues()" class="w-full accent-sky-500 cursor-pointer bg-slate-950 h-2 rounded-lg">
-          <span class="text-[10px] text-slate-500 text-slate-400">Eleva o mitiga la inversión requerida por flete.</span>
-        </div>
-
-        <!-- Ajuste por País -->
-        <div class="border-t border-slate-800 pt-3 mt-2">
-            <div class="flex justify-between items-center mb-1">
-                <span class="text-xs text-slate-400 font-semibold">Velocidad / Retraso por País</span>
-                <span class="text-xs text-indigo-400 font-bold" id="cfg-country-val">1.0x</span>
-            </div>
-            <div class="flex items-center gap-2 mb-2">
-                <select id="cfg-country-sel" onchange="updateCountrySliderUI()" class="flex-1 bg-slate-950 border border-slate-800 rounded px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                </select>
-            </div>
-            <input type="range" id="cfg-country-slider" min="0.1" max="3.0" step="0.1" value="1.0" oninput="applyCountrySpeed()" class="w-full accent-indigo-500 cursor-pointer bg-slate-950 h-2 rounded-lg">
-            <span class="text-[10px] text-slate-500 text-slate-400 block mt-1">Regula el tiempo de tránsito dentro del país destino (1.0x normal, >1 rápido, <1 lento).</span>
-        </div>
-
-        <!-- Préstamo Bancario -->
-        <div class="border-t border-slate-800 pt-3 mt-2">
-            <div class="flex justify-between items-center mb-1">
-                <span class="text-xs text-rose-400 font-bold"><i class="fa-solid fa-building-columns"></i> Préstamo Bancario (20% Interés)</span>
-            </div>
-            <div class="flex items-center gap-2 mb-2">
-                <input type="number" id="custom-funds-input" value="10000" class="flex-1 bg-slate-950 border border-slate-800 rounded px-2 py-1.5 text-xs text-rose-400 font-bold focus:outline-none focus:border-rose-500">
-                <button onclick="requestLoan()" class="bg-rose-600 hover:bg-rose-500 text-slate-950 font-bold px-4 py-1.5 rounded text-xs transition-all shadow-md">
-                    Pedir
-                </button>
-            </div>
-            <span class="text-[10px] text-slate-500 block leading-tight">El capital se añade al instante, pero el banco se cobrará las cuotas y los intereses de forma automática de tu balance. ¡Si quedas en números rojos, las penalizaciones harán crecer tu deuda enormemente!</span>
-            
-            <div class="mt-3">
-              <div class="flex justify-between items-center mb-1">
-                <span class="text-xs text-slate-400 font-semibold">Frecuencia de Cuotas (Segundos)</span>
-                <span class="text-xs text-rose-400 font-bold" id="cfg-loan-interval-val">10 s</span>
-              </div>
-              <input type="range" id="cfg-loan-interval" min="2" max="60" step="1" value="10" oninput="updateConfigValues()" class="w-full accent-rose-500 cursor-pointer bg-slate-950 h-2 rounded-lg">
-              <span class="text-[10px] text-slate-500 block mt-1">Determina cada cuánto tiempo el banco te cobra la cuota del préstamo en un solo bloque.</span>
-            </div>
-        </div>
-
-        <!-- Botón de guardado -->
-        <button onclick="toggleConfigModal(false); playSound('success')" class="w-full mt-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl transition-all shadow-lg shadow-amber-950/20 text-center">
-          APLICAR CAMBIOS Y VOLVER
-        </button>
-
-      </div>
+      <button type="button" class="mini-btn" id="intermExitBtn">← Salir y guardar tiempo</button>
     </div>
   </div>
 
-  <!-- SISTEMA PRINCIPAL DE SIMULACIÓN (JAVASCRIPT) -->
-  <script>
-    // Configuración Inicial del Juego
-    let state = {
-      balance: 1500.00, // Capital inicial
-      completedCount: 0,
-      activeShipments: [],
-      completedShipments: [], // Historial de completados
-      pendingEncargos: [], // Licitaciones activas
-      activeEncargo: null, // Encargo auto-rellenado actualmente para anular las físicas base
-      nextId: 1,
-      // Historial transaccional estructurado tipo Bolsa (Velas de variación)
-      transactionHistory: [
-        { label: 'Capital Inicial', amount: 1500.00, type: 'income', open: 1500.00, close: 1500.00, time: 'Inicio' }
-      ],
-      loan: {
-        principal: 0,
-        debt: 0
-      },
-      // Configuración de juego modificable
-      config: {
-        speedMultiplier: 1.0,
-        rewardMultiplier: 1.0,
-        riskMultiplier: 1.0,
-        damageMultiplier: 1.0,
-        costMultiplier: 1.0,
-        loanPaymentInterval: 10 // Segundos entre pagos
-      }
-    };
+  <!-- ================= RANDOM ================= -->
+  <div class="panel" id="panel-random">
 
-    // Coordenadas de los destinos (basadas en la vista SVG 850x420)
-    const DESTINATIONS = {
-      "Shenzhen": { x: 600, y: 250 },
-      "Madrid": { x: 380, y: 160, dist: 1500 },
-      "Londres": { x: 360, y: 140, dist: 1200 },
-      "París": { x: 370, y: 130, dist: 1350 },
-      "Reikiavik": { x: 310, y: 70, dist: 2200 },
-      "Nueva York": { x: 220, y: 150, dist: 8000 },
-      "Los Ángeles": { x: 120, y: 170, dist: 7000 },
-      "Tokio": { x: 680, y: 150, dist: 3000 },
-      "Dubái": { x: 520, y: 200, dist: 5000 },
-      "El Cairo": { x: 440, y: 190, dist: 5600 },
-      "Sídney": { x: 720, y: 320, dist: 12000 },
-      "Buenos Aires": { x: 260, y: 320, dist: 18000 },
-      "Nairobi": { x: 470, y: 260, dist: 9500 },
-      "Río de Janeiro": { x: 310, y: 310, dist: 15500 },
-      "Johannesburgo": { x: 460, y: 340, dist: 11500 },
-      "Ciudad de México": { x: 160, y: 220, dist: 11000 }
-    };
+    <div class="readout">
+      <div>🎲 <span class="readout-value" id="rndFreq">—</span><span class="readout-unit" id="rndUnit"></span></div>
+      <p class="status" id="rndStatus">⚪ En pausa</p>
+      <div class="clock"><div class="clock-label">Sesión random</div><span id="clockRnd">00:00:00</span></div>
+    </div>
 
-    // Nodos fijos originales para filtrar los dinámicos
-    const ORIGINAL_DESTS = ["Shenzhen", "Madrid", "Londres", "París", "Reikiavik", "Tokio", "Dubái", "El Cairo", "Los Ángeles", "Nueva York", "Nairobi", "Ciudad de México", "Johannesburgo", "Sídney", "Río de Janeiro", "Buenos Aires"];
+    <p class="section-title">Frecuencias incluidas</p>
 
-    // Catálogo de artículos al por mayor importables
-    const WHOLESALE_ITEMS = [
-      {
-        id: 'cat-basic',
-        name: 'Lote de Fast-Fashion',
-        desc: 'Moda textil económica. Sencillo, rápido y de rentabilidad estándar.',
-        cost: 35,
-        baseReward: 95, // ~2.7x
-        weight: 2.2,
-        transport: 'carretera',
-        icon: 'fa-shirt',
-        unlocked: true,
-        reqUnlock: 0,
-        speedPenalty: 1.0,
-        seizureChance: 1 // 1% de confiscación
-      },
-      {
-        id: 'cat-tech',
-        name: 'Smartphones y Microtecnología',
-        desc: 'Componentes modernos y gadgets de alta rotación.',
-        cost: 250,
-        baseReward: 580, // ~2.32x
-        weight: 8.5,
-        transport: 'avion',
-        icon: 'fa-mobile-screen-button',
-        unlocked: true,
-        reqUnlock: 0,
-        speedPenalty: 0.9,
-        seizureChance: 3 // 3%
-      },
-      {
-        id: 'cat-jewelry',
-        name: 'Relojería y Joyería de Lujo',
-        desc: 'Gemas y relojes analógicos de alta gama.',
-        cost: 800,
-        baseReward: 1600, // 2.0x
-        weight: 12.0,
-        transport: 'barco',
-        icon: 'fa-gem',
-        unlocked: false,
-        reqUnlock: 500,
-        speedPenalty: 0.7,
-        seizureChance: 5 // 5%
-      },
-      {
-        id: 'cat-industrial',
-        name: 'Semiconductores & Equipos Médicos',
-        desc: 'Microchips clasificados de alta precisión clínica.',
-        cost: 2200,
-        baseReward: 4100, // 1.86x
-        weight: 25.0,
-        transport: 'avion',
-        icon: 'fa-microchip',
-        unlocked: false,
-        reqUnlock: 2000,
-        speedPenalty: 0.6,
-        seizureChance: 8 // 8%
-      },
-      {
-        id: 'cat-supercars',
-        name: 'Lote de Vehículos Deportivos',
-        desc: 'Coches exóticos exclusivos. Velocidad de traslado de seguridad reducida.',
-        cost: 10000,
-        baseReward: 16000, // 1.6x
-        weight: 45.0,
-        transport: 'carretera',
-        icon: 'fa-car',
-        unlocked: false,
-        reqUnlock: 8000,
-        speedPenalty: 0.3,
-        seizureChance: 12 // 12%
-      },
-      {
-        id: 'cat-military',
-        name: 'Blindaje & Tecnología Balística',
-        desc: 'Equipos tácticos avanzados. Vigilado estrictamente por aduanas.',
-        cost: 45000,
-        baseReward: 67500, // 1.5x
-        weight: 48.0,
-        transport: 'avion',
-        icon: 'fa-shield-halved',
-        unlocked: false,
-        reqUnlock: 35000,
-        speedPenalty: 0.15,
-        seizureChance: 18 // 18%
-      },
-      {
-        id: 'cat-space',
-        name: 'Satélite Cuántico de Telecom',
-        desc: 'Infraestructura espacial sellada. Inspecciones brutales en puertos.',
-        cost: 200000,
-        baseReward: 270000, // 1.35x
-        weight: 50.0,
-        transport: 'avion',
-        icon: 'fa-satellite',
-        unlocked: false,
-        reqUnlock: 150000,
-        speedPenalty: 0.08,
-        seizureChance: 25 // 25% de confiscación de aduana
-      },
-      {
-        id: 'cat-antimatter',
-        name: 'Reactores de Fusión Experimental',
-        desc: 'Maquinaria nuclear pesada. Tránsito sumamente tedioso y vigilado.',
-        cost: 1000000,
-        baseReward: 1250000, // 1.25x
-        weight: 50.0,
-        transport: 'barco',
-        icon: 'fa-atom',
-        unlocked: false,
-        reqUnlock: 800000,
-        speedPenalty: 0.04,
-        seizureChance: 35 // 35%
-      },
-      {
-        id: 'cat-classified',
-        name: 'Tecnología Alienígena Secreta',
-        desc: 'Artefactos inclasificables. Se transporta con máximo sigilo. Altísimo riesgo de incautación.',
-        cost: 10000000,
-        baseReward: 11500000, // 1.15x
-        weight: 50.0,
-        transport: 'barco',
-        icon: 'fa-user-astronaut',
-        unlocked: false,
-        reqUnlock: 8000000,
-        speedPenalty: 0.02,
-        seizureChance: 45 // 45%
-      },
-      {
-        id: 'cat-ultimate',
-        name: 'Plutonio Enriquecido Estelar [ULTRA MEGA CARO]',
-        desc: 'Combustible intergaláctico nuclear. Tránsito desesperantemente lento, ilegal y casi inviable de cruzar fronteras.',
-        cost: 50000000,
-        baseReward: 53500000, // 1.07x
-        weight: 50.0,
-        transport: 'avion',
-        icon: 'fa-biohazard',
-        unlocked: false,
-        reqUnlock: 40000000,
-        speedPenalty: 0.008,
-        seizureChance: 55 // 55%
-      }
-    ];
+    <button type="button" class="card is-active" data-rnd="50">50 Hz<span class="check">✅</span></button>
+    <button type="button" class="card is-active" data-rnd="60">60 Hz<span class="check">✅</span></button>
+    <button type="button" class="card is-active" data-rnd="70">70 Hz<span class="check">✅</span></button>
+    <button type="button" class="card is-active" data-rnd="80">80 Hz<span class="check">✅</span></button>
 
-    // Inicialización del juego al cargar la página
-    window.onload = function() {
-      // Inicializar modificadores de país
-      Object.keys(DESTINATIONS).forEach(key => {
-        if (!DESTINATIONS[key].speedMod) DESTINATIONS[key].speedMod = 1.0;
-      });
-      populateCountrySelect();
-      renderWholesaleCatalog();
-      updateDashboard();
-      updateCustomDistance();
-      calculateCustomCosts();
-      renderCompletedList();
-      drawFinanceChart(); // Renderizar gráfico inicialmente
+    <p class="section-title">Duración de cada frecuencia</p>
+    <div class="range-box">
+      <h3>🔊 Sonido</h3>
+      <p class="val" id="rndOnVal">de 3 a 15 segundos</p>
+      <div class="rvis"><i id="rndOnBar"></i></div>
+      <input type="range" class="slider" id="rndOnMin" min="1" max="60" step="1" value="3">
+      <input type="range" class="slider" id="rndOnMax" min="1" max="60" step="1" value="15">
+      <p class="slider-tag">1s<span style="float:right">60s</span><em class="clearfix"></em></p>
+    </div>
 
-      // Bucle principal de actualización del simulador (30 FPS)
-      setInterval(updateSimulation, 33);
-    };
+    <div class="range-box">
+      <h3>🔇 Silencio</h3>
+      <p class="val" id="rndOffVal">de 3 a 5 segundos</p>
+      <div class="rvis"><i id="rndOffBar"></i></div>
+      <input type="range" class="slider" id="rndOffMin" min="0" max="10" step="1" value="3">
+      <input type="range" class="slider" id="rndOffMax" min="0" max="10" step="1" value="5">
+      <p class="slider-tag">0s<span style="float:right">10s</span><em class="clearfix"></em></p>
+    </div>
 
-    // Funciones para modificadores de país
-    function populateCountrySelect() {
-      const select = document.getElementById('cfg-country-sel');
-      select.innerHTML = '';
-      Object.keys(DESTINATIONS).filter(d => d !== "Shenzhen").forEach(country => {
-        const option = document.createElement('option');
-        option.value = country;
-        option.text = country;
-        select.appendChild(option);
-      });
-      updateCountrySliderUI();
-    }
+    <div class="transport">
+      <button type="button" class="play-btn" id="rndStartBtn">▶ START RANDOM</button>
+      <button type="button" class="play-btn secondary" id="rndPauseBtn">⏸ PAUSE</button>
+    </div>
 
-    // Sincroniza interfaz de control de velocidad por países
-    function updateCountrySliderUI() {
-      const country = document.getElementById('cfg-country-sel').value;
-      const mod = DESTINATIONS[country].speedMod || 1.0;
-      document.getElementById('cfg-country-slider').value = mod;
-      document.getElementById('cfg-country-val').innerText = mod.toFixed(1) + 'x';
-    }
+    <p class="note">El primer control marca el mínimo y el segundo el máximo de cada intervalo.</p>
+  </div>
 
-    function applyCountrySpeed() {
-      const country = document.getElementById('cfg-country-sel').value;
-      const val = parseFloat(document.getElementById('cfg-country-slider').value);
-      DESTINATIONS[country].speedMod = val;
-      document.getElementById('cfg-country-val').innerText = val.toFixed(1) + 'x';
-    }
+  <!-- ================= TIEMPOS ================= -->
+  <div class="panel" id="panel-tiempos">
 
-    // Funciones para peso e inyección de fondos
-    function syncWeight(source) {
-      const numInput = document.getElementById('pkg-weight-num');
-      const rangeInput = document.getElementById('pkg-weight');
-      if (source === 'num') {
-        let val = parseFloat(numInput.value);
-        if (val <= 1000) rangeInput.value = val;
-      } else {
-        numInput.value = rangeInput.value;
-      }
-      calculateCustomCosts();
-    }
+    <div class="times-block">
+      <h2>Tiempos de reproducción<button type="button" class="clear-btn" data-clear="sessions">🗑️ Borrar</button></h2>
+      <ul class="times-list" id="listSessions"></ul>
+      <p class="times-total">Tiempo total<span id="totalSessions">00:00:00</span><em class="clearfix"></em></p>
+    </div>
 
-    // Gestión de Transacciones bursátiles
-    function alterBalance(amount, label, isIncome) {
-      const balanceBefore = state.balance;
-      if (isIncome) {
-        state.balance += amount;
-      } else {
-        state.balance -= amount;
-      }
-      const balanceAfter = state.balance;
-      
-      // Registrar en el historial de la bolsa
-      state.transactionHistory.push({
-        label: label,
-        amount: amount,
-        type: isIncome ? 'income' : 'expense',
-        open: balanceBefore,
-        close: balanceAfter,
-        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})
-      });
-      
-      // Limitar a los últimos 100 movimientos para mayor perspectiva histórica
-      if (state.transactionHistory.length > 100) {
-        state.transactionHistory.shift();
-      }
-      
-      updateDashboard();
-      drawFinanceChart();
-    }
+    <div class="times-block">
+      <h2>🏆 Tiempos de retos<button type="button" class="clear-btn" data-clear="challenges">🗑️ Borrar</button></h2>
+      <ul class="times-list" id="listChallenges"></ul>
+      <p class="times-total">Tiempo total<span id="totalChallenges">00:00:00</span><em class="clearfix"></em></p>
+    </div>
 
-    function requestLoan() {
-      const input = document.getElementById('custom-funds-input');
-      const amount = parseFloat(input.value);
-      if (!isNaN(amount) && amount > 0) {
-        state.loan.principal += amount;
-        state.loan.debt += amount * 1.20; // 20% de interés base
-        alterBalance(amount, 'Préstamo Concedido', true);
-        playSound('buy');
-        showFloatingNotification(`Préstamo concedido de ${amount.toLocaleString('es-ES')} €. Deuda total incrementada a ${state.loan.debt.toLocaleString('es-ES')} €`, 'success');
-      } else {
-        playSound('warning');
-        showFloatingNotification('Por favor, ingresa una cantidad válida para el préstamo.', 'error');
-      }
-    }
+    <div class="times-block">
+      <h2>🎲 Tiempos Random<button type="button" class="clear-btn" data-clear="random">🗑️ Borrar</button></h2>
+      <ul class="times-list" id="listRandom"></ul>
+      <p class="times-total">Tiempo total<span id="totalRandom">00:00:00</span><em class="clearfix"></em></p>
+    </div>
 
-    // NUEVO SISTEMA: Licitaciones Dinámicas
-    function buscarLicitaciones() {
-      const list = document.getElementById('encargos-list');
-      list.innerHTML = '';
-      state.pendingEncargos = [];
-      state.activeEncargo = null; // Reseteamos cualquier contrato activo
-      calculateCustomCosts(); // Forzar recálculo normal
+    <div class="times-block">
+      <h2>🔁 Tiempos Intermitente<button type="button" class="clear-btn" data-clear="interm">🗑️ Borrar</button></h2>
+      <ul class="times-list" id="listInterm"></ul>
+      <p class="times-total">Tiempo total<span id="totalInterm">00:00:00</span><em class="clearfix"></em></p>
+    </div>
 
-      // Asegurarnos de que el jugador tiene algo de fondos
-      const workingBalance = Math.max(state.balance, 1000); 
+    <button type="button" class="mini-btn" id="clearTimesBtn">🗑️ Borrar todos los tiempos</button>
+    <div class="warn" id="storeWarn"></div>
+  </div>
 
-      const tiers = [
-        { risk: 'LOW', nameR: 'Bajo Riesgo', targetPct: 0.15, bonus: 15, color: 'bg-slate-900 border-sky-500/50 text-sky-400 border', icon: 'fa-gem' },
-        { risk: 'MEDIUM', nameR: 'Medio Riesgo', targetPct: 0.45, bonus: 25, color: 'bg-amber-950/40 border-amber-500 text-amber-500 border', icon: 'fa-gem' },
-        { risk: 'HIGH', nameR: 'Alto Riesgo', targetPct: 0.85, bonus: 40, color: 'bg-rose-950/40 border-rose-500 text-rose-500 border', icon: 'fa-satellite' }
-      ];
+</div>
+<script>
+/* -------------------------------------------------------------
+   Hz Jimi
+   JavaScript ES5. Sin dependencias.
 
-      const baseNames = ["Gemas Preciosas Recuperadas", "Equipos Satélite Cuánticos", "Suministros Médicos Avanzados", "Componentes de IA Clasificados", "Armamento Táctico Desmantelado", "Prototipos de Fusión Fría", "Artefactos Históricos Protegidos", "Lingotes de Oro Extraído", "Motores de Aviación Ligeros", "Microchips Criptográficos"];
+   Estructura:
+     1. Engine      - generación de sonido (Web Audio + fallback WAV)
+     2. Timer       - cronómetro HH:MM:SS acumulativo
+     3. Store       - persistencia en localStorage (3 registros)
+     4. Tests       - tone (tono continuo), sweep (reto), random
+     5. UI          - pestañas y pantallas
 
-      tiers.forEach(t => {
-        const targetCost = workingBalance * t.targetPct;
-        const destKeys = Object.keys(DESTINATIONS).filter(d => d !== "Shenzhen");
-        const randomDest = destKeys[Math.floor(Math.random() * destKeys.length)];
-        const destNode = DESTINATIONS[randomDest];
-        const encargoName = baseNames[Math.floor(Math.random() * baseNames.length)];
+   Para añadir nuevas pruebas de altavoces más adelante, crea otro
+   módulo con la misma interfaz que ToneTest (start / stop / setFreq)
+   y regístralo en App.tests.
+   ------------------------------------------------------------- */
+(function () {
+  'use strict';
 
-        // Parámetros fijos según dificultad del contrato
-        let transp = t.risk === 'LOW' ? 'avion' : (t.risk === 'MEDIUM' ? 'avion' : 'avion'); // Simplificado para que concuerde con imagen
-        let serviceTier = 'standard';
-        let escort = 'none';
+  var MIN_HZ = 20;
+  var MAX_HZ = 20000;
+  var LEVEL = 0.25;      // amplitud nominal del tono = volumen 100%
+  var FADE = 0.05;       // segundos de fade-in / fade-out
+  var GLIDE = 0.08;      // segundos para deslizar entre frecuencias
 
-        let transpMod = transp === 'barco' ? 0.5 : (transp === 'carretera' ? 0.8 : (transp === 'privado' ? 4.5 : 2.4));
-        let escortMod = 1.0;
-        let tierMod = 1.0;
+  /* ===========================================================
+     1. ENGINE
+     Cadena: oscilador -> gain (envolvente) -> vol (usuario) -> salida
+     =========================================================== */
 
-        // Despejar variable 'weight' algebraicamente para que el costo alcance el Target del balance de usuario
-        let weight = ((targetCost / (transpMod * tierMod * escortMod * state.config.costMultiplier)) - destNode.dist * 0.04) / 3.5;
-        
-        // Control de límites para pesos lógicos
-        if (weight < 0.5) weight = 0.5 + Math.random() * 5; 
-        if (weight > 100000) weight = 100000;
+  var Engine = {
+    mode: null,          // 'webaudio' | 'html5' | 'none'
+    ctx: null,
+    osc: null,
+    gain: null,
+    vol: null,
+    volume: 0.5,         // multiplicador de usuario: 0.5 = 50%
+    audioEl: null,
+    fadeTimer: null,
+    stopTimer: null,
+    pending: null,       // oscilador en fade-out pendiente de cerrar
+    playing: false,
+    freq: 50,
 
-        // Recalcular coste final exacto
-        const estimatedCost = (weight * 3.5 + destNode.dist * 0.04) * transpMod * tierMod * escortMod * state.config.costMultiplier;
+    /* Detecta el mejor motor disponible. Se llama una sola vez,
+       dentro del primer toque del usuario. */
+    init: function () {
+      if (this.mode) { return this.mode; }
 
-        const encargo = {
-          id: Math.random().toString(36).substr(2, 9),
-          name: `${encargoName} (${t.nameR})`,
-          destination: randomDest,
-          transport: transp,
-          serviceTier: serviceTier,
-          escort: escort,
-          weight: weight,
-          estimatedCost: estimatedCost,
-          bonusPct: t.bonus,
-          riskLabel: t.risk,
-          colorClass: t.color,
-          icon: t.icon
-        };
-        state.pendingEncargos.push(encargo);
-      });
-
-      renderEncargosList();
-    }
-
-    function renderEncargosList() {
-      const list = document.getElementById('encargos-list');
-      list.innerHTML = '';
-
-      if (state.pendingEncargos.length === 0) {
-        list.innerHTML = `
-          <div class="col-span-1 md:col-span-3 text-center py-8 text-slate-500 text-xs border border-slate-800 border-dashed rounded-xl bg-slate-900/30">
-            <i class="fa-solid fa-inbox text-2xl mb-2 opacity-50"></i>
-            <p>No hay contratos pendientes.</p>
-            <p class="text-[10px] opacity-70">Haz clic en "Buscar Licitación" para generar nuevos encargos adaptados a tu cuenta.</p>
-          </div>
-        `;
-        return;
-      }
-
-      state.pendingEncargos.forEach(encargo => {
-        list.innerHTML += `
-          <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow-lg">
-            <div class="flex gap-3 mb-4">
-              <div class="w-10 h-10 rounded bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0 shadow-inner">
-                <i class="fa-solid ${encargo.icon} text-amber-500 text-lg"></i>
-              </div>
-              <div>
-                <h4 class="text-[11px] font-bold text-slate-200 leading-tight">${encargo.name}</h4>
-                <p class="text-[10px] text-slate-400 mt-1">Trayecto a: <strong class="text-slate-100">${encargo.destination}</strong></p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2 text-[9px] mb-4">
-              <span class="px-2 py-0.5 rounded font-black tracking-wide ${encargo.colorClass}">${encargo.riskLabel}</span>
-              <span class="text-slate-400">Transporte: <span class="text-slate-200 capitalize">${encargo.transport}</span></span>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2 border-t border-slate-800 pt-3 pb-4">
-              <div>
-                <span class="block text-[10px] text-slate-500">Flete Previsto</span>
-                <span class="font-bold text-rose-500 text-sm">${encargo.estimatedCost.toLocaleString('es-ES', {maximumFractionDigits:2})} €</span>
-              </div>
-              <div class="text-right">
-                <span class="block text-[10px] text-slate-500">Bonificación</span>
-                <span class="font-bold text-emerald-400 text-sm">+${encargo.bonusPct}% Extra</span>
-              </div>
-            </div>
-
-            <button onclick="autoRellenarLicitacion('${encargo.id}')" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-lg shadow-md flex items-center justify-center gap-2 text-xs transition-colors active:scale-95">
-              <i class="fa-solid fa-pen-to-square"></i> Auto-rellenar
-            </button>
-          </div>
-        `;
-      });
-    }
-
-    function autoRellenarLicitacion(id) {
-      const encargo = state.pendingEncargos.find(e => e.id === id);
-      if (!encargo) return;
-
-      state.activeEncargo = encargo;
-      
-      // Auto-rellenar el formulario Custom
-      document.getElementById('pkg-name').value = encargo.name;
-      document.getElementById('pkg-destination').value = encargo.destination;
-      document.getElementById('pkg-weight-num').value = encargo.weight.toFixed(2);
-      syncWeight('num');
-      
-      document.querySelector(`input[name="transport-mode"][value="${encargo.transport}"]`).checked = true;
-      document.querySelector(`input[name="service-tier"][value="${encargo.serviceTier}"]`).checked = true;
-      document.querySelector(`input[name="escort-tier"][value="${encargo.escort}"]`).checked = true;
-      
-      // Llamar calculos para refrescar visuales
-      updateCustomDistance();
-      
-      playSound('click');
-      showFloatingNotification('Formulario logístico enlazado al contrato. Procede a firmar el envío.', 'success');
-      
-      // Desplazarse al formulario en movil
-      document.getElementById('custom-package-form').scrollIntoView({ behavior: 'smooth' });
-    }
-
-
-    // Renderizar Catálogo de Importación
-    function renderWholesaleCatalog() {
-      const container = document.getElementById('catalog-list');
-      container.innerHTML = '';
-
-      WHOLESALE_ITEMS.forEach(item => {
-        // Comprobación de desbloqueo dinámico por balance o progreso
-        const isUnlocked = item.unlocked || state.balance >= item.reqUnlock;
-        if (isUnlocked) item.unlocked = true;
-
-        if (isUnlocked) {
-          const adjustedCost = item.cost * state.config.costMultiplier;
-          const cardHtml = `
-            <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3.5 hover:border-slate-700/80 transition-all flex flex-col justify-between shadow">
-              <div class="flex gap-2.5">
-                <div class="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 text-amber-400 shrink-0">
-                  <i class="fa-solid ${item.icon} text-base"></i>
-                </div>
-                <div>
-                  <h3 class="text-xs font-bold text-slate-200 leading-tight">${item.name}</h3>
-                  <p class="text-[10px] text-slate-400 mt-1">${item.desc}</p>
-                </div>
-              </div>
-              
-              <div class="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-slate-900 text-xs">
-                <div>
-                  <span class="text-[10px] text-slate-500 block">Coste Adquisición</span>
-                  <span class="font-bold text-red-400">${adjustedCost.toLocaleString('es-ES')} €</span>
-                </div>
-                <div class="text-right">
-                  <span class="text-[10px] text-slate-500 block">Recompensa Estimada</span>
-                  <span class="font-bold text-emerald-400">${(item.baseReward * state.config.rewardMultiplier).toLocaleString('es-ES')} €</span>
-                </div>
-              </div>
-
-              <div class="flex items-center justify-between gap-2 mt-3 pt-2">
-                <span class="text-[10px] text-slate-400 flex items-center gap-1">
-                  <i class="fa-solid fa-shuffle text-indigo-400"></i> Destino: <strong class="text-amber-400 font-semibold">Aleatorio</strong>
-                </span>
-                <button onclick="buyAndDispatchItem('${item.id}')" class="bg-indigo-600 hover:bg-indigo-500 active:scale-[0.97] text-slate-950 text-[11px] font-black px-3 py-1.5 rounded-lg transition-all shadow-md">
-                  IMPORTAR Y ENVIAR
-                </button>
-              </div>
-            </div>
-          `;
-          container.insertAdjacentHTML('beforeend', cardHtml);
-        } else {
-          // Tarjeta Bloqueada
-          const lockedHtml = `
-            <div class="bg-slate-950/40 border border-slate-900/80 rounded-xl p-3.5 flex flex-col justify-between opacity-50 relative overflow-hidden">
-              <div class="absolute inset-0 bg-slate-950/20 flex flex-col items-center justify-center z-10">
-                <i class="fa-solid fa-lock text-slate-500 text-lg mb-1"></i>
-                <span class="text-[9px] uppercase font-bold text-slate-400">Desbloquea al tener ${item.reqUnlock.toLocaleString('es-ES')} €</span>
-              </div>
-              <div class="flex gap-2.5 blur-[1.5px]">
-                <div class="w-10 h-10 rounded-lg bg-slate-900 flex items-center justify-center border border-slate-800 text-slate-600 shrink-0">
-                  <i class="fa-solid ${item.icon} text-base"></i>
-                </div>
-                <div>
-                  <h3 class="text-xs font-bold text-slate-400 leading-tight">${item.name}</h3>
-                  <p class="text-[10px] text-slate-500 mt-1">Suministros de alto valor para exportaciones masivas.</p>
-                </div>
-              </div>
-            </div>
-          `;
-          container.insertAdjacentHTML('beforeend', lockedHtml);
+      var Ctor = window.AudioContext || window.webkitAudioContext || null;
+      if (Ctor) {
+        try {
+          this.ctx = new Ctor();
+          this.gain = this.ctx.createGain();
+          this.gain.gain.value = 0;
+          this.vol = this.ctx.createGain();
+          this.vol.gain.value = this.volume;
+          this.gain.connect(this.vol);
+          this.vol.connect(this.ctx.destination);
+          this.mode = 'webaudio';
+          return this.mode;
+        } catch (e) {
+          this.ctx = null;
+          this.gain = null;
+          this.vol = null;
         }
-      });
-    }
-
-    // Comprar artículo al por mayor y despacharlo con destino aleatorio
-    function buyAndDispatchItem(itemId) {
-      const item = WHOLESALE_ITEMS.find(x => x.id === itemId);
-      if (!item) return;
-
-      const finalCost = item.cost * state.config.costMultiplier;
-
-      if (state.balance < finalCost) {
-        playSound('warning');
-        showFloatingNotification('Capital insuficiente para importar esta mercancía.', 'error');
-        return;
       }
 
-      // Descontar capital de forma bursátil
-      alterBalance(finalCost, `Importar: ${item.name}`, false);
-      playSound('buy');
-
-      // Selección de país destino aleatorio al comprar el lote mayorista (excluyendo la central de Shenzhen)
-      const possibleDestinations = Object.keys(DESTINATIONS).filter(d => d !== "Shenzhen");
-      const randomDest = possibleDestinations[Math.floor(Math.random() * possibleDestinations.length)];
-
-      // Calcular riesgo de aduanas según transporte e importancia
-      const baseRisk = item.transport === 'avion' ? 25 : (item.transport === 'barco' ? 15 : 8);
-      const weightRiskMod = Math.min(item.weight * 0.5, 15);
-      const finalRisk = Math.min((baseRisk + weightRiskMod) * state.config.riskMultiplier, 90);
-
-      // Multiplicamos la velocidad base por la penalización de velocidad propia del artículo
-      const itemSpeed = getSpeedByTransport(item.transport) * (item.speedPenalty || 1.0);
-
-      // Sistema de Aduanas Múltiples para Lotes
-      let maxStops = item.transport === 'avion' ? 2 : (item.transport === 'barco' ? 4 : 3);
-      if (item.cost > 100000) maxStops += 2; // Artículos ultra caros paran más
-      let numStops = Math.floor(Math.random() * maxStops) + 1;
-      
-      let triggers = [];
-      for(let i=0; i<numStops; i++) {
-        triggers.push({ progress: 5 + Math.random() * 90, resolved: false });
+      // Fallback: <audio> con un WAV generado en memoria y reproducido en bucle.
+      var test = document.createElement('audio');
+      if (test && typeof test.canPlayType === 'function' &&
+          test.canPlayType('audio/wav') !== '' && typeof window.btoa === 'function') {
+        this.audioEl = test;
+        this.audioEl.loop = true;
+        this.mode = 'html5';
+        return this.mode;
       }
 
-      const shipment = {
-        id: state.nextId++,
-        name: item.name,
-        tier: 'standard',
-        escort: 'none', // Mayoristas no tienen escolta armada por defecto
-        cost: finalCost,
-        totalExpenses: finalCost, // Seguimiento total de gastos de este flete
-        reward: item.baseReward * state.config.rewardMultiplier,
-        weight: item.weight,
-        distance: DESTINATIONS[randomDest].dist,
-        origin: "Shenzhen",
-        destination: randomDest, // Destino asignado de forma dinámica
-        transport: item.transport,
-        progress: 0,
-        status: 'transit', // transit, customHold, completed, collected, seized, damaged
-        customsRisk: finalRisk,
-        customsTriggers: triggers, // Nuevo sistema de array
-        damageRisk: (item.weight > 20 ? 15 : 5),
-        damageResolved: false,
-        damageTrigger: 20 + Math.random() * 60,
-        speed: itemSpeed,
-        currentPos: { x: DESTINATIONS["Shenzhen"].x, y: DESTINATIONS["Shenzhen"].y },
-        taxCost: finalCost * 0.35, // Tasa de liberación si aduana lo retiene
-        seizureChance: item.seizureChance || 2 // Probabilidad de confiscamiento permanente
-      };
+      this.mode = 'none';
+      return this.mode;
+    },
 
-      state.activeShipments.push(shipment);
-      renderWholesaleCatalog(); // Refrescar catálogo por si cambia el estado de desbloqueo
-      updateDashboard();
-      showFloatingNotification(`¡Cargamento de "${item.name}" despachado hacia ${randomDest}!`, 'success');
-    }
-
-    // Actualizar flete personalizado en base a selección
-    function updateCustomDistance() {
-      const destSelect = document.getElementById('pkg-destination');
-      const customConfig = document.getElementById('custom-dest-config');
-      const previewNode = document.getElementById('custom-dest-preview-node');
-      
-      if (destSelect.value === 'custom_node') {
-        customConfig.classList.remove('hidden');
-        previewNode.classList.remove('hidden');
-        updateCustomDestinationPreview();
-      } else {
-        customConfig.classList.add('hidden');
-        previewNode.classList.add('hidden');
-        
-        const selectedOption = destSelect.options[destSelect.selectedIndex];
-        const distance = parseInt(selectedOption.getAttribute('data-dist'));
-        document.getElementById('pkg-distance-val').innerText = distance.toLocaleString() + ' km';
-        calculateCustomCosts();
+    /* Algunos navegadores crean el contexto en estado 'suspended'.
+       Hay que reanudarlo dentro del gesto del usuario. */
+    unlock: function () {
+      if (this.mode === 'webaudio' && this.ctx && this.ctx.state === 'suspended' &&
+          typeof this.ctx.resume === 'function') {
+        try { this.ctx.resume(); } catch (e) {}
       }
-    }
-
-    // Actualizar previsualización interactiva del nodo en tiempo real
-    function updateCustomDestinationPreview() {
-      const x = parseInt(document.getElementById('custom-dest-x').value);
-      const y = parseInt(document.getElementById('custom-dest-y').value);
-      const name = document.getElementById('custom-dest-name').value.trim() || 'Mi Destino';
-
-      const previewNode = document.getElementById('custom-dest-preview-node');
-      if (previewNode) {
-        previewNode.setAttribute('transform', `translate(${x}, ${y})`);
-      }
-
-      const txt = document.getElementById('custom-preview-text');
-      if (txt) {
-        txt.textContent = name;
-      }
-
-      // Calcular distancia física euclídea escalada desde Shenzhen HQ (600, 250)
-      const dx = x - 600;
-      const dy = y - 250;
-      const calculatedDist = Math.round(Math.sqrt(dx*dx + dy*dy) * 25);
-
-      document.getElementById('custom-dest-dist').value = calculatedDist;
-      document.getElementById('pkg-distance-val').innerText = calculatedDist.toLocaleString() + ' km';
-      calculateCustomCosts();
-    }
-
-    function updateCustomDistanceOnly() {
-      const manualDist = parseInt(document.getElementById('custom-dest-dist').value) || 0;
-      document.getElementById('pkg-distance-val').innerText = manualDist.toLocaleString() + ' km';
-      calculateCustomCosts();
-    }
-
-    // Calcular costes del formulario dinámico de paquetes personalizados
-    function calculateCustomCosts() {
-      let weight = parseFloat(document.getElementById('pkg-weight-num').value);
-      if (isNaN(weight) || weight < 0.01) weight = 0.5;
-
-      const destSelect = document.getElementById('pkg-destination');
-      let distance = 1500;
-      let destName = '';
-
-      if (destSelect.value === 'custom_node') {
-        distance = parseInt(document.getElementById('custom-dest-dist').value) || 1500;
-      } else {
-        const selectedOption = destSelect.options[destSelect.selectedIndex];
-        distance = parseInt(selectedOption.getAttribute('data-dist'));
-        destName = selectedOption.value;
-      }
-
-      const transport = document.querySelector('input[name="transport-mode"]:checked').value;
-      const serviceTier = document.querySelector('input[name="service-tier"]:checked').value;
-      const escort = document.querySelector('input[name="escort-tier"]:checked').value;
-      const inputName = document.getElementById('pkg-name').value.trim();
-
-      // Fórmulas dinámicas basadas en los fletes
-      let transportMultiplier = 1.0;
-
-      if (transport === 'carretera') transportMultiplier = 0.8;
-      else if (transport === 'barco') transportMultiplier = 0.5;
-      else if (transport === 'avion') transportMultiplier = 2.4;
-      else if (transport === 'privado') transportMultiplier = 4.5;
-
-      // Modificadores por prioridad de envío
-      let tierCostMod = 1.0;
-      let tierRewardMod = 1.0;
-      if (serviceTier === 'express') { tierCostMod = 1.5; tierRewardMod = 1.25; } 
-      else if (serviceTier === 'premium') { tierCostMod = 2.5; tierRewardMod = 1.8; } 
-      else if (serviceTier === 'vip') { tierCostMod = 5.0; tierRewardMod = 2.5; }
-
-      // Multiplicador Exponencial de Escolta Militar / Seguro
-      let escortMultiplier = 1.0;
-      if (escort === 'light') escortMultiplier = 15.0; 
-      else if (escort === 'heavy') escortMultiplier = 120.0; 
-
-      // Coste total de preparación base
-      const baseCost = (weight * 3.5 + distance * 0.04) * transportMultiplier * tierCostMod * escortMultiplier * state.config.costMultiplier;
-      let reward = (weight * 3.5 + distance * 0.04) * transportMultiplier * tierCostMod * 2.4 * state.config.rewardMultiplier * tierRewardMod;
-
-      // Compensación de recompensa para escoltas normal (ganancia garantizada sin pérdidas)
-      if (escort === 'light') reward = baseCost * 1.15; 
-      else if (escort === 'heavy') reward = baseCost * 1.05; 
-
-      // VERIFICACIÓN DEL SISTEMA DE ENCARGOS / LICITACIONES
-      let isLicitacionActiva = false;
-      if (state.activeEncargo && inputName === state.activeEncargo.name) {
-          isLicitacionActiva = true;
-          // El pago es el coste original final más el pequeño porcentaje extra de bonificación, multiplicado por el modificador de ganancias global.
-          reward = (baseCost + (baseCost * (state.activeEncargo.bonusPct / 100))) * state.config.rewardMultiplier;
-      } else {
-          // Si cambian el nombre del encargo o crean uno distinto, borramos su link.
-          state.activeEncargo = null;
-      }
-
-      document.getElementById('custom-cost-display').innerText = baseCost.toLocaleString('es-ES', {maximumFractionDigits: 2}) + ' €';
-      
-      if (isLicitacionActiva) {
-          document.getElementById('custom-reward-display').innerHTML = `
-             ${reward.toLocaleString('es-ES', {maximumFractionDigits: 2})} € 
-             <span class="text-[10px] text-amber-500 block text-right mt-1 font-semibold leading-tight">Bonificación Licitación +${state.activeEncargo.bonusPct}%</span>`;
-      } else {
-          document.getElementById('custom-reward-display').innerText = reward.toLocaleString('es-ES', {maximumFractionDigits: 2}) + ' €';
-      }
-    }
-
-    // Despachar paquete customizado o Licitación
-    function createCustomPackage() {
-      const name = document.getElementById('pkg-name').value.trim();
-      let weight = parseFloat(document.getElementById('pkg-weight-num').value);
-      if (isNaN(weight) || weight < 0.01) weight = 0.5;
-      
-      const destSelect = document.getElementById('pkg-destination');
-      let destinationName = '';
-      let distance = 0;
-      let customX = 200;
-      let customY = 200;
-
-      if (destSelect.value === 'custom_node') {
-        destinationName = document.getElementById('custom-dest-name').value.trim() || "Destino Custom";
-        customX = parseInt(document.getElementById('custom-dest-x').value);
-        customY = parseInt(document.getElementById('custom-dest-y').value);
-        distance = parseInt(document.getElementById('custom-dest-dist').value) || 1500;
-
-        // Registrar el nuevo destino en el sistema de coordenadas de la matriz física
-        DESTINATIONS[destinationName] = { x: customX, y: customY, dist: distance, speedMod: 1.0 };
-        populateCountrySelect(); // Actualizar ajustes de países
-        
-        // BUGFIX: Añadir a la lista de selección permanentemente para este envío y envíos futuros
-        const newOption = document.createElement('option');
-        newOption.value = destinationName;
-        newOption.setAttribute('data-dist', distance);
-        newOption.text = `${destinationName} (${distance.toLocaleString()} km)`;
-        
-        const customOpt = destSelect.querySelector('option[value="custom_node"]');
-        destSelect.insertBefore(newOption, customOpt);
-        
-        // Seleccionarlo tras guardarlo para mantener la integridad en envíos en cadena
-        destSelect.value = destinationName;
-        document.getElementById('custom-dest-config').classList.add('hidden');
-        document.getElementById('custom-dest-preview-node').classList.add('hidden');
-        
-      } else {
-        const selectedOption = destSelect.options[destSelect.selectedIndex];
-        destinationName = selectedOption.value;
-        distance = parseInt(selectedOption.getAttribute('data-dist'));
-      }
-
-      const transport = document.querySelector('input[name="transport-mode"]:checked').value;
-      const serviceTier = document.querySelector('input[name="service-tier"]:checked').value;
-      const escort = document.querySelector('input[name="escort-tier"]:checked').value;
-
-      let transportMultiplier = 1.0;
-      let baseRisk = 10;
-      if (transport === 'carretera') { transportMultiplier = 0.8; baseRisk = 8; }
-      else if (transport === 'barco') { transportMultiplier = 0.5; baseRisk = 15; }
-      else if (transport === 'avion') { transportMultiplier = 2.4; baseRisk = 25; }
-      else if (transport === 'privado') { transportMultiplier = 4.5; baseRisk = 5; }
-
-      let tierCostMod = 1.0;
-      let tierRewardMod = 1.0;
-      let tierSpeedMod = 1.0;
-      let tierRiskMod = 1.0;
-      let maxCustomsStops = 3;
-
-      if (serviceTier === 'express') {
-        tierCostMod = 1.5;
-        tierRewardMod = 1.25;
-        tierSpeedMod = 1.6; 
-        tierRiskMod = 0.8; 
-        maxCustomsStops = 2;
-      } else if (serviceTier === 'premium') {
-        tierCostMod = 2.5;
-        tierRewardMod = 1.8;
-        tierSpeedMod = 2.5; 
-        tierRiskMod = 0.3;  
-        maxCustomsStops = 1;
-      } else if (serviceTier === 'vip') {
-        tierCostMod = 5.0;
-        tierRewardMod = 2.5;
-        tierSpeedMod = 4.0; 
-        tierRiskMod = 0.05; 
-        maxCustomsStops = 1;
-      }
-
-      let escortMultiplier = 1.0;
-      if (escort === 'light') escortMultiplier = 15.0;
-      if (escort === 'heavy') escortMultiplier = 120.0;
-
-      const baseCost = (weight * 3.5 + distance * 0.04) * transportMultiplier * tierCostMod * escortMultiplier * state.config.costMultiplier;
-      let reward = (weight * 3.5 + distance * 0.04) * transportMultiplier * tierCostMod * 2.4 * state.config.rewardMultiplier * tierRewardMod;
-      if (escort === 'light') reward = baseCost * 1.15;
-      if (escort === 'heavy') reward = baseCost * 1.05;
-
-      // RESOLVER LICITACIÓN FINAL (APLICAR CONTRATO DE RECOMPENSAS EXTRAS)
-      if (state.activeEncargo && name === state.activeEncargo.name) {
-          reward = (baseCost + (baseCost * (state.activeEncargo.bonusPct / 100))) * state.config.rewardMultiplier;
-          
-          // Eliminar el encargo que acaba de ser enviado
-          state.pendingEncargos = state.pendingEncargos.filter(e => e.id !== state.activeEncargo.id);
-          renderEncargosList();
-          state.activeEncargo = null; // Liberar memoria
-      }
-
-      const customsRisk = Math.min((baseRisk + weight * 0.6) * state.config.riskMultiplier * tierRiskMod, 90);
-      let weightSpeedPenalty = Math.max(0.000001, 50 / (50 + weight));
-
-      if (state.balance < baseCost) {
-        playSound('warning');
-        showFloatingNotification('Capital insuficiente para procesar este flete logístico.', 'error');
-        return;
-      }
-
-      // Descontar balance
-      alterBalance(baseCost, `Envío: ${name || 'Paquete'}`, false);
-      playSound('buy');
-
-      let numStops = Math.floor(Math.random() * maxCustomsStops) + 1;
-      if (serviceTier === 'vip' && Math.random() > 0.3) numStops = 0; 
-
-      let triggers = [];
-      for(let i=0; i<numStops; i++) {
-        triggers.push({ progress: 15 + Math.random() * 70, resolved: false });
-      }
-
-      const shipment = {
-        id: state.nextId++,
-        name: name || "Paquete Personalizado",
-        tier: serviceTier,
-        escort: escort, 
-        cost: baseCost,
-        totalExpenses: baseCost, 
-        reward: reward,
-        weight: weight,
-        distance: distance,
-        origin: "Shenzhen",
-        destination: destinationName,
-        transport: transport,
-        progress: 0,
-        status: 'transit',
-        customsRisk: escort !== 'none' ? 0 : customsRisk, 
-        customsTriggers: escort !== 'none' ? [] : triggers, 
-        damageRisk: escort !== 'none' ? 0 : Math.min(5 + (weight / 50), 40),
-        damageResolved: false,
-        damageTrigger: 20 + Math.random() * 60,
-        speed: getSpeedByTransport(transport) * tierSpeedMod * weightSpeedPenalty,
-        currentPos: { x: DESTINATIONS["Shenzhen"].x, y: DESTINATIONS["Shenzhen"].y },
-        taxCost: baseCost * 0.35,
-        seizureChance: 3 
-      };
-
-      state.activeShipments.push(shipment);
-      updateDashboard();
-      
-      // Limpiar Form
-      document.getElementById('pkg-name').value = '';
-      calculateCustomCosts();
-      
-      showFloatingNotification(`Paquete a medida despachado hacia ${destinationName}`, 'success');
-    }
-
-    function getSpeedByTransport(transport) {
-      if (transport === 'privado') return 0.90; 
-      if (transport === 'avion') return 0.55;
-      if (transport === 'carretera') return 0.18;
-      return 0.06; // barco
-    }
-
-    // Control del Modal de Parámetros
-    function toggleConfigModal(show) {
-      const modal = document.getElementById('config-modal');
-      if (show) {
-        modal.classList.remove('hidden');
-        document.getElementById('cfg-speed').value = state.config.speedMultiplier;
-        document.getElementById('cfg-reward').value = state.config.rewardMultiplier;
-        document.getElementById('cfg-risk').value = state.config.riskMultiplier;
-        document.getElementById('cfg-damage').value = state.config.damageMultiplier;
-        document.getElementById('cfg-cost').value = state.config.costMultiplier;
-        document.getElementById('cfg-loan-interval').value = state.config.loanPaymentInterval;
-        updateConfigValues();
-      } else {
-        modal.classList.add('hidden');
-      }
-    }
-
-    // Actualizar los textos de los inputs de la configuración en tiempo real
-    function updateConfigValues() {
-      const speed = parseFloat(document.getElementById('cfg-speed').value);
-      const reward = parseFloat(document.getElementById('cfg-reward').value);
-      const risk = parseFloat(document.getElementById('cfg-risk').value);
-      const damage = parseFloat(document.getElementById('cfg-damage').value);
-      const cost = parseFloat(document.getElementById('cfg-cost').value);
-      const loanInterval = parseInt(document.getElementById('cfg-loan-interval').value);
-
-      document.getElementById('cfg-speed-val').innerText = speed.toFixed(1) + 'x';
-      document.getElementById('cfg-reward-val').innerText = reward.toFixed(1) + 'x';
-      document.getElementById('cfg-risk-val').innerText = risk.toFixed(1) + 'x';
-      document.getElementById('cfg-damage-val').innerText = damage.toFixed(1) + 'x';
-      document.getElementById('cfg-cost-val').innerText = cost.toFixed(1) + 'x';
-      document.getElementById('cfg-loan-interval-val').innerText = loanInterval + ' s';
-
-      state.config.speedMultiplier = speed;
-      state.config.rewardMultiplier = reward;
-      state.config.riskMultiplier = risk;
-      state.config.damageMultiplier = damage;
-      state.config.costMultiplier = cost;
-      state.config.loanPaymentInterval = loanInterval;
-
-      calculateCustomCosts();
-      renderWholesaleCatalog();
-    }
-
-    let tickCounter = 0; 
-    let loanTickCounter = 0;
-
-    // Bucle de simulación principal
-    function updateSimulation() {
-      let stateChanged = false;
-      tickCounter++;
-
-      if (state.loan.debt > 0) {
-        loanTickCounter++;
-        const intervalTicks = state.config.loanPaymentInterval * 30; 
-
-        if (loanTickCounter >= intervalTicks) {
-          let cuota = state.loan.principal * (0.015 * state.config.loanPaymentInterval); 
-          if (state.loan.debt < cuota) cuota = state.loan.debt;
-
-          if (state.balance < 0) {
-            state.loan.debt += cuota * 0.8; 
-            showFloatingNotification('⚠️ Préstamo: Penalización por cuenta al descubierto.', 'error');
-          }
-
-          alterBalance(cuota, 'Pago Cuota Préstamo', false);
-          state.loan.debt -= cuota;
-          
-          if (state.loan.debt <= 0) {
-            state.loan.debt = 0;
-            state.loan.principal = 0;
-            playSound('success');
-            showFloatingNotification('¡Felicidades! Has saldado tu deuda bancaria.', 'success');
-          }
-          
-          loanTickCounter = 0; 
-          stateChanged = true;
-        }
-      } else {
-        loanTickCounter = 0;
-      }
-
-      state.activeShipments.forEach(shipment => {
-        if (shipment.status === 'transit') {
-          const destMod = DESTINATIONS[shipment.destination] ? (DESTINATIONS[shipment.destination].speedMod || 1.0) : 1.0;
-          const step = shipment.speed * state.config.speedMultiplier * destMod;
-          shipment.progress += step;
-
-          if (shipment.escort === 'none' && shipment.customsTriggers && shipment.customsTriggers.length > 0) {
-            shipment.customsTriggers.forEach(trigger => {
-              if (!trigger.resolved && shipment.progress >= trigger.progress) {
-                const chance = Math.random() * 100;
-                if (chance < shipment.customsRisk) {
-                  const seizureRoll = Math.random() * 100;
-                  const finalSeizureChance = shipment.seizureChance || 3;
-                  if (seizureRoll < finalSeizureChance) {
-                    shipment.status = 'seized';
-                    playSound('warning');
-                    showFloatingNotification(`🚨 ¡Cargamento #${shipment.id} CONFISCADO de forma permanente!`, 'error');
-                  } else {
-                    shipment.status = 'customHold';
-                    shipment.taxCost = shipment.cost * (0.15 + Math.random() * 0.25);
-                    playSound('warning');
-                    showFloatingNotification(`⚠️ ¡Paquete #${shipment.id} retenido en puesto fronterizo!`, 'error');
-                  }
-                }
-                trigger.resolved = true;
-              }
-            });
-          }
-
-          if (shipment.escort === 'none' && !shipment.damageResolved && shipment.progress >= shipment.damageTrigger) {
-            const damageChance = shipment.damageRisk * state.config.damageMultiplier;
-            if (Math.random() * 100 < damageChance) {
-              shipment.status = 'damaged';
-              shipment.penaltyCost = shipment.cost * 1.5 + 500; 
-              playSound('warning');
-              showFloatingNotification(`💥 ¡ACCIDENTE GRAVE! El cargamento #${shipment.id} [${shipment.name}] ha sido destruido en ruta.`, 'error');
-            }
-            shipment.damageResolved = true;
-          }
-
-          if (shipment.progress >= 100) {
-            shipment.progress = 100;
-            shipment.status = 'completed';
-            playSound('success');
-            showFloatingNotification(`📦 Paquete #${shipment.id} ha llegado a su destino. ¡Listo para cobro!`, 'success');
-          }
-
-          const originNode = DESTINATIONS[shipment.origin];
-          const destNode = DESTINATIONS[shipment.destination];
-          
-          if (originNode && destNode) {
-            const t = shipment.progress / 100;
-            const midX = (originNode.x + destNode.x) / 2;
-            const midY = Math.min(originNode.y, destNode.y) - 60; 
-            shipment.currentPos.x = (1 - t) * (1 - t) * originNode.x + 2 * (1 - t) * t * midX + t * t * destNode.x;
-            shipment.currentPos.y = (1 - t) * (1 - t) * originNode.y + 2 * (1 - t) * t * midY + t * t * destNode.y;
-          }
-
-          stateChanged = true;
-        }
-      });
-
-      if (stateChanged || state.activeShipments.length > 0) {
-        renderShipmentList();
-        renderMapShipments();
-        updateDashboard();
-      }
-    }
-
-    function updateDashboard() {
-      const balanceEl = document.getElementById('balance-display');
-      balanceEl.innerText = state.balance.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
-      
-      if (state.balance < 0) {
-        balanceEl.classList.remove('text-emerald-400');
-        balanceEl.classList.add('text-rose-500');
-      } else {
-        balanceEl.classList.remove('text-rose-500');
-        balanceEl.classList.add('text-emerald-400');
-      }
-
-      const loanDisplay = document.getElementById('loan-display');
-      if (state.loan.debt > 0) {
-        loanDisplay.classList.remove('hidden');
-        document.getElementById('debt-display').innerText = state.loan.debt.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
-      } else {
-        loanDisplay.classList.add('hidden');
-      }
-      
-      const activeCount = state.activeShipments.filter(s => s.status === 'transit' || s.status === 'customHold' || s.status === 'seized').length;
-      document.getElementById('active-count').innerText = `${activeCount} activo${activeCount !== 1 ? 's' : ''} en tránsito`;
-      document.getElementById('completed-count').innerText = `${state.completedCount} entrega${state.completedCount !== 1 ? 's' : ''}`;
-    }
-
-    function renderShipmentList() {
-      const container = document.getElementById('shipments-container');
-      const emptyMsg = document.getElementById('empty-shipments-msg');
-
-      if (state.activeShipments.length === 0) {
-        emptyMsg.classList.remove('hidden');
-        const dynamicElements = container.querySelectorAll('.shipment-card');
-        dynamicElements.forEach(el => el.remove());
-        return;
-      }
-
-      emptyMsg.classList.add('hidden');
-
-      state.activeShipments.forEach(s => {
-        let card = document.getElementById(`ship-card-${s.id}`);
-        
-        if (!card || s.lastRenderedStatus !== s.status) {
-          s.lastRenderedStatus = s.status;
-          
-          let statusHtml = '';
-          let buttonHtml = '';
-          let cardBg = 'bg-slate-950/80 border-slate-800';
-
-          if (s.status === 'transit') {
-            statusHtml = `
-              <span class="text-sky-400 font-medium flex items-center gap-1">
-                <i class="fa-solid fa-spinner animate-spin"></i> En ruta por ${s.transport}
-              </span>
-            `;
-            buttonHtml = `<div id="est-time-${s.id}" class="text-[10px] text-slate-500 font-bold">Est: --s</div>`;
-          } else if (s.status === 'customHold') {
-            cardBg = 'bg-red-950/25 border-red-900/40 animate-pulse';
-            statusHtml = `
-              <span class="text-amber-400 font-black flex items-center gap-1">
-                <i class="fa-solid fa-triangle-exclamation text-amber-500 text-xs"></i> RETENIDO ADUANAS
-              </span>
-            `;
-            buttonHtml = `
-              <button onclick="resolveCustoms(${s.id}); event.stopPropagation();" class="bg-red-500 hover:bg-red-400 active:scale-[0.96] text-slate-950 font-bold text-[10px] px-2.5 py-1.5 rounded-lg shadow-md flex items-center gap-1 transition-all">
-                <i class="fa-solid fa-receipt"></i> Liberar (${s.taxCost.toLocaleString('es-ES', {maximumFractionDigits:0})}€)
-              </button>
-            `;
-          } else if (s.status === 'seized') {
-            cardBg = 'bg-rose-950/50 border-rose-600/60 animate-pulse';
-            statusHtml = `
-              <span class="text-rose-500 font-black flex items-center gap-1">
-                <i class="fa-solid fa-ban text-rose-500 text-xs animate-bounce"></i> INCAUTADO permanente
-              </span>
-            `;
-            buttonHtml = `
-              <button onclick="discardLoss(${s.id}); event.stopPropagation();" class="bg-rose-600 hover:bg-rose-500 active:scale-[0.96] text-white font-bold text-[10px] px-2.5 py-1.5 rounded-lg shadow-md flex items-center gap-1 transition-all">
-                <i class="fa-solid fa-trash-can"></i> Descartar
-              </button>
-            `;
-          } else if (s.status === 'damaged') {
-            cardBg = 'bg-orange-950/40 border-orange-600/60 animate-pulse';
-            statusHtml = `
-              <span class="text-orange-500 font-black flex items-center gap-1">
-                <i class="fa-solid fa-fire text-orange-500 text-xs animate-bounce"></i> ACCIDENTE/DAÑOS
-              </span>
-            `;
-            buttonHtml = `
-              <button onclick="replaceDamaged(${s.id}); event.stopPropagation();" class="bg-orange-600 hover:bg-orange-500 active:scale-[0.96] text-white font-bold text-[10px] px-2.5 py-1.5 rounded-lg shadow-md flex items-center gap-1 transition-all">
-                <i class="fa-solid fa-rotate-right"></i> Reemplazar (-${s.penaltyCost.toLocaleString('es-ES', {maximumFractionDigits:0})}€)
-              </button>
-            `;
-          } else if (s.status === 'completed') {
-            cardBg = 'bg-emerald-950/20 border-emerald-500/40';
-            statusHtml = `
-              <span class="text-emerald-400 font-black flex items-center gap-1">
-                <i class="fa-solid fa-circle-check text-xs"></i> ENTREGADO
-              </span>
-            `;
-            buttonHtml = `
-              <button onclick="collectReward(${s.id}); event.stopPropagation();" class="bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-400 hover:to-teal-300 active:scale-[0.96] text-slate-950 font-black text-xs px-4 py-2 rounded-lg shadow-md animate-bounce">
-                COBRAR ${s.reward.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2})}€
-              </button>
-            `;
-          }
-
-          const transportIcon = s.transport === 'privado' ? 'fa-helicopter' : s.transport === 'avion' ? 'fa-plane' : s.transport === 'barco' ? 'fa-ship' : 'fa-truck';
-
-          let tierBadge = '';
-          if (s.tier === 'express') tierBadge = '<span class="bg-amber-900/50 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ml-1 shadow-sm">Express</span>';
-          if (s.tier === 'premium') tierBadge = '<span class="bg-fuchsia-900/50 text-fuchsia-400 border border-fuchsia-500/30 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ml-1 shadow-sm"><i class="fa-solid fa-crown mr-0.5"></i>Premium</span>';
-          if (s.tier === 'vip') tierBadge = '<span class="bg-yellow-900/50 text-yellow-400 border border-yellow-500/30 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ml-1 shadow-sm shadow-yellow-500/20"><i class="fa-solid fa-star mr-0.5"></i>Diplo</span>';
-
-          let escortBadge = '';
-          if (s.escort === 'light') {
-            escortBadge = '<span class="bg-amber-950/70 text-amber-400 border border-amber-500/30 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ml-1 shadow-sm flex items-center gap-1"><i class="fa-solid fa-user-shield"></i>Escolta Ligera</span>';
-          } else if (s.escort === 'heavy') {
-            escortBadge = '<span class="bg-red-950/80 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ml-1 shadow-sm flex items-center gap-1 animate-pulse"><i class="fa-solid fa-person-military-pointing"></i>Escolta Militar (Soldados)</span>';
-          }
-
-          const cardContent = `
-            <div class="flex justify-between items-start mb-2">
-              <div class="flex-1">
-                <h4 class="text-xs font-black text-slate-200 flex flex-wrap items-center gap-1">${s.name} ${tierBadge} ${escortBadge}</h4>
-                <p class="text-[10px] text-slate-400 mt-1 flex items-center gap-1.5">
-                  <span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded text-[9px]">ID: #${s.id}</span>
-                  <span>Destino: <strong class="text-slate-200">${s.destination}</strong></span>
-                </p>
-              </div>
-              <div class="w-7 h-7 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-center text-slate-400 shadow shrink-0">
-                <i class="fa-solid ${transportIcon} text-xs"></i>
-              </div>
-            </div>
-
-            <div class="mt-3">
-              <div class="flex justify-between text-[10px] text-slate-400 mb-1">
-                <span id="progress-text-${s.id}">Trayecto: ${s.progress.toFixed(0)}% completado</span>
-                <span>Peso: ${s.weight.toFixed(1)}kg</span>
-              </div>
-              <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
-                <div id="progress-bar-${s.id}" class="bg-gradient-to-r from-sky-500 to-indigo-500 h-1.5 rounded-full transition-all duration-300" style="width: ${s.progress}%"></div>
-              </div>
-            </div>
-
-            <div class="flex justify-between items-center mt-3 pt-2 border-t border-slate-950/40 text-[11px]">
-              ${statusHtml}
-              <div id="action-area-${s.id}">
-                ${buttonHtml}
-              </div>
-            </div>
-          `;
-
-          if (!card) {
-            card = document.createElement('div');
-            card.id = `ship-card-${s.id}`;
-            container.appendChild(card);
-          }
-          card.className = `shipment-card p-4 border rounded-xl flex flex-col justify-between shadow-md transition-all duration-300 ${cardBg}`;
-          card.innerHTML = cardContent;
-        } else {
-          const progressBar = document.getElementById(`progress-bar-${s.id}`);
-          const progressText = document.getElementById(`progress-text-${s.id}`);
-          const estTime = document.getElementById(`est-time-${s.id}`);
-
-          if (progressBar) progressBar.style.width = `${s.progress}%`;
-          if (progressText) progressText.innerText = `Trayecto: ${s.progress.toFixed(0)}% completado`;
-          if (estTime && s.status === 'transit') {
-            const remSecs = ((100 - s.progress) / (s.speed * state.config.speedMultiplier * 30)).toFixed(0);
-            estTime.innerText = `Est: ${remSecs}s`;
-          }
-        }
-      });
-
-      const currentIds = state.activeShipments.map(s => `ship-card-${s.id}`);
-      const renderedCards = container.querySelectorAll('.shipment-card');
-      renderedCards.forEach(card => {
-        if (!currentIds.includes(card.id)) {
-          card.remove();
-        }
-      });
-    }
-
-    function renderMapShipments() {
-      const destLayer = document.getElementById('dynamic-destinations-layer');
-      const linesLayer = document.getElementById('dynamic-lines-layer');
-      let customDestsHtml = '';
-      let customLinesHtml = '';
-      
-      Object.keys(DESTINATIONS).forEach(key => {
-        if (!ORIGINAL_DESTS.includes(key)) {
-          const node = DESTINATIONS[key];
-          customDestsHtml += `
-            <g transform="translate(${node.x}, ${node.y})" class="cursor-pointer group">
-              <circle r="6" fill="#10b981" class="transition-all duration-300 group-hover:scale-125 group-hover:fill-amber-400" />
-              <text y="-12" text-anchor="middle" font-size="9" fill="#10b981" font-weight="black">${key}</text>
-            </g>
-          `;
-          
-          const midX = (600 + node.x) / 2;
-          const midY = Math.min(250, node.y) - 60;
-          customLinesHtml += `<path d="M 600 250 Q ${midX} ${midY} ${node.x} ${node.y}" />`;
-        }
-      });
-      destLayer.innerHTML = customDestsHtml;
-      linesLayer.innerHTML = customLinesHtml;
-
-      const layer = document.getElementById('dynamic-packages-layer');
-      layer.innerHTML = '';
-
-      state.activeShipments.forEach(s => {
-        if (s.status === 'transit' || s.status === 'customHold' || s.status === 'seized' || s.status === 'damaged') {
-          const isSeized = s.status === 'seized';
-          const isHold = s.status === 'customHold';
-          const isDamaged = s.status === 'damaged';
-          const isPrivado = s.transport === 'privado';
-
-          const color = isSeized ? '#f43f5e' : (isDamaged ? '#f97316' : (isHold ? '#f59e0b' : (isPrivado ? '#fb7185' : (s.transport === 'avion' ? '#c084fc' : (s.transport === 'barco' ? '#60a5fa' : '#22d3ee')))));
-          const pulse = (isSeized || isHold || isDamaged) ? `<circle r="12" fill="none" stroke="${color}" stroke-width="2" class="animate-ping" opacity="0.6"/>` : '';
-
-          let iconShape = '';
-          if (isPrivado) {
-            iconShape = `<path d="M-5,-1 L5,-1 M-2,2 L2,2 M0,-5 L0,3" stroke="${color}" stroke-width="1.5" fill="none"/>`;
-          } else if (s.transport === 'avion') {
-            iconShape = `<path d="M-6,0 L6,0 M0,-6 L0,6" stroke="${color}" stroke-width="2" fill="none"/>`;
-          } else if (s.transport === 'barco') {
-            iconShape = `<polygon points="-5,2 5,2 7,-3 -7,-3" fill="${color}"/>`;
+    },
+
+    /* Nivel real que debe alcanzar la envolvente (fallback html5). */
+    peak: function () {
+      return Math.min(1, this.volume);
+    },
+
+    /* mult: 0.5 = 50%, 3 = 300%. Ganancia REAL sobre la señal. */
+    setVolume: function (mult) {
+      this.volume = mult;
+
+      if (this.mode === 'webaudio' && this.vol) {
+        var p = this.vol.gain;
+        var now = this.ctx.currentTime;
+        try {
+          if (p.cancelScheduledValues) { p.cancelScheduledValues(now); }
+          p.setValueAtTime(p.value, now);
+          if (p.linearRampToValueAtTime) {
+            p.linearRampToValueAtTime(mult, now + 0.06);
           } else {
-            iconShape = `<rect x="-6" y="-4" width="12" height="8" rx="1" fill="${color}"/>`;
+            p.value = mult;
           }
+        } catch (e) {
+          p.value = mult;
+        }
+        return;
+      }
 
-          let escortVisual = '';
-          if (s.escort === 'light') {
-            escortVisual = `
-              <circle r="15" fill="none" stroke="#f59e0b" stroke-width="1.25" stroke-dasharray="4,3" opacity="0.9" />
-              <path d="M-2,-14 L2,-14 L0,-17 Z" fill="#f59e0b" />
-            `;
-          } else if (s.escort === 'heavy') {
-            const orbitTime = Date.now() / 250;
-            const orbitRadius = 18;
-            const ship1x = Math.cos(orbitTime) * orbitRadius;
-            const ship1y = Math.sin(orbitTime) * orbitRadius;
-            const ship2x = Math.cos(orbitTime + Math.PI) * orbitRadius;
-            const ship2y = Math.sin(orbitTime + Math.PI) * orbitRadius;
-            
-            escortVisual = `
-              <circle r="18" fill="none" stroke="#ef4444" stroke-width="1" stroke-dasharray="2,2" opacity="0.6" />
-              <circle cx="${ship1x}" cy="${ship1y}" r="3.5" fill="#f43f5e" stroke="#0f172a" stroke-width="1" />
-              <circle cx="${ship2x}" cy="${ship2y}" r="3.5" fill="#f43f5e" stroke="#0f172a" stroke-width="1" />
-              <path d="M-2,-17 L2,-17 L0,-20 Z" fill="#f43f5e" />
-            `;
+      if (this.mode === 'html5' && this.audioEl && this.playing) {
+        try { this.audioEl.volume = this.peak(); } catch (e2) {}
+      }
+    },
+
+    /* glide opcional en segundos (para el barrido del reto). */
+    setFrequency: function (hz, glide) {
+      this.freq = hz;
+      if (!this.playing) { return; }
+
+      if (this.mode === 'webaudio' && this.osc) {
+        var p = this.osc.frequency;
+        var now = this.ctx.currentTime;
+        var t = (typeof glide === 'number') ? glide : GLIDE;
+        try {
+          if (p.cancelScheduledValues) { p.cancelScheduledValues(now); }
+          p.setValueAtTime(p.value, now);
+          if (p.linearRampToValueAtTime) {
+            p.linearRampToValueAtTime(hz, now + t);
+          } else {
+            p.value = hz;
           }
-
-          const group = `
-            <g transform="translate(${s.currentPos.x}, ${s.currentPos.y})" class="cursor-pointer">
-              ${pulse}
-              ${escortVisual}
-              <circle r="6" fill="#0f172a" stroke="${color}" stroke-width="1.5" />
-              <g transform="translate(0, -12)">
-                <text text-anchor="middle" font-size="7" fill="#cbd5e1" font-weight="bold" stroke="#0f172a" stroke-width="2" paint-order="stroke">#${s.id} - ${s.progress.toFixed(0)}%</text>
-              </g>
-              <circle r="2" fill="${color}"/>
-            </g>
-          `;
-          layer.insertAdjacentHTML('beforeend', group);
+        } catch (e) {
+          p.value = hz;
         }
-      });
-    }
-
-    function resolveCustoms(id) {
-      const shipment = state.activeShipments.find(s => s.id === id);
-      if (!shipment) return;
-
-      if (state.balance < shipment.taxCost) {
-        playSound('warning');
-        showFloatingNotification('Capital insuficiente para liberar el paquete de aduanas.', 'error');
         return;
       }
 
-      shipment.totalExpenses += shipment.taxCost; 
-      alterBalance(shipment.taxCost, `Aduana Liberada #${id}`, false);
-      shipment.status = 'transit';
-      playSound('buy');
-      showFloatingNotification(`Arancel aduanero abonado. ¡El paquete #${id} vuelve a estar en tránsito!`, 'success');
-      updateDashboard();
-      renderShipmentList();
-    }
-
-    function discardLoss(id) {
-      const index = state.activeShipments.findIndex(s => s.id === id);
-      if (index === -1) return;
-
-      const shipment = state.activeShipments[index];
-      playSound('warning');
-      showFloatingNotification(`Cargamento confiscado #${id} descartado. Pérdida total de ${shipment.totalExpenses.toLocaleString('es-ES')} €`, 'error');
-
-      shipment.status = 'seized_history';
-      shipment.reward = 0; 
-      const now = new Date();
-      shipment.collectionDate = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-      state.completedShipments.unshift(shipment);
-
-      state.activeShipments.splice(index, 1);
-      renderWholesaleCatalog();
-      updateDashboard();
-      renderShipmentList();
-      renderCompletedList();
-    }
-
-    function replaceDamaged(id) {
-      const shipment = state.activeShipments.find(s => s.id === id);
-      if (!shipment) return;
-
-      if (state.balance < shipment.penaltyCost) {
-        playSound('warning');
-        showFloatingNotification('Capital insuficiente para procesar la recolección y reemplazo.', 'error');
-        return;
+      if (this.mode === 'html5') {
+        // El fallback no puede deslizar: reinicia el bucle con la nueva onda.
+        this.stop(true);
+        this.start();
       }
+    },
 
-      shipment.totalExpenses += shipment.penaltyCost; 
-      alterBalance(shipment.penaltyCost, `Reemplazo Flete #${id}`, false);
-      shipment.status = 'transit';
-      shipment.progress = 0; 
-      shipment.damageResolved = true; 
+    start: function () {
+      if (this.mode === null) { this.init(); }
+      this.unlock();
+      if (this.playing) { return true; }        // nunca osciladores superpuestos
+      if (this.mode === 'none') { return false; }
 
-      playSound('buy');
-      showFloatingNotification(`Cargo masivo de ${shipment.penaltyCost.toLocaleString('es-ES')} € pagado. Cargamento #${id} reenviado desde central.`, 'success');
-      updateDashboard();
-      renderShipmentList();
-    }
+      if (this.mode === 'webaudio') {
+        if (this.stopTimer) { clearTimeout(this.stopTimer); this.stopTimer = null; }
 
-    function collectReward(id) {
-      const index = state.activeShipments.findIndex(s => s.id === id);
-      if (index === -1) return;
+        var osc = this.ctx.createOscillator();
+        osc.type = 'sine';                       // siempre sinusoidal
+        osc.frequency.value = this.freq;
+        osc.connect(this.gain);
 
-      const shipment = state.activeShipments[index];
-      alterBalance(shipment.reward, `Entrega Exitosa #${id}`, true);
-      state.completedCount++;
-
-      playSound('success');
-      showFloatingNotification(`💰 ¡Cobrados ${shipment.reward.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2})} € del cargamento #${id}!`, 'success');
-
-      shipment.status = 'collected';
-      const now = new Date();
-      shipment.collectionDate = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-      state.completedShipments.unshift(shipment);
-
-      state.activeShipments.splice(index, 1);
-
-      renderWholesaleCatalog();
-      updateDashboard();
-      renderShipmentList();
-      renderCompletedList();
-    }
-
-    function renderCompletedList() {
-      const container = document.getElementById('completed-container');
-      const emptyMsg = document.getElementById('empty-completed-msg');
-
-      if (state.completedShipments.length === 0) {
-        emptyMsg.classList.remove('hidden');
-        container.querySelectorAll('.completed-card').forEach(el => el.remove());
-        return;
-      }
-
-      emptyMsg.classList.add('hidden');
-      
-      container.querySelectorAll('.completed-card').forEach(el => el.remove());
-
-      state.completedShipments.forEach(s => {
-        const transportIcon = s.transport === 'privado' ? 'fa-helicopter' : s.transport === 'avion' ? 'fa-plane' : s.transport === 'barco' ? 'fa-ship' : 'fa-truck';
-        
-        const netProfit = s.reward - s.totalExpenses;
-        const isProfit = netProfit >= 0;
-        const netColor = isProfit ? 'text-emerald-400' : 'text-rose-500';
-        const netSign = isProfit ? '+' : '';
-        const netLabel = isProfit ? 'Beneficio' : 'Pérdida';
-        
-        const cardOpacity = s.status === 'seized_history' ? 'opacity-70 bg-rose-950/10 border-rose-900/30' : 'bg-slate-800/40 border-slate-700/50';
-        const statusIcon = s.status === 'seized_history' ? '<i class="fa-solid fa-ban text-xs text-rose-500"></i>' : '<i class="fa-solid fa-check text-xs"></i>';
-        const statusIconBg = s.status === 'seized_history' ? 'border-rose-500/30 text-rose-400 bg-rose-900/20' : 'border-emerald-500/30 text-emerald-400 bg-slate-900';
-
-        const cardHtml = `
-          <div class="completed-card ${cardOpacity} border rounded-lg p-3 flex justify-between items-center transition-all hover:bg-slate-800">
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 shadow-inner border ${statusIconBg}">
-                ${statusIcon}
-              </div>
-              <div>
-                <h4 class="text-[11px] font-bold text-slate-200 line-clamp-1">${s.name}</h4>
-                <div class="flex items-center gap-2 mt-0.5 text-[9px] text-slate-400">
-                  <span class="bg-slate-950 px-1 rounded border border-slate-800">#${s.id}</span>
-                  <span class="flex items-center gap-1"><i class="fa-solid ${transportIcon}"></i> ${s.destination}</span>
-                  <span class="text-slate-500"><i class="fa-regular fa-clock"></i> ${s.collectionDate}</span>
-                </div>
-              </div>
-            </div>
-            <div class="text-right">
-              <span class="block text-[11px] font-black ${netColor}">${netSign}${netProfit.toLocaleString('es-ES', {maximumFractionDigits:2})}€</span>
-              <span class="block text-[9px] text-slate-500">${netLabel} Neto</span>
-            </div>
-          </div>
-        `;
-        container.insertAdjacentHTML('beforeend', cardHtml);
-      });
-    }
-
-    function drawFinanceChart() {
-      const canvas = document.getElementById('finance-chart');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const w = canvas.width = canvas.offsetWidth;
-      const h = canvas.height = canvas.offsetHeight;
-
-      ctx.clearRect(0, 0, w, h);
-      
-      const history = state.transactionHistory;
-      if (history.length === 0) return;
-
-      let allValues = history.flatMap(t => [t.open, t.close]);
-      let minVal = Math.min(...allValues);
-      let maxVal = Math.max(...allValues);
-      
-      if (maxVal - minVal < 10) {
-          maxVal += 100;
-          minVal -= 100;
-      }
-      
-      const padding = (maxVal - minVal) * 0.10;
-      minVal -= padding;
-      maxVal += padding;
-      const range = maxVal - minVal;
-
-      const gridHeight = h * 0.75;
-      ctx.strokeStyle = '#1e293b';
-      ctx.lineWidth = 1;
-      const gridCount = 4;
-      for (let i = 0; i <= gridCount; i++) {
-        const y = (i / gridCount) * gridHeight;
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-
-        const val = maxVal - (i / gridCount) * range;
-        ctx.fillStyle = '#64748b';
-        ctx.font = '10px monospace';
-        ctx.fillText(val.toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' €', 5, y + 12);
-      }
-
-      const limit = Math.max(50, history.length); 
-      const barSpacing = w / limit;
-      const candleWidth = Math.max(1, barSpacing * 0.3); 
-
-      ctx.beginPath();
-      ctx.moveTo(0, gridHeight);
-      history.forEach((t, i) => {
-         const x = i * barSpacing + barSpacing / 2;
-         const yClose = ((maxVal - t.close) / range) * gridHeight;
-         if (i === 0) ctx.moveTo(x, yClose);
-         else ctx.lineTo(x, yClose);
-      });
-      const lastX = (history.length - 1) * barSpacing + barSpacing / 2;
-      ctx.lineTo(lastX, gridHeight);
-      ctx.lineTo(0, gridHeight);
-      ctx.closePath();
-
-      const gradient = ctx.createLinearGradient(0, 0, 0, gridHeight);
-      gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)'); 
-      gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
-      ctx.fillStyle = gradient;
-      ctx.fill();
-
-      ctx.beginPath();
-      history.forEach((t, i) => {
-         const x = i * barSpacing + barSpacing / 2;
-         const yClose = ((maxVal - t.close) / range) * gridHeight;
-         if (i === 0) ctx.moveTo(x, yClose);
-         else ctx.lineTo(x, yClose);
-      });
-      ctx.strokeStyle = 'rgba(16, 185, 129, 0.8)';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      const maxAmount = Math.max(...history.map(tx => tx.amount)) || 1;
-      const maxVolHeight = h * 0.25; 
-
-      history.forEach((t, i) => {
-        const x = i * barSpacing + barSpacing / 2;
-        
-        const yOpen = ((maxVal - t.open) / range) * gridHeight;
-        const yClose = ((maxVal - t.close) / range) * gridHeight;
-        
-        const isBullish = t.type === 'income';
-        const color = isBullish ? '#34d399' : '#fb7185'; 
-        
-        const wickHigh = Math.min(yOpen, yClose) - 2;
-        const wickLow = Math.max(yOpen, yClose) + 2;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(x, wickHigh);
-        ctx.lineTo(x, wickLow);
-        ctx.stroke();
-
-        ctx.fillStyle = color;
-        const bodyHeight = Math.max(1, Math.abs(yOpen - yClose)); 
-        const bodyY = Math.min(yOpen, yClose);
-        ctx.fillRect(x - candleWidth / 2, bodyY, candleWidth, bodyHeight);
-
-        const volHeight = (Math.sqrt(t.amount) / Math.sqrt(maxAmount)) * maxVolHeight;
-        ctx.fillStyle = isBullish ? 'rgba(52, 211, 153, 0.35)' : 'rgba(251, 113, 133, 0.35)';
-        ctx.fillRect(x - candleWidth, h - volHeight, candleWidth * 2, volHeight);
-      });
-
-      updateSummaryPanel();
-    }
-
-    function updateSummaryPanel() {
-      const history = state.transactionHistory;
-      const lastOpEl = document.getElementById('chart-last-op');
-      const lastAmtEl = document.getElementById('chart-last-amount');
-      const sessionVolEl = document.getElementById('chart-session-vol');
-      const netMarginEl = document.getElementById('chart-net-margin');
-
-      if (!lastOpEl || !lastAmtEl || !sessionVolEl || !netMarginEl) return;
-
-      if (history.length > 1) {
-        const last = history[history.length - 1];
-        lastOpEl.innerText = last.label;
-        
-        const sign = last.type === 'income' ? '+' : '-';
-        const colorClass = last.type === 'income' ? 'text-emerald-400' : 'text-rose-500';
-        
-        lastAmtEl.innerHTML = `<span class="${colorClass}">${sign}${last.amount.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €</span>`;
-      } else {
-        lastOpEl.innerText = "Sin operaciones";
-        lastAmtEl.innerText = "0,00 €";
-      }
-
-      let totalVol = 0;
-      let netIncome = 0;
-      let netExpense = 0;
-      history.forEach((tx, idx) => {
-        if (idx === 0) return; 
-        totalVol += tx.amount;
-        if (tx.type === 'income') {
-          netIncome += tx.amount;
-        } else {
-          netExpense += tx.amount;
+        var now = this.ctx.currentTime;
+        var g = this.gain.gain;
+        try {
+          if (g.cancelScheduledValues) { g.cancelScheduledValues(now); }
+          g.setValueAtTime(0.0001, now);
+          if (g.linearRampToValueAtTime) {
+            g.linearRampToValueAtTime(LEVEL, now + FADE);
+          } else {
+            g.value = LEVEL;
+          }
+        } catch (e) {
+          g.value = LEVEL;
         }
-      });
 
-      sessionVolEl.innerText = totalVol.toLocaleString('es-ES', { maximumFractionDigits: 0 }) + ' €';
-      
-      const netMargin = netIncome - netExpense;
-      const marginColor = netMargin >= 0 ? 'text-emerald-400' : 'text-rose-500';
-      const marginSign = netMargin >= 0 ? '+' : '';
-      netMarginEl.innerHTML = `<span class="${marginColor}">${marginSign}${netMargin.toLocaleString('es-ES', { maximumFractionDigits: 0 })} €</span>`;
+        // Si quedaba un oscilador en fade-out (silencios de 0 s), se cierra
+        // ahora que la ganancia ya está en cero: nunca suenan dos a la vez.
+        killOsc(this.pending);
+        this.pending = null;
+
+        if (osc.start) { osc.start(0); } else if (osc.noteOn) { osc.noteOn(0); }
+        this.osc = osc;
+        this.playing = true;
+        return true;
+      }
+
+      // html5
+      try {
+        this.audioEl.src = buildSineWav(this.freq);
+        this.audioEl.loop = true;
+        this.audioEl.volume = 0;
+        var playPromise = this.audioEl.play();
+        if (playPromise && playPromise['catch']) { playPromise['catch'](function () {}); }
+        this.playing = true;
+        fadeElement(this, this.peak());
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+
+    stop: function (immediate) {
+      if (!this.playing) { return; }
+      this.playing = false;
+
+      if (this.mode === 'webaudio') {
+        var osc = this.osc;
+        this.osc = null;
+        var now = this.ctx.currentTime;
+        var g = this.gain.gain;
+        var tail = immediate ? 0.005 : FADE;
+        try {
+          if (g.cancelScheduledValues) { g.cancelScheduledValues(now); }
+          g.setValueAtTime(g.value, now);
+          if (g.linearRampToValueAtTime) {
+            g.linearRampToValueAtTime(0.0001, now + tail);
+          } else {
+            g.value = 0;
+          }
+        } catch (e) {
+          g.value = 0;
+        }
+        this.pending = osc;
+        var self = this;
+        this.stopTimer = setTimeout(function () {
+          killOsc(osc);
+          if (self.pending === osc) { self.pending = null; }
+          self.stopTimer = null;
+        }, Math.round(tail * 1000) + 60);
+        return;
+      }
+
+      if (this.mode === 'html5' && this.audioEl) {
+        var el = this.audioEl;
+        if (immediate) {
+          try { el.pause(); } catch (e4) {}
+          return;
+        }
+        fadeElement(this, 0, function () {
+          try { el.pause(); } catch (e5) {}
+        });
+      }
+    }
+  };
+
+  function killOsc(osc) {
+    if (!osc) { return; }
+    try {
+      if (osc.stop) { osc.stop(0); } else if (osc.noteOff) { osc.noteOff(0); }
+    } catch (e) {}
+    try { osc.disconnect(); } catch (e2) {}
+  }
+
+  /* Fade por software para el fallback <audio>.
+     iOS ignora el cambio de volume, pero ahí siempre hay Web Audio. */
+  function fadeElement(engine, target, done) {
+    if (engine.fadeTimer) { clearInterval(engine.fadeTimer); }
+    var el = engine.audioEl;
+    var steps = 10;
+    var from = el.volume;
+    var i = 0;
+    engine.fadeTimer = setInterval(function () {
+      i++;
+      var v = from + (target - from) * (i / steps);
+      try { el.volume = Math.max(0, Math.min(1, v)); } catch (e) {}
+      if (i >= steps) {
+        clearInterval(engine.fadeTimer);
+        engine.fadeTimer = null;
+        if (done) { done(); }
+      }
+    }, Math.round(FADE * 1000 / steps));
+  }
+
+  /* Genera un WAV PCM de 16 bits con un número entero de ciclos,
+     para que el bucle sea perfecto y no produzca clicks. */
+  function buildSineWav(freq) {
+    var rate = 22050;
+    var cycles = Math.max(1, Math.round(freq / 4));
+    var samples = Math.round(cycles * rate / freq);
+    var bytes = [];
+
+    function push16(v) { bytes.push(v & 255, (v >> 8) & 255); }
+    function push32(v) { bytes.push(v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >> 24) & 255); }
+    function pushStr(s) { for (var k = 0; k < s.length; k++) { bytes.push(s.charCodeAt(k)); } }
+
+    pushStr('RIFF'); push32(36 + samples * 2); pushStr('WAVE');
+    pushStr('fmt '); push32(16); push16(1); push16(1);
+    push32(rate); push32(rate * 2); push16(2); push16(16);
+    pushStr('data'); push32(samples * 2);
+
+    for (var n = 0; n < samples; n++) {
+      var s = Math.sin(2 * Math.PI * freq * n / rate) * 0.5;
+      push16(Math.round(s * 32767) & 0xFFFF);
     }
 
-    function showFloatingNotification(message, type = 'success') {
-      const container = document.body;
-      const notification = document.createElement('div');
-      notification.className = `fixed bottom-6 right-6 px-4 py-3 rounded-xl shadow-2xl z-50 text-xs font-bold transition-all duration-300 transform translate-y-10 opacity-0 flex items-center gap-2 ${
-        type === 'success' ? 'bg-emerald-500 text-slate-950 shadow-emerald-950/20' : 'bg-red-500 text-slate-100 shadow-red-950/20'
-      }`;
-
-      const icon = type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation';
-      notification.innerHTML = `
-        <i class="fa-solid ${icon} text-sm"></i>
-        <span>${message}</span>
-      `;
-
-      container.appendChild(notification);
-
-      setTimeout(() => {
-        notification.classList.remove('translate-y-10', 'opacity-0');
-      }, 50);
-
-      setTimeout(() => {
-        notification.classList.add('translate-y-10', 'opacity-0');
-        setTimeout(() => {
-          notification.remove();
-        }, 300);
-      }, 3500);
+    var chars = '';
+    for (var j = 0; j < bytes.length; j += 4096) {
+      chars += String.fromCharCode.apply(null, bytes.slice(j, j + 4096));
     }
-  </script>
+    return 'data:audio/wav;base64,' + window.btoa(chars);
+  }
+
+  /* ===========================================================
+     2. TIMER
+     =========================================================== */
+
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  function fmt(ms) {
+    var s = Math.floor(ms / 1000);
+    var h = Math.floor(s / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    return pad2(h) + ':' + pad2(m) + ':' + pad2(s % 60);
+  }
+
+  function Timer(displayEl) {
+    this.el = displayEl;
+    this.elapsed = 0;
+    this.from = 0;
+    this.tick = null;
+  }
+
+  Timer.prototype.render = function () {
+    if (this.el) { this.el.innerHTML = fmt(this.value()); }
+  };
+
+  Timer.prototype.value = function () {
+    return this.elapsed + (this.tick ? (new Date().getTime() - this.from) : 0);
+  };
+
+  Timer.prototype.start = function () {
+    if (this.tick) { return; }
+    this.from = new Date().getTime();
+    var self = this;
+    this.tick = setInterval(function () { self.render(); }, 500);
+    this.render();
+  };
+
+  Timer.prototype.pause = function () {
+    if (!this.tick) { return; }
+    clearInterval(this.tick);
+    this.tick = null;
+    this.elapsed += new Date().getTime() - this.from;
+    this.render();
+  };
+
+  Timer.prototype.reset = function () {
+    this.pause();
+    this.elapsed = 0;
+    this.render();
+  };
+
+  /* ===========================================================
+     3. STORE (localStorage, con degradación silenciosa)
+     =========================================================== */
+
+  var Store = {
+    ok: false,
+    keys: {
+      sessions: 'hzjimi.sessions',
+      challenges: 'hzjimi.challenges',
+      random: 'hzjimi.random',
+      interm: 'hzjimi.interm'
+    },
+
+    init: function () {
+      try {
+        window.localStorage.setItem('hzjimi.test', '1');
+        window.localStorage.removeItem('hzjimi.test');
+        this.ok = !!window.JSON;
+      } catch (e) {
+        this.ok = false;
+      }
+      return this.ok;
+    },
+
+    read: function (key) {
+      if (!this.ok) { return []; }
+      try {
+        var raw = window.localStorage.getItem(this.keys[key]);
+        if (!raw) { return []; }
+        var arr = window.JSON.parse(raw);
+        return (arr && arr.length) ? arr : [];
+      } catch (e) {
+        return [];
+      }
+    },
+
+    write: function (key, arr) {
+      if (!this.ok) { return; }
+      try {
+        while (arr.length > 30) { arr.shift(); }   // no guardar datos innecesarios
+        window.localStorage.setItem(this.keys[key], window.JSON.stringify(arr));
+      } catch (e) {}
+    },
+
+    /* Crea o actualiza el registro de la sesión en curso. */
+    save: function (key, id, label, ms) {
+      var arr = this.read(key);
+      var found = false;
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i].id === id) { arr[i].ms = ms; arr[i].label = label; found = true; break; }
+      }
+      if (!found) { arr.push({ id: id, label: label, ms: ms }); }
+      this.write(key, arr);
+    },
+
+    /* Borra un único registro (Test, Retos, Random o Intermitente). */
+    clearOne: function (key) {
+      if (!this.ok || !this.keys[key]) { return; }
+      try { window.localStorage.removeItem(this.keys[key]); } catch (e) {}
+    },
+
+    clear: function () {
+      if (!this.ok) { return; }
+      for (var k in this.keys) {
+        if (this.keys.hasOwnProperty(k)) {
+          try { window.localStorage.removeItem(this.keys[k]); } catch (e) {}
+        }
+      }
+    }
+  };
+
+  /* ===========================================================
+     4. PRUEBAS
+     =========================================================== */
+
+  /* --- Tono sinusoidal continuo (pantalla Test) -------------- */
+  var ToneTest = {
+    id: 'tone',
+    name: 'Tono continuo',
+    start: function () { return Engine.start(); },
+    stop: function () { Engine.stop(false); },
+    setFreq: function (hz) { Engine.setFrequency(hz); }
+  };
+
+  /* --- Reto: barrido 50 -> 80 -> 50 Hz ----------------------- */
+  var SweepTest = {
+    id: 'sweep',
+    name: '50 → 80 → 50',
+    low: 50,
+    high: 80,
+
+    /* Aplica un nuevo rango antes de empezar. Si coinciden, no cambia nada. */
+    setRange: function (a, b) {
+      if (a === b) { return false; }
+      this.low = Math.min(a, b);
+      this.high = Math.max(a, b);
+      return true;
+    },
+    speeds: { easy: 45000, normal: 18000, hard: 6000, extreme: 2000 }, // ms por tramo
+    labels: { easy: '🟢 Fácil', normal: '🟡 Normal', hard: '🔴 Difícil', extreme: '🟣 Extremo' },
+    diff: 'easy',
+    pos: 0,            // 0 = 50 Hz, 1 = 80 Hz
+    dir: 1,
+    tick: null,
+    onFrame: null,     // callback de la interfaz
+
+    freqNow: function () {
+      return this.low + (this.high - this.low) * this.pos;
+    },
+
+    reset: function () { this.pos = 0; this.dir = 1; },
+
+    start: function () {
+      Engine.setFrequency(this.freqNow(), 0.02);
+      var ok = Engine.start();
+      if (!ok) { return false; }
+      if (this.tick) { clearInterval(this.tick); }
+      var self = this;
+      var step = 80;                        // 80 ms: ligero en equipos antiguos
+      this.tick = setInterval(function () {
+        var span = self.speeds[self.diff];
+        self.pos += self.dir * (step / span);
+        if (self.pos >= 1) { self.pos = 1; self.dir = -1; }
+        else if (self.pos <= 0) { self.pos = 0; self.dir = 1; }
+        // rampa ligeramente mayor que el intervalo: sin escalones audibles
+        Engine.setFrequency(self.freqNow(), step / 1000 + 0.02);
+        if (self.onFrame) { self.onFrame(self.freqNow(), self.pos, self.dir); }
+      }, step);
+      return true;
+    },
+
+    stop: function () {
+      if (this.tick) { clearInterval(this.tick); this.tick = null; }
+      Engine.stop(false);
+    }
+  };
+
+  /* --- Random: frecuencias y silencios aleatorios ------------ */
+  var RandomTest = {
+    id: 'random',
+    name: 'Random',
+    pool: [50, 60, 70, 80],
+    selected: { 50: true, 60: true, 70: true, 80: true },
+    running: false,
+    timer: null,
+    onPhase: null,     // callback de la interfaz
+    onMin: 3000,       // duración del tono: mínimo / máximo (ms)
+    onMax: 15000,
+    offMin: 3000,      // duración del silencio: mínimo / máximo (ms)
+    offMax: 5000,
+
+    list: function () {
+      var out = [];
+      for (var i = 0; i < this.pool.length; i++) {
+        if (this.selected[this.pool[i]]) { out.push(this.pool[i]); }
+      }
+      return out;
+    },
+
+    rand: function (min, max) { return min + Math.random() * (max - min); },
+
+    start: function () {
+      if (this.running) { return true; }
+      if (!this.list().length) { return false; }
+      this.running = true;
+      return this.playPhase();
+    },
+
+    playPhase: function () {
+      if (!this.running) { return false; }
+      var opts = this.list();
+      var hz = opts[Math.floor(Math.random() * opts.length)];
+      Engine.setFrequency(hz, 0.02);          // en silencio: sin salto audible
+      var ok = Engine.start();                // fade-in suave
+      if (!ok) { this.running = false; return false; }
+      if (this.onPhase) { this.onPhase('play', hz); }
+      var self = this;
+      this.timer = setTimeout(function () { self.pausePhase(); }, this.rand(this.onMin, this.onMax));
+      return true;
+    },
+
+    pausePhase: function () {
+      if (!this.running) { return; }
+      Engine.stop(false);                     // fade-out suave, silencio total
+      if (this.onPhase) { this.onPhase('pause', 0); }
+      var self = this;
+      this.timer = setTimeout(function () { self.playPhase(); }, this.rand(this.offMin, this.offMax));
+    },
+
+    stop: function () {
+      this.running = false;
+      if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+      Engine.stop(false);
+      if (this.onPhase) { this.onPhase('idle', 0); }
+    }
+  };
+
+  /* --- Reto: intermitente (sonido / silencio en ciclo) ------- */
+  var IntermTest = {
+    id: 'interm',
+    name: 'Intermitente',
+    freq: 60,
+    on: 5000,          // ms de sonido
+    off: 3000,         // ms de silencio
+    running: false,
+    timer: null,
+    phase: 'idle',
+    phaseEnd: 0,
+    onPhase: null,     // callback de la interfaz
+
+    /* Un único temporizador vivo: pulsar START varias veces no
+       duplica ciclos porque start() sale si ya está en marcha. */
+    clearTimer: function () {
+      if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+    },
+
+    start: function () {
+      if (this.running) { return true; }
+      this.running = true;
+      return this.playPhase();
+    },
+
+    playPhase: function () {
+      if (!this.running) { return false; }
+      Engine.setFrequency(this.freq, 0.02);   // en silencio: sin salto audible
+      var ok = Engine.start();                // fade-in suave
+      if (!ok) { this.running = false; return false; }
+      this.phase = 'play';
+      this.phaseEnd = new Date().getTime() + this.on;
+      if (this.onPhase) { this.onPhase('play', this.freq); }
+      var self = this;
+      this.clearTimer();
+      this.timer = setTimeout(function () { self.pausePhase(); }, this.on);
+      return true;
+    },
+
+    pausePhase: function () {
+      if (!this.running) { return; }
+      Engine.stop(false);                     // fade-out suave, silencio total
+      this.phase = 'pause';
+      this.phaseEnd = new Date().getTime() + this.off;
+      if (this.onPhase) { this.onPhase('pause', this.freq); }
+      var self = this;
+      this.clearTimer();
+      this.timer = setTimeout(function () { self.playPhase(); }, this.off);
+    },
+
+    remaining: function () {
+      var left = (this.phaseEnd - new Date().getTime()) / 1000;
+      return left > 0 ? left : 0;
+    },
+
+    stop: function () {
+      this.running = false;
+      this.clearTimer();
+      this.phase = 'idle';
+      Engine.stop(false);
+      if (this.onPhase) { this.onPhase('idle', this.freq); }
+    }
+  };
+
+  var App = {
+    tests: { tone: ToneTest, sweep: SweepTest, random: RandomTest, interm: IntermTest },
+    current: ToneTest,
+    mode: 'tone'
+  };
+
+  /* ===========================================================
+     5. INTERFAZ
+     =========================================================== */
+
+  function $(id) { return document.getElementById(id); }
+
+  Store.init();
+
+  /* --- Pestañas --------------------------------------------- */
+
+  var tabs = $('tabs').getElementsByTagName('button');
+  var panels = ['test', 'retos', 'random', 'tiempos'];
+
+  function showPanel(name) {
+    for (var i = 0; i < panels.length; i++) {
+      $('panel-' + panels[i]).className = (panels[i] === name) ? 'panel is-open' : 'panel';
+    }
+    for (var j = 0; j < tabs.length; j++) {
+      tabs[j].className = (tabs[j].getAttribute('data-panel') === name) ? 'tab is-active' : 'tab';
+    }
+    if (name === 'tiempos') { renderTimes(); }
+  }
+
+  for (var t = 0; t < tabs.length; t++) {
+    (function (btn) {
+      btn.onclick = function () {
+        var target = btn.getAttribute('data-panel');
+        if (target !== 'test') { stopTest(); }
+        if (target !== 'retos') { stopReto(false); stopInterm(false); }
+        if (target !== 'random') { stopRandom(); }
+        showPanel(target);
+      };
+    })(tabs[t]);
+  }
+
+  /* --- Volumen (compartido por los tres modos) --------------- */
+
+  var volSlider = $('volSlider');
+  var volLabel = $('volLabel');
+  var volWarn = $('volWarn');
+
+  function applyVolume() {
+    var pct = parseInt(volSlider.value, 10);
+    if (isNaN(pct)) { pct = 50; }
+    if (pct < 50) { pct = 50; }
+    if (pct > 300) { pct = 300; }
+    volLabel.innerHTML = '🔊 Volumen: ' + pct + '%';
+    volWarn.className = (pct > 100) ? 'vol-warn is-open' : 'vol-warn';
+    Engine.setVolume(pct / 100);
+  }
+
+  volSlider.oninput = applyVolume;
+  volSlider.onchange = applyVolume;
+  Engine.volume = 0.5;
+
+  /* --- TEST -------------------------------------------------- */
+
+  var freqValue = $('freqValue');
+  var statusEl = $('status');
+  var grid = $('freqGrid');
+  var customBtn = $('customBtn');
+  var customPanel = $('customPanel');
+  var customInput = $('customInput');
+  var customApply = $('customApply');
+  var customHint = $('customHint');
+  var startBtn = $('startBtn');
+  var pauseBtn = $('pauseBtn');
+  var warn = $('warn');
+
+  var presets = [];
+  var all = grid.getElementsByTagName('button');
+  for (var i = 0; i < all.length; i++) {
+    if (all[i].getAttribute('data-freq')) { presets.push(all[i]); }
+  }
+
+  var freq = 50;
+  var testTimer = new Timer($('clockTest'));
+  var testSession = null;
+
+  function setActive(btn) {
+    for (var k = 0; k < presets.length; k++) { presets[k].className = 'freq-btn'; }
+    customBtn.className = 'freq-btn wide';
+    if (btn) { btn.className += ' is-active'; }
+  }
+
+  function applyFrequency(hz, sourceBtn) {
+    freq = hz;
+    freqValue.innerHTML = String(hz);
+    setActive(sourceBtn);
+    ToneTest.setFreq(hz);
+  }
+
+  function renderStatus() {
+    var on = Engine.playing && App.mode === 'tone';
+    statusEl.innerHTML = on ? '🟢 <strong>Sonando</strong>' : '⚪ En pausa';
+    startBtn.disabled = on;
+    pauseBtn.disabled = !on;
+  }
+
+  function saveTestTime() {
+    if (!testSession) { return; }
+    Store.save('sessions', testSession.id, testSession.label, testTimer.value());
+  }
+
+  function stopTest() {
+    if (App.mode === 'tone' && Engine.playing) {
+      ToneTest.stop();
+      testTimer.pause();
+      saveTestTime();
+    }
+    renderStatus();
+  }
+
+  for (var p = 0; p < presets.length; p++) {
+    (function (btn) {
+      btn.onclick = function () {
+        applyFrequency(parseInt(btn.getAttribute('data-freq'), 10), btn);
+        customPanel.className = 'custom';
+      };
+    })(presets[p]);
+  }
+
+  customBtn.onclick = function () {
+    var open = customPanel.className.indexOf('is-open') !== -1;
+    customPanel.className = open ? 'custom' : 'custom is-open';
+    if (!open && customInput.focus) {
+      try { customInput.focus(); } catch (e) {}
+    }
+  };
+
+  customApply.onclick = function () {
+    var raw = customInput.value;
+    var hz = parseFloat(String(raw).replace(',', '.'));
+
+    if (!raw || isNaN(hz)) {
+      customHint.className = 'hint is-error';
+      customHint.innerHTML = 'Escribe un número.';
+      return;
+    }
+    hz = Math.round(hz);
+    if (hz < MIN_HZ || hz > MAX_HZ) {
+      customHint.className = 'hint is-error';
+      customHint.innerHTML = 'Solo entre ' + MIN_HZ + ' y ' + MAX_HZ + ' Hz.';
+      return;
+    }
+    customHint.className = 'hint';
+    customHint.innerHTML = 'Frecuencia aplicada.';
+    applyFrequency(hz, customBtn);
+  };
+
+  customInput.onkeydown = function (e) {
+    var code = e.keyCode || e.which;
+    if (code === 13) { customApply.onclick(); return false; }
+    return true;
+  };
+
+  startBtn.onclick = function () {
+    stopReto(false);
+    stopInterm(false);
+    stopRandom();
+    App.mode = 'tone';
+    App.current = ToneTest;
+    applyVolume();
+    var ok = ToneTest.start();
+    if (!ok) {
+      showWarning('Este navegador no puede generar tonos. Prueba con Safari, Chrome o Firefox actualizados.');
+      renderStatus();
+      return;
+    }
+    if (!testSession) {
+      testSession = { id: 's' + new Date().getTime(), label: 'Sesión ' + (Store.read('sessions').length + 1) };
+    }
+    testTimer.start();
+    renderStatus();
+  };
+
+  pauseBtn.onclick = function () { stopTest(); };
+
+  $('newSessionBtn').onclick = function () {
+    stopTest();
+    saveTestTime();
+    testSession = null;
+    testTimer.reset();
+  };
+
+  function showWarning(text) {
+    warn.innerHTML = text;
+    warn.className = 'warn is-open';
+  }
+
+  /* --- RETOS ------------------------------------------------- */
+
+  var retoList = $('retoList');
+  var retoSetup = $('retoSetup');
+  var retoRun = $('retoRun');
+  var retoFreqEl = $('retoFreq');
+  var retoDot = $('retoDot');
+  var retoFromEl = $('retoFrom');
+  var retoToEl = $('retoTo');
+  var retoStatus = $('retoStatus');
+  var retoResumeBtn = $('retoResumeBtn');
+  var retoPauseBtn = $('retoPauseBtn');
+  var retoTimer = new Timer($('clockReto'));
+  var retoSession = null;
+  var diffBtns = retoSetup.getElementsByTagName('button');
+  var sweepFromBtns = $('sweepFromGrid').getElementsByTagName('button');
+  var sweepToBtns = $('sweepToGrid').getElementsByTagName('button');
+  var sweepFrom = 50;
+  var sweepTo = 80;
+
+  function renderSweepTitle() {
+    var lo = Math.min(sweepFrom, sweepTo);
+    var hi = Math.max(sweepFrom, sweepTo);
+    $('sweepRangeTitle').innerHTML = '🌊 ' + lo + ' → ' + hi + ' → ' + lo + ' Hz';
+    var hint = $('sweepHint');
+    if (sweepFrom === sweepTo) {
+      hint.className = 'hint is-error';
+      hint.innerHTML = 'Elige dos frecuencias distintas.';
+      $('retoGoBtn').disabled = true;
+    } else {
+      hint.className = 'hint';
+      hint.innerHTML = '&nbsp;';
+      $('retoGoBtn').disabled = false;
+    }
+  }
+
+  function bindSweepPick(btns, attr, setVal) {
+    for (var i = 0; i < btns.length; i++) {
+      (function (btn) {
+        var hz = btn.getAttribute(attr);
+        if (!hz) { return; }
+        btn.onclick = function () {
+          for (var q = 0; q < btns.length; q++) { btns[q].className = 'freq-btn'; }
+          btn.className = 'freq-btn is-active';
+          setVal(parseInt(hz, 10));
+          renderSweepTitle();
+        };
+      })(btns[i]);
+    }
+  }
+
+  bindSweepPick(sweepFromBtns, 'data-sfrom', function (v) { sweepFrom = v; });
+  bindSweepPick(sweepToBtns, 'data-sto', function (v) { sweepTo = v; });
+
+  function retoView(which) {
+    retoList.style.display = (which === 'list') ? 'block' : 'none';
+    retoSetup.style.display = (which === 'setup') ? 'block' : 'none';
+    retoRun.style.display = (which === 'run') ? 'block' : 'none';
+    $('intermSetup').style.display = (which === 'isetup') ? 'block' : 'none';
+    $('intermRun').style.display = (which === 'irun') ? 'block' : 'none';
+  }
+
+  $('retoSweepBtn').onclick = function () { renderSweepTitle(); retoView('setup'); };
+  $('retoBackBtn').onclick = function () { retoView('list'); };
+
+  for (var d = 0; d < diffBtns.length; d++) {
+    (function (btn) {
+      var key = btn.getAttribute('data-diff');
+      if (!key) { return; }
+      btn.onclick = function () {
+        for (var q = 0; q < diffBtns.length; q++) {
+          if (diffBtns[q].getAttribute('data-diff')) { diffBtns[q].className = 'card'; }
+        }
+        btn.className = 'card is-active';
+        SweepTest.diff = key;
+      };
+    })(diffBtns[d]);
+  }
+
+  SweepTest.onFrame = function (hz, pos, dir) {
+    retoFreqEl.innerHTML = String(Math.round(hz * 10) / 10);
+    retoDot.style.left = Math.round(pos * 100) + '%';
+    retoFromEl.innerHTML = SweepTest.low + ' Hz';
+    retoToEl.innerHTML = SweepTest.high + ' Hz' + (dir > 0 ? ' ▲' : ' ▼');
+  };
+
+  function renderRetoStatus() {
+    var on = Engine.playing && App.mode === 'sweep';
+    retoStatus.innerHTML = on ? '🟢 <strong>Sonando</strong>' : '⚪ En pausa';
+    retoResumeBtn.disabled = on;
+    retoPauseBtn.disabled = !on;
+  }
+
+  function saveRetoTime() {
+    if (!retoSession) { return; }
+    Store.save('challenges', retoSession.id, retoSession.label, retoTimer.value());
+  }
+
+  function startReto() {
+    stopTest();
+    stopInterm(false);
+    stopRandom();
+    App.mode = 'sweep';
+    App.current = SweepTest;
+    applyVolume();
+    var ok = SweepTest.start();
+    if (!ok) {
+      retoStatus.innerHTML = '⚠️ Este navegador no puede generar tonos.';
+      return;
+    }
+    if (!retoSession) {
+      retoSession = {
+        id: 'c' + new Date().getTime(),
+        label: SweepTest.low + ' → ' + SweepTest.high + ' → ' + SweepTest.low + ' · ' + SweepTest.labels[SweepTest.diff]
+      };
+    }
+    retoTimer.start();
+    renderRetoStatus();
+  }
+
+  function stopReto(exiting) {
+    if (App.mode === 'sweep' && Engine.playing) {
+      SweepTest.stop();
+      retoTimer.pause();
+      saveRetoTime();
+    }
+    if (exiting) {
+      saveRetoTime();
+      retoSession = null;
+      retoTimer.reset();
+      SweepTest.reset();
+      retoDot.style.left = '0%';
+      retoFreqEl.innerHTML = String(SweepTest.low);
+    }
+    renderRetoStatus();
+  }
+
+  $('retoGoBtn').onclick = function () {
+    if (!SweepTest.setRange(sweepFrom, sweepTo)) { return; }   // misma frecuencia: no arranca
+    SweepTest.reset();
+    retoSession = null;
+    retoTimer.reset();
+    $('retoDiffLabel').innerHTML = SweepTest.labels[SweepTest.diff];
+    retoDot.style.left = '0%';
+    retoFreqEl.innerHTML = String(SweepTest.low);
+    retoView('run');
+    startReto();
+  };
+
+  retoResumeBtn.onclick = function () { startReto(); };
+  retoPauseBtn.onclick = function () { stopReto(false); };
+  $('retoExitBtn').onclick = function () { stopReto(true); retoView('list'); };
+
+  /* --- RETO INTERMITENTE ------------------------------------- */
+
+  var intermGrid = $('intermGrid');
+  var intermOn = $('intermOn');
+  var intermOff = $('intermOff');
+  var intermOnVal = $('intermOnVal');
+  var intermOffVal = $('intermOffVal');
+  var intermFreqEl = $('intermFreq');
+  var intermState = $('intermState');
+  var intermCount = $('intermCount');
+  var intermResumeBtn = $('intermResumeBtn');
+  var intermPauseBtn = $('intermPauseBtn');
+  var intermTimer = new Timer($('clockInterm'));
+  var intermSession = null;
+  var intermCountTick = null;
+  var intermFreqBtns = intermGrid.getElementsByTagName('button');
+
+  $('retoIntermBtn').onclick = function () { retoView('isetup'); };
+  $('intermBackBtn').onclick = function () { retoView('list'); };
+
+  for (var f = 0; f < intermFreqBtns.length; f++) {
+    (function (btn) {
+      var hz = btn.getAttribute('data-ifreq');
+      if (!hz) { return; }
+      btn.onclick = function () {
+        for (var q = 0; q < intermFreqBtns.length; q++) { intermFreqBtns[q].className = 'freq-btn'; }
+        btn.className = 'freq-btn is-active';
+        IntermTest.freq = parseInt(hz, 10);
+      };
+    })(intermFreqBtns[f]);
+  }
+
+  function fmtSeconds(v) {
+    // Quita el .0 sobrante pero conserva .25 / .5 / .75
+    var r = Math.round(v * 100) / 100;
+    var s = (r % 1 === 0) ? String(r) : String(r);
+    return s + (r === 1 ? ' segundo' : ' segundos');
+  }
+
+  function readIntermSliders() {
+    var on = parseInt(intermOn.value, 10);
+    var off = parseFloat(intermOff.value);
+    if (isNaN(on) || on < 1) { on = 1; }
+    if (on > 10) { on = 10; }
+    if (isNaN(off) || off < 0.25) { off = 0.25; }
+    if (off > 10) { off = 10; }
+    IntermTest.on = Math.round(on * 1000);
+    IntermTest.off = Math.round(off * 1000);
+    intermOnVal.innerHTML = fmtSeconds(on);
+    intermOffVal.innerHTML = fmtSeconds(off);
+  }
+
+  intermOn.oninput = readIntermSliders;
+  intermOn.onchange = readIntermSliders;
+  intermOff.oninput = readIntermSliders;
+  intermOff.onchange = readIntermSliders;
+
+  IntermTest.onPhase = function (phase) {
+    if (phase === 'play') {
+      intermState.innerHTML = '🔊 SONANDO';
+    } else if (phase === 'pause') {
+      intermState.innerHTML = '🔇 PAUSA';
+    } else {
+      intermState.innerHTML = '⚪ Detenido';
+      intermCount.innerHTML = '0.0 s';
+    }
+    intermResumeBtn.disabled = IntermTest.running;
+    intermPauseBtn.disabled = !IntermTest.running;
+  };
+
+  function intermCountdown() {
+    if (intermCountTick) { return; }
+    intermCountTick = setInterval(function () {
+      if (!IntermTest.running) { return; }
+      var left = IntermTest.remaining();
+      intermCount.innerHTML = (Math.round(left * 10) / 10).toFixed(1) + ' s';
+    }, 100);
+  }
+
+  function saveIntermTime() {
+    if (!intermSession) { return; }
+    Store.save('interm', intermSession.id, intermSession.label, intermTimer.value());
+  }
+
+  function startInterm() {
+    stopTest();
+    stopReto(false);
+    stopRandom();
+    App.mode = 'interm';
+    App.current = IntermTest;
+    applyVolume();
+    var ok = IntermTest.start();
+    if (!ok) {
+      intermState.innerHTML = '⚠️ Sin audio';
+      return;
+    }
+    if (!intermSession) {
+      intermSession = {
+        id: 'i' + new Date().getTime(),
+        label: IntermTest.freq + ' Hz — ' + (IntermTest.on / 1000) + 's / ' + (IntermTest.off / 1000) + 's'
+      };
+    }
+    intermTimer.start();
+    intermCountdown();
+  }
+
+  function stopInterm(exiting) {
+    if (IntermTest.running) {
+      IntermTest.stop();
+      intermTimer.pause();
+      saveIntermTime();
+    }
+    if (intermCountTick) { clearInterval(intermCountTick); intermCountTick = null; }
+    if (exiting) {
+      saveIntermTime();
+      intermSession = null;
+      intermTimer.reset();
+    }
+    intermResumeBtn.disabled = false;
+    intermPauseBtn.disabled = true;
+  }
+
+  $('intermGoBtn').onclick = function () {
+    readIntermSliders();
+    intermSession = null;
+    intermTimer.reset();
+    intermFreqEl.innerHTML = String(IntermTest.freq);
+    $('intermCfg').innerHTML = (IntermTest.on / 1000) + 's / ' + (IntermTest.off / 1000) + 's';
+    retoView('irun');
+    startInterm();
+  };
+
+  intermResumeBtn.onclick = function () { startInterm(); };
+  intermPauseBtn.onclick = function () { stopInterm(false); };
+  $('intermExitBtn').onclick = function () { stopInterm(true); retoView('list'); };
+
+  /* --- RANDOM ------------------------------------------------ */
+
+  var rndFreq = $('rndFreq');
+  var rndUnit = $('rndUnit');
+  var rndStatus = $('rndStatus');
+  var rndStartBtn = $('rndStartBtn');
+  var rndPauseBtn = $('rndPauseBtn');
+  var rndTimer = new Timer($('clockRnd'));
+  var rndSession = null;
+  var rndCards = $('panel-random').getElementsByTagName('button');
+
+  for (var r = 0; r < rndCards.length; r++) {
+    (function (btn) {
+      var hz = btn.getAttribute('data-rnd');
+      if (!hz) { return; }
+      btn.onclick = function () {
+        var on = !RandomTest.selected[hz];
+        // Debe quedar al menos una frecuencia seleccionada.
+        if (!on && RandomTest.list().length <= 1) { return; }
+        RandomTest.selected[hz] = on;
+        btn.className = on ? 'card is-active' : 'card';
+        btn.innerHTML = hz + ' Hz<span class="check">' + (on ? '✅' : '⬜') + '</span>';
+      };
+    })(rndCards[r]);
+  }
+
+  RandomTest.onPhase = function (phase, hz) {
+    if (phase === 'play') {
+      rndFreq.innerHTML = String(hz);
+      rndUnit.innerHTML = ' Hz';
+      rndStatus.innerHTML = '🟢 <strong>Sonando</strong>';
+    } else if (phase === 'pause') {
+      rndFreq.innerHTML = '—';
+      rndUnit.innerHTML = '';
+      rndStatus.innerHTML = '⏸ Silencio';
+    } else {
+      rndFreq.innerHTML = '—';
+      rndUnit.innerHTML = '';
+      rndStatus.innerHTML = '⚪ En pausa';
+    }
+    rndStartBtn.disabled = RandomTest.running;
+    rndPauseBtn.disabled = !RandomTest.running;
+  };
+
+  var rndOnMin = $('rndOnMin');
+  var rndOnMax = $('rndOnMax');
+  var rndOffMin = $('rndOffMin');
+  var rndOffMax = $('rndOffMax');
+
+  function applyRndRanges(moved) {
+    var a = parseInt(rndOnMin.value, 10);
+    var b = parseInt(rndOnMax.value, 10);
+    var c = parseInt(rndOffMin.value, 10);
+    var d = parseInt(rndOffMax.value, 10);
+    if (isNaN(a)) { a = 3; }
+    if (isNaN(b)) { b = 15; }
+    if (isNaN(c)) { c = 3; }
+    if (isNaN(d)) { d = 5; }
+
+    // El mínimo nunca puede superar al máximo: empuja al otro control.
+    if (a > b) { if (moved === 'onMin') { b = a; } else { a = b; } }
+    if (c > d) { if (moved === 'offMin') { d = c; } else { c = d; } }
+
+    rndOnMin.value = a; rndOnMax.value = b;
+    rndOffMin.value = c; rndOffMax.value = d;
+
+    RandomTest.onMin = a * 1000;
+    RandomTest.onMax = b * 1000;
+    RandomTest.offMin = c * 1000;
+    RandomTest.offMax = d * 1000;
+
+    $('rndOnVal').innerHTML = (a === b) ? (a + ' segundos fijos') : ('de ' + a + ' a ' + b + ' segundos');
+    $('rndOffVal').innerHTML = (c === d)
+      ? (c === 0 ? 'sin silencio' : c + ' segundos fijos')
+      : ('de ' + c + ' a ' + d + ' segundos');
+
+    $('rndOnBar').style.left = ((a - 1) / 59 * 100) + '%';
+    $('rndOnBar').style.width = ((b - a) / 59 * 100) + '%';
+    $('rndOffBar').style.left = (c / 10 * 100) + '%';
+    $('rndOffBar').style.width = ((d - c) / 10 * 100) + '%';
+  }
+
+  function bindRange(el, which) {
+    el.oninput = function () { applyRndRanges(which); };
+    el.onchange = function () { applyRndRanges(which); };
+  }
+
+  bindRange(rndOnMin, 'onMin');
+  bindRange(rndOnMax, 'onMax');
+  bindRange(rndOffMin, 'offMin');
+  bindRange(rndOffMax, 'offMax');
+
+  function saveRndTime() {
+    if (!rndSession) { return; }
+    Store.save('random', rndSession.id, rndSession.label, rndTimer.value());
+  }
+
+  function stopRandom() {
+    if (RandomTest.running) {
+      RandomTest.stop();
+      rndTimer.pause();
+      saveRndTime();
+      rndSession = null;
+    }
+    rndStartBtn.disabled = false;
+    rndPauseBtn.disabled = true;
+  }
+
+  rndStartBtn.onclick = function () {
+    stopTest();
+    stopReto(false);
+    stopInterm(false);
+    App.mode = 'random';
+    App.current = RandomTest;
+    applyVolume();
+    var ok = RandomTest.start();
+    if (!ok) {
+      rndStatus.innerHTML = '⚠️ Selecciona al menos una frecuencia.';
+      return;
+    }
+    if (!rndSession) {
+      rndSession = { id: 'r' + new Date().getTime(), label: 'Random' };
+    }
+    rndTimer.reset();
+    rndTimer.start();
+  };
+
+  rndPauseBtn.onclick = function () { stopRandom(); };
+
+  /* --- TIEMPOS ----------------------------------------------- */
+
+  function renderList(listEl, totalEl, key) {
+    var arr = Store.read(key);
+    var html = '';
+    var total = 0;
+    for (var i = 0; i < arr.length; i++) {
+      total += arr[i].ms;
+      html += '<li>' + arr[i].label + '<span>' + fmt(arr[i].ms) + '</span><em class="clearfix"></em></li>';
+    }
+    if (!html) { html = '<li class="empty">Todavía no hay tiempos guardados.</li>'; }
+    listEl.innerHTML = html;
+    totalEl.innerHTML = fmt(total);
+  }
+
+  function renderTimes() {
+    renderList($('listSessions'), $('totalSessions'), 'sessions');
+    renderList($('listChallenges'), $('totalChallenges'), 'challenges');
+    renderList($('listRandom'), $('totalRandom'), 'random');
+    renderList($('listInterm'), $('totalInterm'), 'interm');
+    if (!Store.ok) {
+      $('storeWarn').innerHTML = 'Este navegador no permite guardar datos locales, así que los tiempos no se conservarán al cerrar la página.';
+      $('storeWarn').className = 'warn is-open';
+    }
+  }
+
+  $('clearTimesBtn').onclick = function () {
+    Store.clear();
+    testSession = null;
+    retoSession = null;
+    rndSession = null;
+    intermSession = null;
+    renderTimes();
+  };
+
+  /* Borrado por categoría: cada bloque tiene su propio botón. */
+  var clearBtns = $('panel-tiempos').getElementsByTagName('button');
+  for (var c = 0; c < clearBtns.length; c++) {
+    (function (btn) {
+      var key = btn.getAttribute('data-clear');
+      if (!key) { return; }
+      btn.onclick = function () {
+        Store.clearOne(key);
+        if (key === 'sessions') { testSession = null; }
+        if (key === 'challenges') { retoSession = null; }
+        if (key === 'random') { rndSession = null; }
+        if (key === 'interm') { intermSession = null; }
+        renderTimes();
+      };
+    })(clearBtns[c]);
+  }
+
+  /* --- Cierre / segundo plano -------------------------------- */
+
+  function panic() {
+    stopTest();
+    stopReto(false);
+    stopInterm(false);
+    stopRandom();
+  }
+
+  if (window.addEventListener) {
+    window.addEventListener('pagehide', panic, false);
+    window.addEventListener('beforeunload', panic, false);
+  }
+
+  /* --- Arranque ---------------------------------------------- */
+
+  applyVolume();
+  renderStatus();
+  renderRetoStatus();
+  retoView('list');
+  RandomTest.onPhase('idle', 0);
+  IntermTest.onPhase('idle', 0);
+  readIntermSliders();
+  applyRndRanges('init');
+  intermTimer.render();
+  testTimer.render();
+  retoTimer.render();
+  rndTimer.render();
+})();
+</script>
+
 </body>
 </html>
