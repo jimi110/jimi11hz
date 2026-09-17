@@ -807,6 +807,8 @@ input[type="range"]::-moz-focus-outer {
       <button type="button" class="card" id="retoBreathBtn">🌬️ Respiración<small>El volumen sube y baja suavemente, como una respiración</small></button>
       <button type="button" class="card" id="retoStairBtn">🪜 Escalera<small>Escalones de volumen · modo Jugar o Personalizado</small></button>
       <button type="button" class="card" id="retoMemoryBtn">🧠 Memoria<small>Detecta qué frecuencia cambió en la secuencia</small></button>
+      <button type="button" class="card" id="retoComboBtn">🔥 Combo<small>Identifica la frecuencia que acabas de escuchar</small></button>
+      <button type="button" class="card" id="retoAiBtn">🤖 IA al mando<small>La aplicación dirige la sesión automáticamente</small></button>
     </div>
 
     <div id="retoSetup" style="display:none">
@@ -1169,6 +1171,111 @@ input[type="range"]::-moz-focus-outer {
         <button type="button" class="play-btn" id="memoryPlayAgainBtn">🔄 Jugar otra vez</button>
       </div>
       <button type="button" class="mini-btn" id="memoryResultBackBtn">← Volver</button>
+    </div>
+
+    <div id="comboSetup" style="display:none">
+      <p class="section-title">🔥 Combo · dificultad</p>
+      <button type="button" class="card is-active" data-cdiff="easy">🟢 Fácil<small>Objetivo: 3 aciertos seguidos</small></button>
+      <button type="button" class="card" data-cdiff="normal">🟡 Normal<small>Objetivo: 5 aciertos seguidos</small></button>
+      <button type="button" class="card" data-cdiff="hard">🔴 Difícil<small>Objetivo: 7 aciertos · con fondo constante</small></button>
+      <button type="button" class="card" data-cdiff="extreme">🟣 Extremo<small>Objetivo: 10 aciertos · con fondo constante</small></button>
+      <div class="transport">
+        <button type="button" class="play-btn" id="comboGoBtn">▶ COMENZAR RETO</button>
+      </div>
+      <button type="button" class="mini-btn" id="comboBackBtn">← Volver</button>
+    </div>
+
+    <div id="comboRun" style="display:none">
+      <div class="readout">
+        <div class="clock-label" id="comboDiffLabel">🔥 COMBO · Fácil</div>
+        <p class="big-state" id="comboCombo">COMBO: 0</p>
+        <p class="status" id="comboStatus">🟢 <strong>Escucha…</strong></p>
+      </div>
+      <div class="grid" id="comboGuessGrid">
+        <button type="button" class="freq-btn" data-cguess="50" disabled>50 Hz</button>
+        <button type="button" class="freq-btn" data-cguess="60" disabled>60 Hz</button>
+        <button type="button" class="freq-btn" data-cguess="70" disabled>70 Hz</button>
+        <button type="button" class="freq-btn" data-cguess="80" disabled>80 Hz</button>
+      </div>
+      <button type="button" class="mini-btn" id="comboStopBtn">⏹️ Detener</button>
+    </div>
+
+    <div id="comboResult" style="display:none">
+      <div class="readout" id="comboResultBox">
+        <p class="big-state" id="comboResultTitle">🎉 ¡Combo completado!</p>
+        <p class="status" id="comboResultDetail">Dificultad: Fácil · Combo conseguido: 3 · Rondas: 3</p>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="comboPlayAgainBtn">🔄 Jugar otra vez</button>
+      </div>
+      <button type="button" class="mini-btn" id="comboResultBackBtn">← Volver</button>
+    </div>
+
+    <div id="aiSetup" style="display:none">
+      <p class="section-title">🤖 IA al mando · frecuencia</p>
+      <div class="grid" id="aiFreqGrid">
+        <button type="button" class="freq-btn is-active" data-aifreq="50">50 Hz</button>
+        <button type="button" class="freq-btn" data-aifreq="60">60 Hz</button>
+        <button type="button" class="freq-btn" data-aifreq="70">70 Hz</button>
+        <button type="button" class="freq-btn" data-aifreq="80">80 Hz</button>
+      </div>
+
+      <p class="section-title">Dificultad</p>
+      <button type="button" class="card is-active" data-aidiff="easy">🟢 Fácil<small>Cambios suaves, pausas largas, ritmo predecible</small></button>
+      <button type="button" class="card" data-aidiff="normal">🟡 Medio<small>Variaciones más amplias, pausas más cortas</small></button>
+      <button type="button" class="card" data-aidiff="hard">🔴 Difícil<small>Hz en respiración automática · cambios frecuentes</small></button>
+      <button type="button" class="card" data-aidiff="extreme">🟣 Extremo<small>Hz en respiración rápida · muy dinámico</small></button>
+      <button type="button" class="card" data-aidiff="chaos">⚡ Caótico<small>Todo muy rápido e impredecible</small></button>
+      <p class="hint" id="aiFreqHint">&nbsp;</p>
+
+      <div class="range-box">
+        <h3>Intensidad máxima permitida</h3>
+        <p class="val" id="aiMaxVal">150%</p>
+        <input type="range" class="slider" id="aiMaxSlider" min="50" max="500" step="5" value="150">
+        <p class="slider-tag">50%<span style="float:right">500%</span><em class="clearfix"></em></p>
+        <div class="preset-row">
+          <button type="button" class="preset-btn w4" data-aimaxpreset="100">100%</button>
+          <button type="button" class="preset-btn w4" data-aimaxpreset="150">150%</button>
+          <button type="button" class="preset-btn w4" data-aimaxpreset="250">250%</button>
+          <button type="button" class="preset-btn w4" data-aimaxpreset="400">400%</button>
+        </div>
+      </div>
+      <div class="warn" id="aiWarnHigh">⚠️ Por encima del 100% puedes provocar clipping, distorsión o daños en los altavoces.</div>
+      <div class="warn" id="aiWarnExtremeHigh">🚨 NIVEL EXTREMO: a partir de 300% existe un riesgo alto de clipping, distorsión grave o sobrecarga del altavoz, dependiendo de tu dispositivo.</div>
+
+      <div class="range-box">
+        <h3>Duración de la sesión</h3>
+        <p class="val" id="aiDurVal">3 min 0 s</p>
+        <input type="range" class="slider" id="aiDurSlider" min="10" max="900" step="5" value="180">
+        <p class="slider-tag">10 s<span style="float:right">15 min</span><em class="clearfix"></em></p>
+      </div>
+
+      <div class="transport">
+        <button type="button" class="play-btn" id="aiGoBtn">▶ COMENZAR SESIÓN</button>
+      </div>
+      <button type="button" class="mini-btn" id="aiBackBtn">← Volver</button>
+    </div>
+
+    <div id="aiRun" style="display:none">
+      <div class="readout">
+        <div class="clock-label" id="aiActiveLabel">🤖 IA AL MANDO · ACTIVO</div>
+        <div><span class="readout-value" id="aiPercent">0</span><span class="readout-unit">%</span></div>
+        <p class="status" id="aiFreqNow">50 Hz</p>
+        <p class="status" id="aiState">🟢 <strong>Vibrando</strong></p>
+        <div class="clock"><div class="clock-label" id="aiDiffLabel">Fácil</div><span id="aiTimeLeft">03:00</span></div>
+      </div>
+      <button type="button" class="mini-btn" id="aiStopBtn">⏹️ Detener sesión</button>
+    </div>
+
+    <div id="aiResult" style="display:none">
+      <div class="readout" id="aiResultBox">
+        <p class="big-state" id="aiResultTitle">✅ Sesión finalizada</p>
+        <p class="status" id="aiResultDetail">Dificultad: Fácil · Duración: 3 min · Intensidad máx.: 150%</p>
+      </div>
+      <div class="transport">
+        <button type="button" class="play-btn" id="aiPlayAgainBtn">🔄 Repetir sesión</button>
+      </div>
+      <button type="button" class="mini-btn" id="aiResultBackBtn">← Volver</button>
     </div>
   </div>
 
@@ -2214,8 +2321,351 @@ input[type="range"]::-moz-focus-outer {
     }
   };
 
+  /* --- Reto: Combo --------------------------------------------------
+     Reproduce una única frecuencia (50/60/70/80 Hz) y el jugador debe
+     identificarla entre las 4 opciones. Acierto = combo +1; fallo =
+     combo a 0 y fin de ronda. En Difícil/Extremo hay un tono de fondo
+     constante de 65Hz que se detiene durante el estímulo (nunca suena
+     a la vez que la pregunta) y se reanuda mientras el jugador responde. */
+  var ComboTest = {
+    id: 'combo',
+    name: 'Combo',
+    pool: [50, 60, 70, 80],
+    bgHz: 65,
+    goals: { easy: 3, normal: 5, hard: 7, extreme: 10 },
+    hasBackground: { easy: false, normal: false, hard: true, extreme: true },
+    diff: 'easy',
+    combo: 0,
+    rounds: 0,
+    current: 0,
+    timer: null,
+    onStimulusStart: null,   // callback: () al empezar a sonar el tono de pregunta
+    onReady: null,           // callback: () cuando ya se puede responder
+
+    clearTimer: function () { if (this.timer) { clearTimeout(this.timer); this.timer = null; } },
+
+    goal: function () { return this.goals[this.diff] || 3; },
+    usesBackground: function () { return !!this.hasBackground[this.diff]; },
+
+    reset: function () {
+      this.combo = 0;
+      this.rounds = 0;
+    },
+
+    /* Lanza una ronda nueva: silencio breve (si hay fondo) -> estímulo -> fondo/silencio */
+    nextRound: function () {
+      var self = this;
+      this.current = this.pool[Math.floor(Math.random() * this.pool.length)];
+      this.clearTimer();
+
+      function playStimulus() {
+        Engine.setFrequency(self.current, 0.02);
+        Engine.start();
+        if (self.onStimulusStart) { self.onStimulusStart(); }
+        self.timer = setTimeout(function () {
+          Engine.stop(true);
+          if (self.usesBackground()) {
+            self.timer = setTimeout(function () {
+              Engine.setFrequency(self.bgHz, 0.02);
+              Engine.start();
+              if (self.onReady) { self.onReady(); }
+            }, 150);
+          } else {
+            if (self.onReady) { self.onReady(); }
+          }
+        }, 900);
+      }
+
+      if (this.usesBackground()) {
+        Engine.stop(true);
+        this.timer = setTimeout(playStimulus, 250);
+      } else {
+        playStimulus();
+      }
+    },
+
+    /* Comprueba la respuesta del jugador. Devuelve true si acertó. */
+    answer: function (hz) {
+      this.clearTimer();
+      var ok = (hz === this.current);
+      if (ok) { this.combo++; } else { this.combo = 0; }
+      this.rounds++;
+      return ok;
+    },
+
+    stop: function () {
+      this.clearTimer();
+      Engine.stop(false);
+    }
+  };
+
+  /* --- Reto: IA al mando --------------------------------------------
+     La aplicación actúa como "director" de la sesión: decide de forma
+     dinámica y con aleatoriedad controlada cuándo subir/bajar la
+     intensidad, cuándo meter una pausa y cuándo cambiar el ritmo,
+     dentro de los límites (intensidad máxima, duración) que fija el
+     usuario. Reutiliza Engine (mismo oscilador, sin duplicar motor).
+     El botón de detener está SIEMPRE disponible, en todas las
+     dificultades: no se oculta ni se deshabilita nunca. */
+  var AiDirectorTest = {
+    id: 'ai',
+    diff: 'easy',
+    freq: 50,          // frecuencia base elegida por el usuario (fácil/medio)
+    autoFreq: false,   // true en difícil/extremo/caótico: la IA mueve el Hz sola
+    freqMin: 50,
+    freqMax: 80,
+    maxPct: 150,     // intensidad máxima permitida (%), fijada por el usuario
+    minPct: 40,      // suelo razonable para que nunca sea "silencio total" salvo en pausa
+    durationMs: 180000,
+    endAt: 0,
+    timer: null,
+    tickTimer: null,
+    running: false,  // true mientras la sesión está activa; evita que un frame
+                      // de animación en curso toque el volumen tras stop()
+    state: 'vibe',   // 'vibe' | 'pause' | 'transition'
+    currentPct: 0,
+    currentHz: 50,
+    onState: null,   // callback: (state, pct)
+    onTick: null,    // callback: (msLeft)
+    onFreq: null,    // callback: (hz)
+    onEnd: null,     // callback: () sesión completada por tiempo
+
+    /* Parámetros por dificultad: qué tan agresivos pueden ser los cambios.
+       pctSpread: fracción del rango [minPct,maxPct] que un solo salto puede
+       cubrir (1 = puede ir de un extremo a otro de golpe). */
+    profiles: {
+      easy: {
+        stepMin: 800, stepMax: 1500,
+        transMin: 1200, transMax: 2500,
+        pauseChance: 0.15, pauseMin: 1500, pauseMax: 3000,
+        pctSpread: 0.35,
+        freqStepMin: 1400, freqStepMax: 2600
+      },
+      normal: {
+        stepMin: 500, stepMax: 1100,
+        transMin: 700, transMax: 1600,
+        pauseChance: 0.22, pauseMin: 900, pauseMax: 2000,
+        pctSpread: 0.55,
+        freqStepMin: 900, freqStepMax: 1800
+      },
+      hard: {
+        stepMin: 300, stepMax: 800,
+        transMin: 350, transMax: 1000,
+        pauseChance: 0.3, pauseMin: 500, pauseMax: 1200,
+        pctSpread: 0.75,
+        freqStepMin: 450, freqStepMax: 900
+      },
+      extreme: {
+        stepMin: 200, stepMax: 500,
+        transMin: 150, transMax: 900,      // ~1s tipo "50% -> 80%"
+        pauseChance: 0.22, pauseMin: 500, pauseMax: 1000,
+        pctSpread: 0.9,
+        freqStepMin: 220, freqStepMax: 500,
+        rollercoaster: 0.75
+      },
+      chaos: {
+        stepMin: 100, stepMax: 350,
+        transMin: 90, transMax: 450,
+        pauseChance: 0.12, pauseMin: 250, pauseMax: 700,
+        pctSpread: 1,
+        freqStepMin: 100, freqStepMax: 300,
+        rollercoaster: 0.85
+      }
+    },
+
+    profile: function () { return this.profiles[this.diff] || this.profiles.easy; },
+
+    rand: function (min, max) { return min + Math.random() * (max - min); },
+
+    clamp: function (v) {
+      if (v > this.maxPct) { v = this.maxPct; }
+      if (v < this.minPct) { v = this.minPct; }
+      return v;
+    },
+
+    /* Elige un objetivo de intensidad en todo el rango permitido, no solo
+       un paso pequeño desde el valor actual: así SÍ se alcanza maxPct.
+       Con "rollercoaster" (extremo/caótico), el objetivo tiende a irse
+       al extremo opuesto del actual: sube y baja marcado, tipo montaña
+       rusa, en vez de una deriva aleatoria plana. */
+    pickTargetPct: function () {
+      var p = this.profile();
+      var mid = (this.minPct + this.maxPct) / 2;
+
+      if (p.rollercoaster && Math.random() < p.rollercoaster) {
+        var goingUp = this.currentPct < mid;
+        var extreme = goingUp ? this.maxPct : this.minPct;
+        var near = this.rand(0.7, 1) * (extreme - mid) + mid; // se acerca bastante al extremo opuesto
+        return this.clamp(near);
+      }
+
+      var span = (this.maxPct - this.minPct) * p.pctSpread;
+      var lo = this.currentPct - span;
+      var hi = this.currentPct + span;
+      if (lo < this.minPct) { lo = this.minPct; }
+      if (hi > this.maxPct) { hi = this.maxPct; }
+      if (hi <= lo) { hi = this.maxPct; lo = this.minPct; }
+      return this.clamp(this.rand(lo, hi));
+    },
+
+    pickTargetHz: function () {
+      var p = this.profile();
+      var span = (this.freqMax - this.freqMin);
+      var lo = this.currentHz - span;
+      var hi = this.currentHz + span;
+      if (lo < this.freqMin) { lo = this.freqMin; }
+      if (hi > this.freqMax) { hi = this.freqMax; }
+      if (hi <= lo) { hi = this.freqMax; lo = this.freqMin; }
+      var v = this.rand(lo, hi);
+      // se aleja del valor actual para que la "respiración" se note
+      if (Math.abs(v - this.currentHz) < span * 0.3) {
+        v = (this.currentHz < (this.freqMin + this.freqMax) / 2) ? this.freqMax : this.freqMin;
+      }
+      return v;
+    },
+
+    clearTimers: function () {
+      if (this.timer) { clearTimeout(this.timer); this.timer = null; }
+      if (this.tickTimer) { clearInterval(this.tickTimer); this.tickTimer = null; }
+    },
+
+    msLeft: function () {
+      var left = this.endAt - new Date().getTime();
+      return left > 0 ? left : 0;
+    },
+
+    start: function () {
+      var self = this;
+      this.autoFreq = (this.diff === 'hard' || this.diff === 'extreme' || this.diff === 'chaos');
+      this.currentHz = this.autoFreq ? this.freqMin : this.freq;
+      this.running = true;
+      Engine.setFrequency(this.currentHz, 0.02);
+      Engine.setVolume(this.minPct / 100);
+      this.currentPct = this.minPct;
+      var ok = Engine.start();
+      if (!ok) { this.running = false; return false; }
+
+      this.endAt = new Date().getTime() + this.durationMs;
+
+      this.tickTimer = setInterval(function () {
+        var left = self.msLeft();
+        if (self.onTick) { self.onTick(left); }
+        if (left <= 0) { self.finish(); }
+      }, 250);
+
+      this.step();
+      return true;
+    },
+
+    /* La IA decide la siguiente acción: subir, bajar, mantener, pausar o
+       cambiar de ritmo. Nunca supera this.maxPct ni la duración total. */
+    step: function () {
+      var self = this;
+      if (!this.running) { return; }
+      if (this.msLeft() <= 0) { this.finish(); return; }
+      var p = this.profile();
+
+      var doPause = Math.random() < p.pauseChance;
+
+      if (doPause) {
+        var pauseMs = Math.min(this.rand(p.pauseMin, p.pauseMax), this.msLeft());
+        if (this.state !== 'pause' && this.onState) { this.onState('pause', 0); }
+        this.state = 'pause';
+        Engine.stop(false);
+        this.timer = setTimeout(function () {
+          if (!self.running) { return; }
+          if (self.msLeft() <= 0) { self.finish(); return; }
+          self.resumeFromPause();
+        }, pauseMs);
+        return;
+      }
+
+      // Nueva intensidad (y, en modos automáticos, nueva frecuencia) objetivo.
+      var targetPct = this.pickTargetPct();
+      var targetHz = this.autoFreq ? this.pickTargetHz() : this.currentHz;
+      var transMs = Math.min(this.rand(p.transMin, p.transMax), this.msLeft());
+
+      this.state = 'transition';
+      if (this.onState) { this.onState('transition', targetPct); }
+
+      var startPct = this.currentPct;
+      var startHz = this.currentHz;
+      var startTime = new Date().getTime();
+
+      (function animate() {
+        if (!self.running) { return; }
+        var elapsed = new Date().getTime() - startTime;
+        var t = Math.min(1, elapsed / transMs);
+        var pct = startPct + (targetPct - startPct) * t;
+        self.currentPct = pct;
+        Engine.setVolume(pct / 100);
+        if (self.autoFreq) {
+          var hz = startHz + (targetHz - startHz) * t;
+          self.currentHz = hz;
+          Engine.setFrequency(hz, 0.05);
+          if (self.onFreq) { self.onFreq(hz); }
+        }
+        if (self.onTick) { self.onTick(self.msLeft()); }
+        if (t < 1 && self.msLeft() > 0) {
+          self.timer = setTimeout(animate, 60);
+        } else {
+          self.currentPct = targetPct;
+          self.currentHz = targetHz;
+          self.state = 'vibe';
+          if (self.onState) { self.onState('vibe', targetPct); }
+          var holdMs = Math.min(self.rand(p.stepMin, p.stepMax), self.msLeft());
+          self.timer = setTimeout(function () { self.step(); }, holdMs);
+        }
+      })();
+    },
+
+    resumeFromPause: function () {
+      var self = this;
+      if (!this.running) { return; }
+      var p = this.profile();
+      if (this.autoFreq) { this.currentHz = this.pickTargetHz(); }
+      Engine.setFrequency(this.currentHz, 0.02);
+      var ok = Engine.start();
+      if (!ok) { return; }
+      var target = this.pickTargetPct();
+      var transMs = Math.min(this.rand(p.transMin, p.transMax), this.msLeft());
+      this.state = 'transition';
+      if (this.onState) { this.onState('transition', target); }
+      var startTime = new Date().getTime();
+      (function animate() {
+        if (!self.running) { return; }
+        var elapsed = new Date().getTime() - startTime;
+        var t = Math.min(1, elapsed / transMs);
+        var pct = 0.0001 + (target - 0.0001) * t;
+        self.currentPct = pct;
+        Engine.setVolume(pct / 100);
+        if (t < 1 && self.msLeft() > 0) {
+          self.timer = setTimeout(animate, 60);
+        } else {
+          self.currentPct = target;
+          self.state = 'vibe';
+          if (self.onState) { self.onState('vibe', target); }
+          self.timer = setTimeout(function () { self.step(); }, Math.min(self.rand(p.stepMin, p.stepMax), self.msLeft()));
+        }
+      })();
+    },
+
+    finish: function () {
+      this.running = false;
+      this.clearTimers();
+      Engine.stop(false);
+      if (this.onEnd) { this.onEnd(); }
+    },
+
+    stop: function () {
+      this.running = false;
+      this.clearTimers();
+      Engine.stop(false);
+    }
+  };
+
   var App = {
-    tests: { tone: ToneTest, sweep: SweepTest, random: RandomTest, interm: IntermTest, volsweep: VolSweepTest, breath: BreathTest, stair: StairTest, memory: MemoryTest },
+    tests: { tone: ToneTest, sweep: SweepTest, random: RandomTest, interm: IntermTest, volsweep: VolSweepTest, breath: BreathTest, stair: StairTest, memory: MemoryTest, combo: ComboTest, ai: AiDirectorTest },
     current: ToneTest,
     mode: 'tone'
   };
@@ -2248,7 +2698,7 @@ input[type="range"]::-moz-focus-outer {
       btn.onclick = function () {
         var target = btn.getAttribute('data-panel');
         if (target !== 'test') { stopTest(); }
-        if (target !== 'retos') { stopReto(false); stopInterm(false); stopVolReto(false); stopBreathReto(false); stopStairReto(false); stopMemory(); }
+        if (target !== 'retos') { stopReto(false); stopInterm(false); stopVolReto(false); stopBreathReto(false); stopStairReto(false); stopMemory(); stopCombo(); stopAi(); }
         if (target !== 'random') { stopRandom(); }
         if (target !== 'maraton') { Marathon.stop(); }
         showPanel(target);
@@ -2498,7 +2948,9 @@ input[type="range"]::-moz-focus-outer {
     ['stairModePick', 'stmodepick'],
     ['stairPlaySetup', 'stpsetup'], ['stairPlayRun', 'stprun'], ['stairPlayGuess', 'stpguess'], ['stairPlayResult', 'stpresult'],
     ['stairCustomSetup', 'stcsetup'], ['stairCustomRun', 'stcrun'],
-    ['memorySetup', 'msetup'], ['memoryRun', 'mrun'], ['memoryGuess', 'mguess'], ['memoryResult', 'mresult']
+    ['memorySetup', 'msetup'], ['memoryRun', 'mrun'], ['memoryGuess', 'mguess'], ['memoryResult', 'mresult'],
+    ['comboSetup', 'cbsetup'], ['comboRun', 'cbrun'], ['comboResult', 'cbresult'],
+    ['aiSetup', 'aisetup'], ['aiRun', 'airun'], ['aiResult', 'airesult']
   ];
 
   function retoView(which) {
@@ -3514,6 +3966,295 @@ input[type="range"]::-moz-focus-outer {
 
   $('memoryPlayAgainBtn').onclick = function () { retoView('mrun'); startMemory(); };
   $('memoryResultBackBtn').onclick = function () { retoView('msetup'); };
+
+  /* --- RETO COMBO -------------------------------------------- */
+
+  var comboDiffBtns = $('comboSetup').getElementsByTagName('button');
+  var comboDiffKeys = [];
+  for (var cdb = 0; cdb < comboDiffBtns.length; cdb++) {
+    var ck = comboDiffBtns[cdb].getAttribute('data-cdiff');
+    if (ck) { comboDiffKeys.push(comboDiffBtns[cdb]); }
+  }
+  var comboDiffLabels = { easy: 'Fácil', normal: 'Normal', hard: 'Difícil', extreme: 'Extremo' };
+  for (var cdi = 0; cdi < comboDiffKeys.length; cdi++) {
+    (function (btn) {
+      var key = btn.getAttribute('data-cdiff');
+      btn.onclick = function () {
+        for (var q = 0; q < comboDiffKeys.length; q++) { comboDiffKeys[q].className = 'card'; }
+        btn.className = 'card is-active';
+        ComboTest.diff = key;
+      };
+    })(comboDiffKeys[cdi]);
+  }
+
+  $('retoComboBtn').onclick = function () { retoView('cbsetup'); };
+  $('comboBackBtn').onclick = function () { retoView('list'); };
+
+  var comboGuessBtns = $('comboGuessGrid').getElementsByTagName('button');
+
+  function setComboGuessEnabled(enabled) {
+    for (var i = 0; i < comboGuessBtns.length; i++) {
+      comboGuessBtns[i].disabled = !enabled;
+    }
+  }
+
+  function updateComboCombo() {
+    $('comboCombo').innerHTML = 'COMBO: ' + ComboTest.combo + ' / ' + ComboTest.goal();
+  }
+
+  function comboRoundStart() {
+    setComboGuessEnabled(false);
+    $('comboStatus').innerHTML = '🟢 <strong>Escucha…</strong>';
+    ComboTest.onStimulusStart = function () {
+      $('comboStatus').innerHTML = '🟢 <strong>Escucha…</strong>';
+    };
+    ComboTest.onReady = function () {
+      $('comboStatus').innerHTML = '🎧 <strong>Elige la frecuencia</strong>';
+      setComboGuessEnabled(true);
+    };
+    ComboTest.nextRound();
+  }
+
+  function startCombo() {
+    stopTest(); stopReto(false); stopInterm(false); stopVolReto(false); stopRandom();
+    stopBreathReto(false); stopStairReto(false); stopMemory();
+    App.mode = 'combo';
+    App.current = ComboTest;
+    applyVolume();
+
+    ComboTest.reset();
+    $('comboDiffLabel').innerHTML = '🔥 COMBO · ' + comboDiffLabels[ComboTest.diff];
+    updateComboCombo();
+    comboRoundStart();
+  }
+
+  function stopCombo() {
+    if (App.mode === 'combo') {
+      ComboTest.stop();
+      applyVolume();
+    }
+  }
+
+  for (var cg = 0; cg < comboGuessBtns.length; cg++) {
+    (function (btn) {
+      btn.onclick = function () {
+        if (btn.disabled) { return; }
+        setComboGuessEnabled(false);
+        var hz = parseInt(btn.getAttribute('data-cguess'), 10);
+        var ok = ComboTest.answer(hz);
+        updateComboCombo();
+
+        if (ok && ComboTest.combo >= ComboTest.goal()) {
+          $('comboStatus').innerHTML = '✓ <strong>Correcto</strong>';
+          setTimeout(function () {
+            ComboTest.stop();
+            $('comboResultTitle').innerHTML = '🎉 ¡Combo completado!';
+            $('comboResultDetail').innerHTML =
+              'Dificultad: ' + comboDiffLabels[ComboTest.diff] + ' · Combo conseguido: ' + ComboTest.combo +
+              ' · Rondas: ' + ComboTest.rounds + '.';
+            retoView('cbresult');
+          }, 500);
+          return;
+        }
+
+        if (ok) {
+          $('comboStatus').innerHTML = '✓ <strong>Correcto</strong>';
+          setTimeout(function () { comboRoundStart(); }, 700);
+        } else {
+          $('comboStatus').innerHTML = '✕ <strong>Incorrecto</strong> · COMBO ROTO';
+          setTimeout(function () {
+            ComboTest.stop();
+            $('comboResultTitle').innerHTML = '✕ Combo roto';
+            $('comboResultDetail').innerHTML =
+              'Dificultad: ' + comboDiffLabels[ComboTest.diff] + ' · Combo conseguido: ' + (ComboTest.rounds - 1) +
+              ' · Rondas: ' + ComboTest.rounds + '. Era ' + ComboTest.current + ' Hz.';
+            retoView('cbresult');
+          }, 900);
+        }
+      };
+    })(comboGuessBtns[cg]);
+  }
+
+  $('comboGoBtn').onclick = function () { retoView('cbrun'); startCombo(); };
+  $('comboStopBtn').onclick = function () { stopCombo(); retoView('cbsetup'); };
+  $('comboPlayAgainBtn').onclick = function () { retoView('cbrun'); startCombo(); };
+  $('comboResultBackBtn').onclick = function () { retoView('cbsetup'); };
+
+  /* --- RETO IA AL MANDO ---------------------------------------- */
+
+  var aiFreqBtns = $('aiFreqGrid').getElementsByTagName('button');
+  var aiFreqGridEl = $('aiFreqGrid');
+  var aiFreqHintEl = $('aiFreqHint');
+  for (var afb = 0; afb < aiFreqBtns.length; afb++) {
+    (function (btn) {
+      var hz = btn.getAttribute('data-aifreq');
+      btn.onclick = function () {
+        for (var q = 0; q < aiFreqBtns.length; q++) { aiFreqBtns[q].className = 'freq-btn'; }
+        btn.className = 'freq-btn is-active';
+        AiDirectorTest.freq = parseInt(hz, 10);
+      };
+    })(aiFreqBtns[afb]);
+  }
+
+  var aiDiffBtns = $('aiSetup').getElementsByTagName('button');
+  var aiDiffKeys = [];
+  for (var adb = 0; adb < aiDiffBtns.length; adb++) {
+    var ak = aiDiffBtns[adb].getAttribute('data-aidiff');
+    if (ak) { aiDiffKeys.push(aiDiffBtns[adb]); }
+  }
+  var aiDiffLabels = { easy: 'Fácil', normal: 'Medio', hard: 'Difícil', extreme: 'Extremo', chaos: 'Caótico' };
+  var AI_AUTOFREQ_DIFFS = { hard: true, extreme: true, chaos: true };
+
+  function updateAiFreqUi(diff) {
+    var auto = !!AI_AUTOFREQ_DIFFS[diff];
+    aiFreqGridEl.style.display = auto ? 'none' : '';
+    aiFreqHintEl.innerHTML = auto
+      ? '🤖 En esta dificultad la frecuencia varía sola, como una respiración entre 50 y 80 Hz.'
+      : '&nbsp;';
+  }
+  updateAiFreqUi(AiDirectorTest.diff);
+
+  for (var adi = 0; adi < aiDiffKeys.length; adi++) {
+    (function (btn) {
+      var key = btn.getAttribute('data-aidiff');
+      btn.onclick = function () {
+        for (var q = 0; q < aiDiffKeys.length; q++) { aiDiffKeys[q].className = 'card'; }
+        btn.className = 'card is-active';
+        AiDirectorTest.diff = key;
+        updateAiFreqUi(key);
+      };
+    })(aiDiffKeys[adi]);
+  }
+
+  var aiMaxSlider = $('aiMaxSlider');
+  var aiMaxVal = $('aiMaxVal');
+  var aiWarnHigh = $('aiWarnHigh');
+  var aiWarnExtremeHigh = $('aiWarnExtremeHigh');
+  var aiMaxPresetBtns = $('aiSetup').querySelectorAll('[data-aimaxpreset]');
+
+  function highlightAiMaxPreset(pct) {
+    for (var i = 0; i < aiMaxPresetBtns.length; i++) {
+      var v = parseInt(aiMaxPresetBtns[i].getAttribute('data-aimaxpreset'), 10);
+      aiMaxPresetBtns[i].className = (v === pct) ? 'preset-btn w4 is-active' : 'preset-btn w4';
+    }
+  }
+
+  function applyAiMax() {
+    var pct = parseInt(aiMaxSlider.value, 10);
+    if (isNaN(pct)) { pct = 150; }
+    if (pct < 50) { pct = 50; }
+    if (pct > 500) { pct = 500; }
+    aiMaxVal.innerHTML = pct + '%';
+    aiWarnHigh.className = (pct > 100) ? 'warn is-open' : 'warn';
+    aiWarnExtremeHigh.className = (pct >= 300) ? 'warn is-open' : 'warn';
+    highlightAiMaxPreset(pct);
+    AiDirectorTest.maxPct = pct;
+    if (AiDirectorTest.minPct > pct) { AiDirectorTest.minPct = Math.min(40, pct); }
+  }
+  aiMaxSlider.oninput = applyAiMax;
+  aiMaxSlider.onchange = applyAiMax;
+  for (var amp = 0; amp < aiMaxPresetBtns.length; amp++) {
+    (function (btn) {
+      btn.onclick = function () {
+        aiMaxSlider.value = btn.getAttribute('data-aimaxpreset');
+        applyAiMax();
+      };
+    })(aiMaxPresetBtns[amp]);
+  }
+  applyAiMax();
+
+  var aiDurSlider = $('aiDurSlider');
+  var aiDurVal = $('aiDurVal');
+
+  function fmtDur(totalSec) {
+    var m = Math.floor(totalSec / 60);
+    var s = totalSec % 60;
+    if (m <= 0) { return s + ' s'; }
+    return m + ' min ' + s + ' s';
+  }
+
+  function applyAiDur() {
+    var sec = parseInt(aiDurSlider.value, 10);
+    if (isNaN(sec)) { sec = 180; }
+    if (sec < 10) { sec = 10; }
+    if (sec > 900) { sec = 900; }
+    aiDurVal.innerHTML = fmtDur(sec);
+    AiDirectorTest.durationMs = sec * 1000;
+  }
+  aiDurSlider.oninput = applyAiDur;
+  aiDurSlider.onchange = applyAiDur;
+  applyAiDur();
+
+  $('retoAiBtn').onclick = function () { retoView('aisetup'); };
+  $('aiBackBtn').onclick = function () { retoView('list'); };
+
+  function fmtClock(totalMs) {
+    var totalSec = Math.ceil(totalMs / 1000);
+    if (totalSec < 0) { totalSec = 0; }
+    var m = Math.floor(totalSec / 60);
+    var s = totalSec % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  function startAi() {
+    stopTest(); stopReto(false); stopInterm(false); stopVolReto(false); stopRandom();
+    stopBreathReto(false); stopStairReto(false); stopMemory(); stopCombo();
+    App.mode = 'ai';
+    App.current = AiDirectorTest;
+
+    $('aiDiffLabel').innerHTML = aiDiffLabels[AiDirectorTest.diff];
+    $('aiTimeLeft').innerHTML = fmtClock(AiDirectorTest.durationMs);
+    $('aiPercent').innerHTML = Math.round(AiDirectorTest.minPct);
+    $('aiFreqNow').innerHTML = (AI_AUTOFREQ_DIFFS[AiDirectorTest.diff] ? AiDirectorTest.freqMin : AiDirectorTest.freq) + ' Hz';
+    $('aiState').innerHTML = '🟢 <strong>Vibrando</strong>';
+
+    AiDirectorTest.onTick = function (msLeft) {
+      $('aiTimeLeft').innerHTML = fmtClock(msLeft);
+    };
+    AiDirectorTest.onState = function (state, pct) {
+      $('aiPercent').innerHTML = Math.round(pct);
+      if (state === 'pause') {
+        $('aiState').innerHTML = '⏸ <strong>Pausa</strong>';
+      } else if (state === 'transition') {
+        $('aiState').innerHTML = '🔄 <strong>Transición</strong>';
+      } else {
+        $('aiState').innerHTML = '🟢 <strong>Vibrando</strong>';
+      }
+    };
+    AiDirectorTest.onFreq = function (hz) {
+      $('aiFreqNow').innerHTML = Math.round(hz) + ' Hz';
+    };
+    AiDirectorTest.onEnd = function () {
+      $('aiResultTitle').innerHTML = '✅ Sesión finalizada';
+      $('aiResultDetail').innerHTML =
+        'Dificultad: ' + aiDiffLabels[AiDirectorTest.diff] + ' · Duración: ' + fmtDur(Math.round(AiDirectorTest.durationMs / 1000)) +
+        ' · Intensidad máx.: ' + AiDirectorTest.maxPct + '%.';
+      retoView('airesult');
+    };
+
+    var ok = AiDirectorTest.start();
+    if (!ok) {
+      $('aiState').innerHTML = '⚠️ Este navegador no puede generar tonos.';
+    }
+  }
+
+  function stopAi() {
+    if (App.mode === 'ai') {
+      AiDirectorTest.stop();
+      applyVolume();
+    }
+  }
+
+  $('aiGoBtn').onclick = function () { retoView('airun'); startAi(); };
+  $('aiStopBtn').onclick = function () {
+    stopAi();
+    $('aiResultTitle').innerHTML = '⏹️ Sesión detenida';
+    $('aiResultDetail').innerHTML =
+      'Dificultad: ' + aiDiffLabels[AiDirectorTest.diff] + ' · Detenida manualmente · Intensidad máx.: ' + AiDirectorTest.maxPct + '%.';
+    retoView('airesult');
+  };
+  $('aiPlayAgainBtn').onclick = function () { retoView('airun'); startAi(); };
+  $('aiResultBackBtn').onclick = function () { retoView('aisetup'); };
 
   /* --- RANDOM ------------------------------------------------ */
 
