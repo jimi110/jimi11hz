@@ -419,6 +419,12 @@ touch-action: manipulation;
 
 /* Tarjetas (retos, dificultad, random) ----------------------- */
 
+/* Lista de retos en 2 columnas ------------------------------- */
+#retoList { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#retoList .section-title { grid-column: 1 / -1; margin-bottom: 0; }
+#retoList .card { margin: 0; min-width: 0; padding: 14px 12px; font-size: 16px; line-height: 1.25; overflow-wrap: break-word; word-wrap: break-word; }
+#retoList .card small { font-size: 12px; line-height: 1.3; }
+
 .card {
 display: block;
 width: 100%;
@@ -492,10 +498,11 @@ margin-bottom: 4px;
 
 /* --- RULETA: máquina de eventos -------------------------------- */
 .roulette-wheel-wrap { text-align:center; margin:10px 0 14px; }
-.roulette-wheel { position:relative; width:250px; height:250px; margin:0 auto; border-radius:50%; border:8px solid #222; box-shadow:0 8px 22px rgba(0,0,0,.28), inset 0 0 0 3px rgba(255,255,255,.18); background:conic-gradient(#ef5350 0deg 45deg,#ffca28 45deg 90deg,#66bb6a 90deg 135deg,#42a5f5 135deg 180deg,#ab47bc 180deg 225deg,#26a69a 225deg 270deg,#ec407a 270deg 315deg,#ffa726 315deg 360deg); transition:transform 3.2s cubic-bezier(.12,.72,.12,1); }
+.roulette-wheel { position:relative; width:250px; height:250px; margin:0 auto; border-radius:50%; border:8px solid #222; box-shadow:0 8px 22px rgba(0,0,0,.28), inset 0 0 0 3px rgba(255,255,255,.18); background:conic-gradient(#ef5350 0deg 36deg,#ffca28 36deg 72deg,#66bb6a 72deg 108deg,#42a5f5 108deg 144deg,#ab47bc 144deg 180deg,#26a69a 180deg 216deg,#ec407a 216deg 252deg,#ffa726 252deg 288deg,#8d6e63 288deg 324deg,#78909c 324deg 360deg); transition:transform 3.2s cubic-bezier(.12,.72,.12,1); }
 .roulette-wheel.is-spinning { filter:saturate(1.18); }
 .roulette-label { position:absolute; left:50%; top:50%; width:82px; margin:-12px 0 0 -41px; font-size:10px; font-weight:800; text-transform:uppercase; color:#fff; text-shadow:0 1px 2px #000; pointer-events:none; }
 .roulette-pointer { width:0; height:0; border-left:12px solid transparent; border-right:12px solid transparent; border-top:30px solid #111; margin:0 auto -10px; position:relative; z-index:2; filter:drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+.roulette-icon { position:absolute; left:50%; top:50%; width:30px; height:30px; margin:-15px 0 0 -15px; font-size:20px; line-height:30px; text-align:center; pointer-events:none; }
 .roulette-center { position:absolute; left:50%; top:50%; width:42px; height:42px; margin:-21px 0 0 -21px; border-radius:50%; background:#fff; border:4px solid #222; box-sizing:border-box; }
 .roulette-event { min-height:24px; margin-top:8px; font-weight:800; }
 .roulette-metrics { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-top:10px; }
@@ -883,6 +890,21 @@ background: #111111;
 <button type="button" class="card" id="retoNoReactBtn">☝️ No reacciones<small>Mantén el dedo pulsado hasta el final sin levantarlo</small></button>
 <button type="button" class="card" id="retoAiBtn">🤖 IA al mando<small>La aplicación dirige la sesión automáticamente</small></button>
 <button type="button" class="card" id="retoRouletteBtn">🎲 Ruleta<small>Eventos aleatorios acumulativos · dificultad progresiva e infinita</small></button>
+<button type="button" class="card" id="retoPulseBtn">💓 Latido<small>Pulsos de dos tiempos que se aceleran poco a poco</small></button>
+<button type="button" class="card" id="retoCoasterBtn">🎢 Montaña rusa<small>Frecuencia y volumen en olas cada vez más rápidas</small></button>
+<button type="button" class="card" id="retoAmbushBtn">🎯 Emboscada<small>Silencios largos y golpes de sonido por sorpresa</small></button>
+<button type="button" class="card" id="retoRollBtn">🥁 Redoble<small>Ráfagas de golpes cada vez más rápidas</small></button>
+<button type="button" class="card" id="retoPendBtn">🔀 Péndulo<small>Salta entre 50 y 80 Hz cada vez más deprisa</small></button>
+<button type="button" class="card" id="retoClimbBtn">🧗 Escalada<small>Sube por escalones de frecuencia y cae de golpe</small></button>
+<button type="button" class="card" id="retoFlashBtn">⚡ Relámpago<small>Chispazos muy cortos que se vuelven más frecuentes</small></button>
+<button type="button" class="card" id="retoEchoBtn">🔔 Eco<small>Un golpe seguido de ecos que se van apagando</small></button>
+<button type="button" class="card" id="retoVibeBtn">📳 Vibración<small>El sonido late a un ritmo cada vez más rápido</small></button>
+<button type="button" class="card" id="retoArpBtn">🎹 Arpegio<small>Notas de 50 a 80 Hz que se suceden cada vez más rápido</small></button>
+<button type="button" class="card" id="retoSirenBtn">🚨 Sirena<small>La frecuencia sube y baja en ciclos cada vez más cortos</small></button>
+<button type="button" class="card" id="retoTideBtn">🌊 Marea<small>Olas de volumen que crecen y cambian de frecuencia</small></button>
+<button type="button" class="card" id="retoStormBtn">⛈️ Tormenta<small>Truenos agrupados en rachas y calmas cada vez más breves</small></button>
+<button type="button" class="card" id="retoTrrrBtn">📠 TRRRRR<small>Salta entre 50 y 80 Hz a toda velocidad, cada vez más rápido</small></button>
+<button type="button" class="card" id="retoBlackBtn">🪫 Apagón<small>Tono continuo que se corta de golpe, cada vez más a menudo</small></button>
 </div>
 
 <div id="retoSetup" style="display:none">
@@ -1372,7 +1394,7 @@ background: #111111;
 <div class="clock-label">🎲 RULETA · EVENTOS ACUMULATIVOS</div>
 <div class="roulette-wheel-wrap">
 <div class="roulette-pointer"></div>
-<div class="roulette-wheel" id="rouletteWheel"><div class="roulette-label">EVENTO<br>RANDOM</div><div class="roulette-center"></div></div>
+<div class="roulette-wheel" id="rouletteWheel"><div class="roulette-center"></div></div>
 <p class="roulette-event" id="rouletteEvent">Preparando la primera tirada…</p>
 </div>
 <div class="roulette-metrics">
@@ -1394,6 +1416,49 @@ background: #111111;
 </div>
 <div class="transport"><button type="button" class="play-btn" id="roulettePlayAgainBtn">🔄 Jugar otra vez</button></div>
 <button type="button" class="mini-btn" id="rouletteResultBackBtn">← Volver</button>
+</div>
+
+<!-- ---- NUEVOS RETOS (Latido · Montaña rusa · Emboscada) ---- -->
+<div id="nwSetup" style="display:none">
+<p class="section-title" id="nwSetupTitle">💓 Latido · dificultad</p>
+<button type="button" class="card is-active" data-nwdiff="easy">🟢 Fácil<small>Aumenta despacio y deja mucho margen</small></button>
+<button type="button" class="card" data-nwdiff="normal">🟡 Normal<small>Progresión equilibrada</small></button>
+<button type="button" class="card" data-nwdiff="hard">🔴 Difícil<small>Sube pronto y llega más lejos</small></button>
+<button type="button" class="card" data-nwdiff="extreme">🟣 Extremo<small>Sube rápido hasta el máximo</small></button>
+<div class="range-box">
+<h3>Duración de la sesión</h3>
+<p class="val" id="nwDurVal">2 min 0 s</p>
+<input type="range" class="slider" id="nwDurSlider" min="10" max="900" step="5" value="120">
+<p class="slider-tag">10 s<span style="float:right">15 min</span><em class="clearfix"></em></p>
+</div>
+<p class="note" id="nwSetupNote"></p>
+<div class="transport">
+<button type="button" class="play-btn" id="nwGoBtn">▶ COMENZAR RETO</button>
+</div>
+<button type="button" class="mini-btn" id="nwBackBtn">← Volver</button>
+</div>
+
+<div id="nwRun" style="display:none">
+<div class="readout">
+<div class="clock-label" id="nwRunTitle">💓 LATIDO</div>
+<p class="big-state" id="nwTimeLeft">02:00</p>
+<p class="status">Tiempo restante</p>
+<p class="big-state" id="nwLevel">Nivel 5%</p>
+<div class="chaos-meter"><i id="nwBar"></i></div>
+<p class="status" id="nwState">🟢 <strong>Preparando</strong></p>
+</div>
+<button type="button" class="mini-btn" id="nwExitBtn">⏹️ Terminar y ver resultado</button>
+</div>
+
+<div id="nwResult" style="display:none">
+<div class="readout">
+<p class="big-state" id="nwResultTitle">✅ ¡Reto completado!</p>
+<p class="status" id="nwResultDetail"></p>
+</div>
+<div class="transport">
+<button type="button" class="play-btn" id="nwAgainBtn">🔄 Jugar otra vez</button>
+</div>
+<button type="button" class="mini-btn" id="nwResultBackBtn">← Volver</button>
 </div>
 
 <!-- ---- CAOS CRECIENTE ---- -->
@@ -1587,7 +1652,28 @@ background: #111111;
 <p class="slider-tag">5<span style="float:right">20</span><em class="clearfix"></em></p>
 </div>
 
-<p class="note">Cada vuelta ejecuta automáticamente: Test Normal → 50→80→50 Hz → Intermitente → Volumen Progresivo → Respiración → Escalera → Random. La frecuencia, dificultad y otros parámetros internos de cada reto se eligen al azar (siempre entre 50, 60, 70 y 80 Hz); el volumen se mantiene fijo durante toda la Maratón.</p>
+<div class="range-box">
+<h3>🔇 Silencio entre retos</h3>
+<p class="val" id="marGapVal">3 segundos</p>
+<input type="range" class="slider" id="marGapSlider" min="0" max="30" step="1" value="3">
+<p class="slider-tag">Sin silencio<span style="float:right">30s</span><em class="clearfix"></em></p>
+<div class="preset-row">
+<button type="button" class="preset-btn w4" data-mgpreset="0">Sin</button>
+<button type="button" class="preset-btn w4" data-mgpreset="3">3s</button>
+<button type="button" class="preset-btn w4" data-mgpreset="5">5s</button>
+<button type="button" class="preset-btn w4" data-mgpreset="10">10s</button>
+</div>
+<button type="button" class="card" id="marGapRandomBtn">🎲 Silencio aleatorio<small>Desactivado · el silencio es siempre el valor elegido</small></button>
+</div>
+
+<div class="range-box">
+<h3>⚡ Retos sorpresa por vuelta</h3>
+<p class="val" id="marExtraVal">3 retos sorpresa</p>
+<input type="range" class="slider" id="marExtraSlider" min="0" max="17" step="1" value="3">
+<p class="slider-tag">0<span style="float:right">17</span><em class="clearfix"></em></p>
+</div>
+
+<p class="note">Cada vuelta ejecuta automáticamente: Test Normal → 50→80→50 Hz → Intermitente → Volumen Progresivo → Respiración → Escalera → Random, y después los retos sorpresa (Latido, Montaña rusa, Emboscada, Redoble, Péndulo, Escalada, Relámpago, Eco, Vibración, Arpegio, Sirena, Marea, Tormenta, TRRRRR, Apagón, Caos creciente o IA al mando, elegidos al azar sin repetir dentro de la vuelta). Entre un reto y el siguiente hay un silencio configurable (fijo o aleatorio entre 0 y el valor elegido). La frecuencia, dificultad y otros parámetros internos de cada reto se eligen al azar (siempre entre 50 y 80 Hz); el volumen se mantiene fijo durante toda la Maratón. Tiempo de silencio incluido en el tiempo total.</p>
 
 <div class="transport">
 <button type="button" class="play-btn" id="marStartBtn">▶ COMENZAR MARATÓN</button>
@@ -2681,7 +2767,7 @@ if (silent) {
 Engine.stop(false);
 if (this.onState) { this.onState('silence'); }
 } else {
-var hz = 35 + Math.random() * 145;
+var hz = 50 + Math.random() * 30;
 var volume = Math.min(5, this.baseVolume * (0.25 + Math.random() * (0.45 + elapsedRatio * 0.3)));
 Engine.setFrequency(hz, 0.05);
 Engine.setVolume(volume);
@@ -3009,7 +3095,13 @@ Store.init();
 var tabs = $('tabs').getElementsByTagName('button');
 var panels = ['test', 'retos', 'random', 'maraton', 'tiempos'];
 
+var retoCur = 'list';
+var retoListScroll = 0;
+var curPanel = 'test';
+function curScrollY() { return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; }
+
 function showPanel(name) {
+if (curPanel === 'retos' && name !== 'retos' && retoCur === 'list') { retoListScroll = curScrollY(); }
 for (var i = 0; i < panels.length; i++) {
 $('panel-' + panels[i]).className = (panels[i] === name) ? 'panel is-open' : 'panel';
 }
@@ -3017,6 +3109,8 @@ for (var j = 0; j < tabs.length; j++) {
 tabs[j].className = (tabs[j].getAttribute('data-panel') === name) ? 'tab w5 is-active' : 'tab w5';
 }
 if (name === 'tiempos') { renderTimes(); }
+if (name === 'retos' && curPanel !== 'retos' && retoCur === 'list') { window.scrollTo(0, retoListScroll); }
+curPanel = name;
 }
 
 for (var t = 0; t < tabs.length; t++) {
@@ -3024,10 +3118,12 @@ for (var t = 0; t < tabs.length; t++) {
 btn.onclick = function () {
 var target = btn.getAttribute('data-panel');
 if (target !== 'test') { stopTest(); }
-if (target !== 'retos') { stopReto(false); stopInterm(false); stopVolReto(false); stopBreathReto(false); stopStairReto(false); stopMemory(); stopCombo(); stopChaos(); stopNoReact(false); stopAi(); stopRoulette(true); }
+if (target !== 'retos') { stopReto(false); stopInterm(false); stopVolReto(false); stopBreathReto(false); stopStairReto(false); stopMemory(); stopCombo(); stopChaos(); stopNoReact(false); stopAi(); stopRoulette(true); stopNW(false); }
 if (target !== 'random') { stopRandom(); }
 if (target !== 'maraton') { Marathon.stop(); }
+var wasRetos = (curPanel === 'retos');
 showPanel(target);
+if (target !== 'retos' && wasRetos && retoCur !== 'list') { retoView('list', true); }
 };
 })(tabs[t]);
 }
@@ -3281,13 +3377,24 @@ var retoViews = [
 ['chaosSetup', 'chsetup'], ['chaosRun', 'chrun'], ['chaosResult', 'chresult'],
 ['noReactSetup', 'nrsetup'], ['noReactRun', 'nrrun'], ['noReactResult', 'nrresult'],
 ['aiSetup', 'aisetup'], ['aiRun', 'airun'], ['aiResult', 'airesult'],
-['rouletteSetup', 'rsetup'], ['rouletteRun', 'rrun'], ['rouletteResult', 'rresult']
+['rouletteSetup', 'rsetup'], ['rouletteRun', 'rrun'], ['rouletteResult', 'rresult'],
+['nwSetup', 'nwsetup'], ['nwRun', 'nwrun'], ['nwResult', 'nwresult']
 ];
 
-function retoView(which) {
+function retoView(which, keepScroll) {
+if (retoCur === 'list' && which !== 'list' && curPanel === 'retos') { retoListScroll = curScrollY(); }
+var wasList = (retoCur === 'list');
 for (var i = 0; i < retoViews.length; i++) {
-$(retoViews[i][0]).style.display = (retoViews[i][1] === which) ? 'block' : 'none';
+var on = (retoViews[i][1] === which);
+/* La lista usa display:grid (2 columnas): se limpia el estilo en línea en vez de forzar 'block'. */
+$(retoViews[i][0]).style.display = on ? (retoViews[i][1] === 'list' ? '' : 'block') : 'none';
 }
+/* Al volver a la lista se recupera el scroll; al entrar en un reto se empieza arriba. */
+if (!keepScroll) {
+if (which === 'list' && !wasList) { window.scrollTo(0, retoListScroll); }
+else if (which !== 'list' && wasList) { window.scrollTo(0, 0); }
+}
+retoCur = which;
 }
 
 $('retoSweepBtn').onclick = function () { renderSweepTitle(); retoView('setup'); };
@@ -4453,7 +4560,7 @@ silenceStartMin: 500, silenceStartMax: 1400,
 silenceEndMin: 350, silenceEndMax: 1100,
 transStartMin: 700, transStartMax: 1300,
 transEndMin: 220, transEndMax: 600,
-freqMin: 45, freqMax: 90
+freqMin: 50, freqMax: 80
 },
 normal: {
 ramp: 1.05, holdStartMin: 1300, holdStartMax: 3300,
@@ -4463,7 +4570,7 @@ silenceStartMin: 350, silenceStartMax: 1100,
 silenceEndMin: 180, silenceEndMax: 800,
 transStartMin: 500, transStartMax: 1000,
 transEndMin: 140, transEndMax: 420,
-freqMin: 40, freqMax: 110
+freqMin: 50, freqMax: 80
 },
 hard: {
 ramp: 0.78, holdStartMin: 900, holdStartMax: 2500,
@@ -4473,7 +4580,7 @@ silenceStartMin: 250, silenceStartMax: 850,
 silenceEndMin: 100, silenceEndMax: 550,
 transStartMin: 320, transStartMax: 800,
 transEndMin: 80, transEndMax: 260,
-freqMin: 35, freqMax: 135
+freqMin: 50, freqMax: 80
 },
 extreme: {
 ramp: 0.58, holdStartMin: 650, holdStartMax: 1900,
@@ -4483,7 +4590,7 @@ silenceStartMin: 180, silenceStartMax: 650,
 silenceEndMin: 70, silenceEndMax: 380,
 transStartMin: 220, transStartMax: 600,
 transEndMin: 55, transEndMax: 180,
-freqMin: 30, freqMax: 160
+freqMin: 50, freqMax: 80
 }
 },
 
@@ -4856,25 +4963,30 @@ $('aiResultBackBtn').onclick = function () { retoView('aisetup'); };
 /* --- RETO RULETA ---------------------------------------------- */
 var RouletteTest = {
  diff: 'easy', running: false, rounds: 0, startedAt: 0, elapsedMs: 0,
- timer: null, spinTimer: null, intervalTimer: null,
+ timer: null, spinTimer: null, intervalTimer: null, gateTimer: null, inSound: false,
  baseVolume: 0.5, volumePct: 100, freq: 60, speedFactor: 1, pauseFactor: 1, soundFactor: 1,
  lastEvent: 'Preparando la primera tirada…', effects: [], wheelRotation: 0,
  profiles: { easy: 20000, normal: 15000, hard: 10000, extreme: 5000 },
  labels: { easy:'Fácil', normal:'Normal', hard:'Difícil', extreme:'Extremo' },
  events: [
   {key:'volUp', label:'🔊 Volumen +10%', apply:function(t){t.volumePct=Math.min(500,t.volumePct+10);}},
-  {key:'volUp', label:'🔊 Volumen +15%', apply:function(t){t.volumePct=Math.min(500,t.volumePct+15);}},
+  {key:'volUp', label:'📢 Volumen +15%', apply:function(t){t.volumePct=Math.min(500,t.volumePct+15);}},
   {key:'intensity', label:'⚡ Intensidad +12%', apply:function(t){t.volumePct=Math.min(500,t.volumePct+12);}},
-  {key:'freq', label:'〰️ Frecuencia variable', apply:function(t){t.freq=35+Math.floor(Math.random()*146);}},
+  {key:'freq', label:'〰️ Frecuencia variable', apply:function(t){t.freq=50+Math.floor(Math.random()*31);}},
   {key:'speed', label:'⏩ Cambios más rápidos', apply:function(t){t.speedFactor=Math.min(3,t.speedFactor+0.18);}},
   {key:'pause', label:'⏱️ Pausas más cortas', apply:function(t){t.pauseFactor=Math.max(0.35,t.pauseFactor-0.08);}},
-  {key:'duration', label:'🔊 Sonidos más largos', apply:function(t){t.soundFactor=Math.min(2.5,t.soundFactor+0.12);}},
-  {key:'chaos', label:'🌪️ Cambios impredecibles', apply:function(t){t.speedFactor=Math.min(3.5,t.speedFactor+0.12); t.freq=25+Math.floor(Math.random()*176);}},
+  {key:'duration', label:'⏳ Sonidos más largos', apply:function(t){t.soundFactor=Math.min(2.5,t.soundFactor+0.12);}},
+  {key:'chaos', label:'🌪️ Cambios impredecibles', apply:function(t){t.speedFactor=Math.min(3.5,t.speedFactor+0.12); t.freq=50+Math.floor(Math.random()*31);}},
   {key:'combo', label:'🔥 COMBO: volumen +10% + cambios rápidos', apply:function(t){t.volumePct=Math.min(500,t.volumePct+10); t.speedFactor=Math.min(3.5,t.speedFactor+0.2);}},
   {key:'relief', label:'🟢 Alivio breve: volumen -20%', apply:function(t){t.volumePct=Math.max(50,t.volumePct-20);}}
  ],
- clearTimers:function(){ if(this.timer){clearInterval(this.timer);this.timer=null;} if(this.spinTimer){clearTimeout(this.spinTimer);this.spinTimer=null;} if(this.intervalTimer){clearTimeout(this.intervalTimer);this.intervalTimer=null;} },
- activeMs:function(){return this.startedAt ? (new Date().getTime()-this.startedAt) : this.elapsedMs;},
+ clearTimers:function(){
+  if(this.timer){clearInterval(this.timer);this.timer=null;}
+  if(this.spinTimer){clearTimeout(this.spinTimer);this.spinTimer=null;}
+  if(this.intervalTimer){clearTimeout(this.intervalTimer);this.intervalTimer=null;}
+  if(this.gateTimer){clearTimeout(this.gateTimer);this.gateTimer=null;}
+ },
+ activeMs:function(){return this.running ? (new Date().getTime()-this.startedAt) : this.elapsedMs;},
  nextDelay:function(){var base=this.profiles[this.diff]; var jitter=0.9+Math.random()*0.2; return Math.max(1800,Math.round(base*jitter/this.speedFactor));},
  pickEvent:function(){
   var pool=this.events.slice();
@@ -4882,16 +4994,32 @@ var RouletteTest = {
   if(Math.random()>0.08){pool=pool.filter(function(e){return e.key!=='relief';});}
   return pool[Math.floor(Math.random()*pool.length)];
  },
- applyAudio:function(){
+ curVolume:function(){
   var pct=Math.max(50,Math.min(500,this.volumePct));
-  Engine.setFrequency(this.freq,Math.max(0.02,0.12/this.speedFactor));
-  Engine.setVolume(this.baseVolume*(pct/100));
-  if(!Engine.playing){Engine.start();}
+  return Math.min(5,this.baseVolume*(pct/100));
  },
- spin:function(){
-  if(!this.running)return;
-  var self=this, ev=this.pickEvent(); this.rounds++;
-  ev.apply(this); this.lastEvent=ev.label;
+ /* Aplica frecuencia y volumen actuales si el tono está sonando. */
+ applyAudio:function(){
+  if(!this.running||!this.inSound)return;
+  Engine.setFrequency(this.freq,Math.max(0.02,0.12/this.speedFactor));
+  Engine.setVolume(this.curVolume());
+ },
+ /* Ciclo sonido / pausa: aquí sí se usan "Sonidos más largos", "Pausas más cortas" y la velocidad. */
+ soundPhase:function(){
+  var self=this; if(!this.running)return;
+  Engine.setFrequency(this.freq,0.03);
+  Engine.setVolume(this.curVolume());
+  Engine.start(); this.inSound=true;
+  var ms=Math.max(400,Math.round(3500*this.soundFactor/this.speedFactor*(0.8+Math.random()*0.4)));
+  this.gateTimer=setTimeout(function(){self.pausePhase();},ms);
+ },
+ pausePhase:function(){
+  var self=this; if(!this.running)return;
+  Engine.stop(false); this.inSound=false;
+  var ms=Math.max(250,Math.round(1500*this.pauseFactor/this.speedFactor*(0.8+Math.random()*0.4)));
+  this.gateTimer=setTimeout(function(){self.soundPhase();},ms);
+ },
+ updateEffects:function(){
   this.effects=[
    'Volumen acumulado: '+Math.round(this.volumePct)+'%',
    'Frecuencia actual: '+Math.round(this.freq)+' Hz',
@@ -4899,27 +5027,52 @@ var RouletteTest = {
    'Pausas: '+Math.round(this.pauseFactor*100)+'%',
    'Duración de sonidos: x'+this.soundFactor.toFixed(1)
   ];
-  this.wheelRotation += 1440 + Math.floor(Math.random()*720) + (this.events.indexOf(ev)*45);
+ },
+ spin:function(){
+  if(!this.running)return;
+  var self=this, ev=this.pickEvent(), idx=this.events.indexOf(ev), seg=360/this.events.length;
+  this.rounds++;
+  /* La rueda se detiene con la casilla del evento elegido bajo la flecha. */
+  var wanted=-(idx*seg+seg/2+(Math.random()-0.5)*seg*0.5);
+  var cur=((this.wheelRotation%360)+360)%360;
+  var delta=((wanted-cur)%360+360)%360;
+  this.wheelRotation+=1440+delta;
   $('rouletteWheel').style.transform='rotate('+this.wheelRotation+'deg)';
   $('rouletteWheel').className='roulette-wheel is-spinning';
   $('rouletteEvent').innerHTML='🎲 Girando…';
-  this.applyAudio();
+  /* El efecto se aplica cuando la rueda ya se ha parado. */
   this.spinTimer=setTimeout(function(){
    if(!self.running)return;
+   ev.apply(self); self.lastEvent=ev.label;
+   self.updateEffects(); self.applyAudio();
+   $('rouletteWheel').className='roulette-wheel';
    $('rouletteEvent').innerHTML=self.lastEvent;
    renderRoulette();
    self.schedule();
-  },3200);
+  },3300);
  },
- schedule:function(){var self=this;if(!this.running)return;this.intervalTimer=setTimeout(function(){self.spin();},this.nextDelay());},
+ schedule:function(first){var self=this;if(!this.running)return;this.intervalTimer=setTimeout(function(){self.spin();},first?3000:this.nextDelay());},
  start:function(){
   this.clearTimers(); this.running=true; this.rounds=0; this.startedAt=new Date().getTime(); this.elapsedMs=0;
   this.baseVolume=Math.max(0.05,Engine.volume); this.volumePct=100; this.freq=50+Math.floor(Math.random()*31);
-  this.speedFactor=1;this.pauseFactor=1;this.soundFactor=1;this.effects=[];this.lastEvent='Preparando…';
-  this.applyAudio(); renderRoulette(); this.schedule(); return true;
+  this.speedFactor=1;this.pauseFactor=1;this.soundFactor=1;this.lastEvent='Preparando…';this.inSound=false;
+  this.updateEffects();
+  $('rouletteEvent').innerHTML='Preparando la primera tirada…';
+  this.soundPhase(); renderRoulette(); this.schedule(true); return true;
  },
- stop:function(){if(!this.running)return;this.elapsedMs=this.activeMs();this.running=false;this.clearTimers();Engine.stop(false);renderRoulette();}
+ stop:function(){if(!this.running)return;this.elapsedMs=this.activeMs();this.running=false;this.inSound=false;this.clearTimers();Engine.stop(false);renderRoulette();}
 };
+/* Iconos de cada evento sobre la rueda (una casilla por evento). */
+(function(){
+ var wheel=$('rouletteWheel'), n=RouletteTest.events.length, seg=360/n;
+ for(var i=0;i<n;i++){
+  var d=document.createElement('div');
+  d.className='roulette-icon';
+  d.innerHTML=RouletteTest.events[i].label.split(' ')[0];
+  d.style.transform='rotate('+(i*seg+seg/2)+'deg) translateY(-92px)';
+  wheel.insertBefore(d,wheel.firstChild);
+ }
+})();
 
 var rouletteDiffBtns=$('rouletteSetup').getElementsByTagName('button'), rouletteDiffKeys=[];
 var rouletteDiffLabels=RouletteTest.labels;
@@ -4950,6 +5103,392 @@ $('rouletteGoBtn').onclick=function(){
 $('rouletteStopBtn').onclick=function(){stopRoulette(true);retoView('rresult');};
 $('roulettePlayAgainBtn').onclick=function(){retoView('rrun');RouletteTest.start();rouletteTick();};
 $('rouletteResultBackBtn').onclick=function(){stopRoulette(false);retoView('rsetup');};
+
+/* --- NUEVOS RETOS: Latido, Montaña rusa, Emboscada, Arpegio, Sirena, Marea, Tormenta… (siempre 50-80 Hz) --- */
+var NW = {
+ defs: {
+  pulse:   { icon:'💓', name:'Latido', note:'Suena un latido de dos tiempos (lub-dub). El ritmo y el volumen suben poco a poco. Solo tienes que aguantar hasta el final.' },
+  coaster: { icon:'🎢', name:'Montaña rusa', note:'Un tono continuo sube y baja de frecuencia y de volumen en olas. Con el tiempo las olas son más rápidas y más intensas.' },
+  roll:    { icon:'🥁', name:'Redoble', note:'Ráfagas de golpes secos que empiezan lentas y terminan en un redoble rápido. Con el tiempo las ráfagas son más largas y los descansos más cortos.' },
+  pend:    { icon:'🔀', name:'Péndulo', note:'El tono salta una y otra vez entre 50 y 80 Hz. Al principio los saltos son lentos; después se vuelven muy rápidos.' },
+  climb:   { icon:'🧗', name:'Escalada', note:'La frecuencia sube por escalones de 5 Hz (de 50 a 80) y el volumen crece con ella. Al llegar arriba cae de golpe y vuelve a empezar.' },
+  flash:   { icon:'⚡', name:'Relámpago', note:'Chispazos muy cortos y a veces dobles, en momentos impredecibles. Cada vez aparecen con más frecuencia.' },
+  echo:    { icon:'🔔', name:'Eco', note:'Un golpe de sonido seguido de varios ecos cada vez más suaves. Con el tiempo hay más ecos y menos descanso entre golpes.' },
+  vibe:    { icon:'📳', name:'Vibración', note:'Un tono que late (fuerte y flojo) a un ritmo cada vez más rápido.' },
+  trrr:    { icon:'📠', name:'TRRRRR', note:'El tono salta entre 50 y 80 Hz a una velocidad brutal (decenas de cambios por segundo) y se vuelve todavía más rápido con el tiempo.' },
+  black:   { icon:'🪫', name:'Apagón', note:'Un tono continuo que se corta de golpe en silencios cortos. Con el tiempo los cortes son más frecuentes y más largos.' },
+  arp:     { icon:'🎹', name:'Arpegio', note:'Notas sueltas entre 50 y 80 Hz que se suceden en secuencia. Con el tiempo el arpegio se acelera y las notas son más intensas.' },
+  siren:   { icon:'🚨', name:'Sirena', note:'La frecuencia sube y baja de forma continua entre 50 y 80 Hz. Cada ciclo es más corto y el volumen crece.' },
+  tide:    { icon:'🌊', name:'Marea', note:'Olas de volumen que suben y bajan; en cada ola cambia la frecuencia. Las olas son cada vez más rápidas y más altas.' },
+  storm:   { icon:'⛈️', name:'Tormenta', note:'Rachas de truenos secos separadas por calmas. Con el tiempo las rachas son más largas y las calmas más cortas.' },
+  ambush:  { icon:'🎯', name:'Emboscada', note:'Silencios largos y golpes de sonido por sorpresa. Cuanto más avanza la sesión, más cortos son los silencios y más fuertes los golpes.' }
+ },
+ ramps: { easy: 1.4, normal: 1.0, hard: 0.75, extreme: 0.55 },
+ maxBpm: { easy: 110, normal: 130, hard: 150, extreme: 170 },
+ diffLabels: { easy:'Fácil', normal:'Normal', hard:'Difícil', extreme:'Extremo' },
+ key: 'pulse', diff: 'easy', durationMs: 120000,
+ running: false, startedAt: 0, elapsedMs: 0, baseVolume: 0.5, level: 0.05, phase: 0,
+ tm: [], tickT: null, animT: null, session: null,
+ rand: function (a, b) { return a + Math.random() * (b - a); },
+ lerp: function (a, b, p) { return a + (b - a) * p; },
+ activeMs: function () { return this.running ? (new Date().getTime() - this.startedAt) : this.elapsedMs; },
+ msLeft: function () { var l = this.durationMs - this.activeMs(); return l > 0 ? l : 0; },
+ calcLevel: function () {
+  var p = Math.min(1, this.activeMs() / Math.max(1, this.levelMs || this.durationMs));
+  return Math.min(1, 0.05 + 0.95 * Math.pow(p, this.ramps[this.diff]));
+ },
+ vol: function (mult) { return Math.min(5, Math.max(0.001, (this.mVol || this.baseVolume) * mult)); },
+ later: function (fn, ms) { this.tm.push(setTimeout(fn, ms)); },
+ clear: function () {
+  for (var i = 0; i < this.tm.length; i++) { clearTimeout(this.tm[i]); }
+  this.tm = [];
+  if (this.tickT) { clearInterval(this.tickT); this.tickT = null; }
+  if (this.animT) { clearInterval(this.animT); this.animT = null; }
+ },
+ setState: function (h) { $('nwState').innerHTML = h; if (this.hook) { this.hook(h); } },
+ render: function () {
+  $('nwTimeLeft').innerHTML = fmtClock(this.msLeft());
+  $('nwLevel').innerHTML = 'Nivel ' + Math.round(this.level * 100) + '%';
+  $('nwBar').style.width = Math.round(this.level * 100) + '%';
+  if (this.hook && this.hookDot) { this.hookDot(this.level); }
+ },
+ /* ---- Latido ---- */
+ pulseStep: function () {
+  var self = this; if (!this.running) { return; }
+  var bpm = this.lerp(55, this.maxBpm[this.diff], this.level);
+  var period = 60000 / bpm;
+  var f1 = this.rand(60, 80), f2 = f1 - 10;
+  var v = this.vol(0.5 + 0.5 * this.level);
+  Engine.setFrequency(f1, 0.01); Engine.setVolume(v); Engine.start();
+  this.later(function () { Engine.stop(false); }, 110);
+  this.later(function () { if (!self.running) { return; } Engine.setFrequency(f2, 0.01); Engine.setVolume(v * 0.85); Engine.start(); }, period * 0.3);
+  this.later(function () { Engine.stop(false); }, period * 0.3 + 140);
+  this.setState('💓 <strong>' + Math.round(bpm) + ' latidos/min</strong>');
+  this.later(function () { self.pulseStep(); }, period);
+ },
+ /* ---- Montaña rusa ---- */
+ coasterStart: function () {
+  var self = this, last = new Date().getTime();
+  Engine.setFrequency(65, 0.02); Engine.setVolume(this.vol(0.5)); Engine.start();
+  this.animT = setInterval(function () {
+   if (!self.running) { return; }
+   var now = new Date().getTime(), dt = now - last; last = now;
+   var period = self.lerp(12000, 3000, self.level);
+   self.phase += dt / period * 2 * Math.PI;
+   var hz = 65 + 15 * Math.sin(self.phase);
+   var m = 0.45 + 0.65 * self.level * (0.5 + 0.5 * Math.sin(self.phase + 1.3));
+   Engine.setFrequency(hz, 0.1); Engine.setVolume(self.vol(m));
+   self.setState('🎢 <strong>' + Math.round(hz) + ' Hz</strong> · ola de ' + Math.round(period / 1000) + ' s');
+  }, 80);
+ },
+ /* ---- Redoble ---- */
+ rollStep: function () {
+  var self = this; if (!this.running) { return; }
+  var n = Math.round(this.lerp(6, 24, this.level)), t = 0, v = this.vol(0.5 + 0.5 * this.level);
+  var speed = this.lerp(1, 0.7, this.level);
+  for (var i = 0; i < n; i++) {
+   (function (i, t) {
+    self.later(function () {
+     if (!self.running) { return; }
+     Engine.setFrequency(self.rand(50, 80), 0.01);
+     Engine.setVolume(i === n - 1 ? v : v * (0.55 + 0.35 * i / n));
+     Engine.start();
+     self.later(function () { Engine.stop(false); }, 55);
+    }, t);
+   })(i, t);
+   t += Math.max(95, this.lerp(380, 90, i / Math.max(1, n - 1)) * speed);
+  }
+  this.setState('🥁 <strong>Redoble de ' + n + ' golpes</strong>');
+  this.later(function () { self.rollStep(); }, t + this.lerp(2500, 900, this.level) * this.rand(0.8, 1.3));
+ },
+ /* ---- Péndulo ---- */
+ pendStep: function () {
+  var self = this; if (!this.running) { return; }
+  this.flip = !this.flip;
+  var hz = this.flip ? 80 : 50;
+  Engine.setFrequency(hz, 0.01); Engine.setVolume(this.vol(0.5 + 0.4 * this.level)); Engine.start();
+  this.setState('🔀 <strong>' + hz + ' Hz</strong> ' + (this.flip ? '▲' : '▼'));
+  this.later(function () { self.pendStep(); }, Math.max(220, this.lerp(2500, 250, this.level) * this.rand(0.85, 1.15)));
+ },
+ /* ---- Escalada ---- */
+ climbStep: function () {
+  var self = this; if (!this.running) { return; }
+  var idx = this.stepIdx || 0, hz = 50 + idx * 5, ms = this.lerp(5000, 1500, this.level);
+  Engine.setFrequency(hz, 0.03);
+  Engine.setVolume(this.vol(0.45 + 0.3 * (idx / 6) + 0.25 * this.level));
+  Engine.start();
+  this.setState('🧗 <strong>Escalón ' + (idx + 1) + '/7 · ' + hz + ' Hz</strong>');
+  this.stepIdx = idx + 1;
+  if (this.stepIdx > 6) {
+   this.stepIdx = 0;
+   this.later(function () { Engine.stop(false); self.setState('🔇 <strong>Caída…</strong>'); }, ms);
+   this.later(function () { self.climbStep(); }, ms + 700);
+  } else {
+   this.later(function () { self.climbStep(); }, ms);
+  }
+ },
+ /* ---- Relámpago ---- */
+ flashStep: function () {
+  var self = this; if (!this.running) { return; }
+  var v = this.vol(0.5 + 0.5 * this.level);
+  function tick() {
+   if (!self.running) { return; }
+   Engine.setFrequency(self.rand(50, 80), 0.01); Engine.setVolume(v); Engine.start();
+   self.later(function () { Engine.stop(false); }, self.rand(60, 120));
+  }
+  tick();
+  if (Math.random() < 0.15 + 0.35 * this.level) { this.later(tick, 230); }
+  this.setState('⚡ <strong>Chispazo</strong>');
+  this.later(function () { self.flashStep(); }, this.lerp(1800, 300, this.level) * this.rand(0.5, 1.5) + 300);
+ },
+ /* ---- Eco ---- */
+ echoStep: function () {
+  var self = this; if (!this.running) { return; }
+  var hz = this.rand(50, 80), v = this.vol(0.5 + 0.5 * this.level), n = 2 + Math.round(this.level * 3);
+  for (var i = 0; i <= n; i++) {
+   (function (i) {
+    self.later(function () {
+     if (!self.running) { return; }
+     Engine.setFrequency(hz, 0.01); Engine.setVolume(v * Math.pow(0.6, i)); Engine.start();
+     self.later(function () { Engine.stop(false); }, 170);
+    }, i * 330);
+   })(i);
+  }
+  this.setState('🔔 <strong>Golpe + ' + n + ' ecos · ' + Math.round(hz) + ' Hz</strong>');
+  this.later(function () { self.echoStep(); }, n * 330 + this.lerp(4000, 1200, this.level) * this.rand(0.8, 1.3));
+ },
+ /* ---- Vibración ---- */
+ vibeStart: function () {
+  Engine.setFrequency(this.rand(55, 75), 0.02); Engine.setVolume(this.vol(0.5)); Engine.start();
+  this.vibeStep(true);
+ },
+ vibeStep: function (on) {
+  var self = this; if (!this.running) { return; }
+  var hi = this.vol(0.5 + 0.5 * this.level);
+  Engine.setVolume(on ? hi : hi * 0.04);
+  this.setState('📳 <strong>' + (on ? 'Pulso' : 'Hueco') + '</strong>');
+  this.later(function () { self.vibeStep(!on); }, Math.max(130, this.lerp(900, 140, this.level)));
+ },
+ /* ---- TRRRRR: 50 <-> 80 Hz a toda velocidad ---- */
+ trrrStart: function () {
+  var self = this, last = new Date().getTime(), acc = 0, hi = false, lastTxt = 0;
+  Engine.setFrequency(50, 0.001); Engine.setVolume(this.vol(0.7)); Engine.start();
+  this.animT = setInterval(function () {
+   if (!self.running) { return; }
+   var now = new Date().getTime(), dt = now - last; last = now;
+   var rate = self.lerp(22, 70, self.level);          /* cambios por segundo */
+   var period = 1000 / rate;
+   acc += dt;
+   if (acc >= period) {
+    acc = acc % period; hi = !hi;
+    Engine.setFrequency(hi ? 80 : 50, 0.001);
+    Engine.setVolume(self.vol(0.7 + 0.3 * self.level));
+   }
+   if (now - lastTxt > 250) { lastTxt = now; self.setState('📠 <strong>TRRRRR · ' + Math.round(rate) + ' cambios/s</strong>'); }
+  }, 6);
+ },
+ /* ---- Apagón ---- */
+ blackStep: function () {
+  var self = this; if (!this.running) { return; }
+  Engine.setFrequency(this.rand(50, 80), 0.01); Engine.setVolume(this.vol(0.5 + 0.5 * this.level)); Engine.start();
+  this.setState('🟢 <strong>Sonando…</strong>');
+  this.later(function () {
+   if (!self.running) { return; }
+   Engine.stop(false);
+   self.setState('🪫 <strong>¡Apagón!</strong>');
+   self.later(function () { self.blackStep(); }, self.lerp(500, 1800, self.level) * self.rand(0.6, 1.3));
+  }, this.lerp(6000, 1200, this.level) * this.rand(0.6, 1.3));
+ },
+ /* ---- Arpegio ---- */
+ arpStep: function () {
+  var self = this; if (!this.running) { return; }
+  var notes = [50, 60, 70, 80], hz;
+  this.arpI = (this.arpI || 0);
+  hz = notes[this.arpI % 4]; this.arpI += (Math.random() < 0.7 ? 1 : 2);
+  var gap = Math.max(130, this.lerp(750, 150, this.level));
+  Engine.setFrequency(hz, 0.01); Engine.setVolume(this.vol(0.45 + 0.55 * this.level)); Engine.start();
+  this.later(function () { Engine.stop(false); }, gap * 0.7);
+  this.setState('🎹 <strong>' + hz + ' Hz</strong>');
+  this.later(function () { self.arpStep(); }, gap);
+ },
+ /* ---- Sirena ---- */
+ sirenStart: function () {
+  var self = this, last = new Date().getTime();
+  Engine.setFrequency(50, 0.02); Engine.setVolume(this.vol(0.5)); Engine.start();
+  this.animT = setInterval(function () {
+   if (!self.running) { return; }
+   var now = new Date().getTime(), dt = now - last; last = now;
+   self.phase += dt / self.lerp(7000, 1300, self.level) * 2 * Math.PI;
+   var hz = 65 - 15 * Math.cos(self.phase);
+   Engine.setFrequency(hz, 0.05); Engine.setVolume(self.vol(0.5 + 0.5 * self.level));
+   self.setState('🚨 <strong>' + Math.round(hz) + ' Hz</strong> ' + (Math.sin(self.phase) > 0 ? '▲' : '▼'));
+  }, 70);
+ },
+ /* ---- Marea ---- */
+ tideStart: function () {
+  var self = this, last = new Date().getTime(), cyc = -1;
+  Engine.setFrequency(65, 0.02); Engine.setVolume(this.vol(0.05)); Engine.start();
+  this.animT = setInterval(function () {
+   if (!self.running) { return; }
+   var now = new Date().getTime(), dt = now - last; last = now;
+   self.phase += dt / self.lerp(10000, 3500, self.level) * 2 * Math.PI;
+   var c = Math.floor(self.phase / (2 * Math.PI));
+   if (c !== cyc) { cyc = c; self.tideHz = self.rand(50, 80); Engine.setFrequency(self.tideHz, 0.05); }
+   var wave = 0.5 - 0.5 * Math.cos(self.phase);
+   Engine.setVolume(self.vol(0.04 + (0.3 + 0.7 * self.level) * wave));
+   self.setState('🌊 <strong>Ola ' + Math.round(self.tideHz || 65) + ' Hz</strong> · ' + Math.round(wave * 100) + '%');
+  }, 80);
+ },
+ /* ---- Tormenta ---- */
+ stormStep: function () {
+  var self = this; if (!this.running) { return; }
+  var n = 2 + Math.round(this.lerp(1, 7, this.level) * this.rand(0.7, 1.3)), t = 0;
+  for (var i = 0; i < n; i++) {
+   (function (t) {
+    self.later(function () {
+     if (!self.running) { return; }
+     Engine.setFrequency(self.rand(50, 80), 0.01);
+     Engine.setVolume(self.vol((0.4 + 0.6 * self.level) * self.rand(0.6, 1)));
+     Engine.start();
+     self.later(function () { Engine.stop(false); }, self.rand(90, 380));
+    }, t);
+   })(t);
+   t += self.rand(350, 1100);
+  }
+  this.setState('⛈️ <strong>Racha de ' + n + ' truenos</strong>');
+  this.later(function () { self.stormStep(); }, t + this.lerp(6000, 1500, this.level) * this.rand(0.7, 1.3));
+ },
+ /* ---- Emboscada ---- */
+ ambushStep: function () {
+  var self = this; if (!this.running) { return; }
+  Engine.stop(false);
+  this.setState('🔇 <strong>Silencio… prepárate</strong>');
+  var sil = this.lerp(9000, 1800, this.level) * this.rand(0.6, 1.4);
+  this.later(function () {
+   if (!self.running) { return; }
+   Engine.setFrequency(self.rand(50, 80), 0.01);
+   Engine.setVolume(self.vol(0.5 + 0.5 * self.level));
+   Engine.start();
+   self.setState('⚡ <strong>¡Ahora!</strong>');
+   var dur = self.lerp(1400, 450, self.level) * self.rand(0.7, 1.3);
+   self.later(function () { self.ambushStep(); }, dur);
+  }, sil);
+ },
+ start: function () {
+  var self = this;
+  this.clear(); this.elapsedMs = 0; this.phase = 0; this.level = 0.05;
+  this.baseVolume = Math.max(0.05, Engine.volume);
+  var ok = Engine.start();
+  if (!ok) { return false; }
+  Engine.stop(false);
+  this.running = true; this.startedAt = new Date().getTime();
+  this.tickT = setInterval(function () {
+   if (!self.running) { return; }
+   self.level = self.calcLevel(); self.render();
+   if (self.msLeft() <= 0) { self.finish(true); }
+  }, 200);
+  this.render();
+  this.flip = false; this.stepIdx = 0;
+  var fns = { pulse: 'pulseStep', coaster: 'coasterStart', ambush: 'ambushStep', roll: 'rollStep', pend: 'pendStep', climb: 'climbStep', flash: 'flashStep', echo: 'echoStep', vibe: 'vibeStart', arp: 'arpStep', trrr: 'trrrStart', black: 'blackStep', siren: 'sirenStart', tide: 'tideStart', storm: 'stormStep' };
+  this[fns[this.key]]();
+  return true;
+ },
+ label: function () {
+  var d = this.defs[this.key];
+  return d.icon + ' ' + d.name + ' · ' + this.diffLabels[this.diff] + ' · ' + fmtDur(Math.round(this.durationMs / 1000));
+ },
+ save: function () {
+  if (!this.session) { return; }
+  Store.save('challenges', this.session, this.label(), this.activeMs());
+ },
+ finish: function (completed) {
+  if (!this.running) { return; }
+  this.elapsedMs = Math.min(this.durationMs, this.activeMs());
+  this.running = false; this.clear(); Engine.stop(false);
+  this.save();
+  $('nwResultTitle').innerHTML = completed ? '✅ ¡Reto completado!' : '⏹️ Reto terminado';
+  $('nwResultDetail').innerHTML = this.defs[this.key].icon + ' ' + this.defs[this.key].name + ' · ' + this.diffLabels[this.diff] +
+   ' · Aguantaste ' + fmtDur(Math.round(this.elapsedMs / 1000)) + ' de ' + fmtDur(Math.round(this.durationMs / 1000)) + '.';
+  if (App.mode === 'nw') { applyVolume(); }
+  retoView('nwresult');
+ },
+ stop: function () { stopNW(false); },
+ setFreq: function (hz) { }
+};
+
+/* El volumen base de estos retos sigue EN VIVO al slider principal (antes se copiaba solo al empezar). */
+function userVol() {
+ var pct = parseInt(volSlider.value, 10);
+ if (isNaN(pct) || pct < 50) { pct = 50; }
+ if (pct > VOL_MAX_PCT) { pct = VOL_MAX_PCT; }
+ return pct / 100;
+}
+(function () {
+ var objs = [NoReactionTest, ChaosTest, RouletteTest, NW];
+ for (var k = 0; k < objs.length; k++) {
+  try { Object.defineProperty(objs[k], 'baseVolume', { get: userVol, set: function () {}, configurable: true }); } catch (e) {}
+ }
+})();
+
+function stopNW(showResult) {
+ if (!NW.running) { return; }
+ if (showResult) { NW.finish(false); return; }
+ NW.elapsedMs = NW.activeMs(); NW.running = false; NW.clear(); Engine.stop(false); NW.save();
+ if (App.mode === 'nw') { applyVolume(); }
+}
+function openNW(key) {
+ NW.key = key;
+ $('nwSetupTitle').innerHTML = NW.defs[key].icon + ' ' + NW.defs[key].name + ' · dificultad';
+ $('nwSetupNote').innerHTML = NW.defs[key].note;
+ retoView('nwsetup');
+}
+function startNW() {
+ stopNW(false); stopTest(); stopReto(false); stopInterm(false); stopVolReto(false); stopRandom(); stopBreathReto(false); stopStairReto(false); stopMemory(); stopCombo(); stopChaos(); stopNoReact(false); stopAi(); stopRoulette(false);
+ App.mode = 'nw'; App.current = NW;
+ $('nwRunTitle').innerHTML = NW.defs[NW.key].icon + ' ' + NW.defs[NW.key].name.toUpperCase();
+ retoView('nwrun');
+ NW.session = 'nw' + new Date().getTime();
+ if (!NW.start()) { $('nwState').innerHTML = '⚠️ Este navegador no puede generar tonos.'; }
+}
+$('retoPulseBtn').onclick = function () { openNW('pulse'); };
+$('retoCoasterBtn').onclick = function () { openNW('coaster'); };
+$('retoAmbushBtn').onclick = function () { openNW('ambush'); };
+$('retoRollBtn').onclick = function () { openNW('roll'); };
+$('retoPendBtn').onclick = function () { openNW('pend'); };
+$('retoClimbBtn').onclick = function () { openNW('climb'); };
+$('retoFlashBtn').onclick = function () { openNW('flash'); };
+$('retoEchoBtn').onclick = function () { openNW('echo'); };
+$('retoVibeBtn').onclick = function () { openNW('vibe'); };
+$('retoTrrrBtn').onclick = function () { openNW('trrr'); };
+$('retoBlackBtn').onclick = function () { openNW('black'); };
+$('retoArpBtn').onclick = function () { openNW('arp'); };
+$('retoSirenBtn').onclick = function () { openNW('siren'); };
+$('retoTideBtn').onclick = function () { openNW('tide'); };
+$('retoStormBtn').onclick = function () { openNW('storm'); };
+$('nwBackBtn').onclick = function () { retoView('list'); };
+$('nwGoBtn').onclick = startNW;
+$('nwExitBtn').onclick = function () { stopNW(true); };
+$('nwAgainBtn').onclick = startNW;
+$('nwResultBackBtn').onclick = function () { stopNW(false); retoView('list'); };
+(function () {
+ var btns = $('nwSetup').getElementsByTagName('button'), list = [];
+ for (var i = 0; i < btns.length; i++) { if (btns[i].getAttribute('data-nwdiff')) { list.push(btns[i]); } }
+ for (var k = 0; k < list.length; k++) {
+  (function (btn) {
+   btn.onclick = function () {
+    for (var q = 0; q < list.length; q++) { list[q].className = 'card'; }
+    btn.className = 'card is-active';
+    NW.diff = btn.getAttribute('data-nwdiff');
+   };
+  })(list[k]);
+ }
+ var sl = $('nwDurSlider');
+ function applyDur() {
+  var sec = parseInt(sl.value, 10); if (isNaN(sec) || sec < 10) { sec = 10; }
+  NW.durationMs = sec * 1000; $('nwDurVal').innerHTML = fmtDur(sec);
+ }
+ sl.oninput = applyDur; sl.onchange = applyDur; applyDur();
+})();
 
 /* --- RETO CAOS CRECIENTE -------------------------------------- */
 
@@ -5446,7 +5985,10 @@ laps: 2,
 testDurMs: 15000,
 retoDurMs: 20000,
 rndDurMs: 20000,
-stairSteps: 10
+stairSteps: 10,
+gapMs: 3000,
+gapRandom: false,
+extraCount: 3
 };
 
 function applyMarVol() {
@@ -5516,6 +6058,45 @@ $('marStairStepsVal').innerHTML = v + ' escalones';
 marStairStepsSlider.oninput = applyMarStairSteps;
 marStairStepsSlider.onchange = applyMarStairSteps;
 
+var marGapSlider = $('marGapSlider');
+var marExtraSlider = $('marExtraSlider');
+function applyMarGap() {
+var v = parseInt(marGapSlider.value, 10);
+if (isNaN(v) || v < 0) { v = 3; }
+marConfig.gapMs = v * 1000;
+for (var gpi = 0; gpi < marGapPresetBtns.length; gpi++) {
+marGapPresetBtns[gpi].className = (parseInt(marGapPresetBtns[gpi].getAttribute('data-mgpreset'), 10) === v) ? 'preset-btn w4 is-active' : 'preset-btn w4';
+}
+$('marGapVal').innerHTML = v === 0 ? 'Sin silencio' : (v + (v === 1 ? ' segundo' : ' segundos'));
+}
+marGapSlider.oninput = applyMarGap;
+marGapSlider.onchange = applyMarGap;
+var marGapPresetBtns = [];
+var mgAll = $('marathonSetup').getElementsByTagName('button');
+for (var mgi = 0; mgi < mgAll.length; mgi++) {
+if (mgAll[mgi].getAttribute('data-mgpreset') !== null) { marGapPresetBtns.push(mgAll[mgi]); }
+}
+for (var mgj = 0; mgj < marGapPresetBtns.length; mgj++) {
+(function (btn) {
+btn.onclick = function () { marGapSlider.value = btn.getAttribute('data-mgpreset'); applyMarGap(); };
+})(marGapPresetBtns[mgj]);
+}
+function applyMarGapRandom() {
+var b = $('marGapRandomBtn');
+b.className = marConfig.gapRandom ? 'card is-active' : 'card';
+b.innerHTML = '🎲 Silencio aleatorio<small>' + (marConfig.gapRandom ? 'Activado · cada silencio dura entre 0 y el valor elegido' : 'Desactivado · el silencio es siempre el valor elegido') + '</small>';
+}
+$('marGapRandomBtn').onclick = function () { marConfig.gapRandom = !marConfig.gapRandom; applyMarGapRandom(); };
+applyMarGap();
+function applyMarExtra() {
+var v = parseInt(marExtraSlider.value, 10);
+if (isNaN(v) || v < 0) { v = 3; }
+marConfig.extraCount = v;
+$('marExtraVal').innerHTML = v === 0 ? 'Sin retos sorpresa' : (v + (v === 1 ? ' reto sorpresa' : ' retos sorpresa'));
+}
+marExtraSlider.oninput = applyMarExtra;
+marExtraSlider.onchange = applyMarExtra;
+
 var FREQ_POOL = [50, 60, 70, 80];
 var DIFF_POOL = ['easy', 'normal', 'hard', 'extreme'];
 var DIFF_LABELS = { easy: '🟢 Fácil', normal: '🟡 Normal', hard: '🔴 Difícil', extreme: '🟣 Extremo' };
@@ -5531,18 +6112,50 @@ running: false,
 paused: false,
 lap: 1,
 totalLaps: 2,
+baseSeq: ['test', 'sweep', 'interm', 'volsweep', 'breath', 'stair', 'random'],
 phaseSeq: ['test', 'sweep', 'interm', 'volsweep', 'breath', 'stair', 'random'],
 phaseIdx: 0,
+gapTimer: null,
+inGap: false,
+gapEndAt: 0,
+gapRemain: 0,
+chaosSaved: null,
+aiSaved: null,
 log: [], // registro de lo ocurrido en cada fase, para el resumen
 phaseTimer: null,
 volPct: 100,
 
 phaseLabels: {
 test: '🎵 TEST NORMAL', sweep: '🌊 50 → 80 → 50', interm: '🔁 INTERMITENTE',
-volsweep: '🔊 VOLUMEN PROGRESIVO', breath: '🌬️ RESPIRACIÓN', stair: '🪜 ESCALERA', random: '🎲 RANDOM'
+volsweep: '🔊 VOLUMEN PROGRESIVO', breath: '🌬️ RESPIRACIÓN', stair: '🪜 ESCALERA', random: '🎲 RANDOM',
+chaos: '🌪️ CAOS CRECIENTE', ai: '🤖 IA AL MANDO'
 },
 
 savedRndSelected: null,
+
+/* Etiqueta de una fase (incluye los retos sorpresa 'nw:clave'). */
+labelOf: function (phase) {
+if (phase.indexOf('nw:') === 0) {
+var d = NW.defs[phase.substring(3)];
+return d.icon + ' ' + d.name.toUpperCase();
+}
+return this.phaseLabels[phase];
+},
+
+/* Secuencia de una vuelta: fases base + retos sorpresa al azar (sin repetir). */
+buildSeq: function () {
+var seq = this.baseSeq.slice();
+var keys = [];
+for (var k in NW.defs) { if (NW.defs.hasOwnProperty(k)) { keys.push(k); } }
+keys.push('@chaos'); keys.push('@ai');
+for (var i = keys.length - 1; i > 0; i--) {
+var j = Math.floor(Math.random() * (i + 1));
+var tmp = keys[i]; keys[i] = keys[j]; keys[j] = tmp;
+}
+var n = Math.min(marConfig.extraCount, keys.length);
+for (var q = 0; q < n; q++) { seq.push(keys[q].charAt(0) === '@' ? keys[q].substring(1) : 'nw:' + keys[q]); }
+this.phaseSeq = seq;
+},
 
 start: function () {
 if (this.running) { return; }
@@ -5552,6 +6165,8 @@ this.paused = false;
 this.lap = 1;
 this.totalLaps = marConfig.laps;
 this.phaseIdx = 0;
+this.inGap = false;
+this.buildSeq();
 this.log = [];
 this.volPct = marConfig.volPct;
 // Guarda la selección de frecuencias del usuario en la pestaña Random,
@@ -5560,7 +6175,7 @@ this.savedRndSelected = {};
 for (var k in RandomTest.selected) {
 if (RandomTest.selected.hasOwnProperty(k)) { this.savedRndSelected[k] = RandomTest.selected[k]; }
 }
-marSession = { id: 'mar' + new Date().getTime(), label: '⏱️ Maratón · ' + this.totalLaps + ' vueltas · ' + this.volPct + '%' };
+marSession = { id: 'mar' + new Date().getTime(), label: '⏱️ Maratón · ' + this.totalLaps + ' vueltas · ' + this.volPct + '%' + (marConfig.extraCount ? ' · +' + marConfig.extraCount + ' sorpresa' : '') };
 marTimer.reset();
 marTimer.start();
 $('marLapLabel').innerHTML = 'Vuelta ' + this.lap + ' / ' + this.totalLaps;
@@ -5579,9 +6194,40 @@ if (this.lap > this.totalLaps) {
 this.finish();
 return;
 }
+this.buildSeq();
 $('marLapLabel').innerHTML = 'Vuelta ' + this.lap + ' / ' + this.totalLaps;
 }
-this.runPhase();
+this.gapThen();
+},
+
+/* Silencio entre retos: pantalla de descanso con cuenta atrás y luego siguiente fase. */
+clearGapTimer: function () {
+if (this.gapTimer) { clearTimeout(this.gapTimer); this.gapTimer = null; }
+},
+
+gapThen: function (remainMs) {
+var self = this;
+var g = marConfig.gapMs;
+if (typeof remainMs === 'number') {
+g = remainMs; // reanudando un silencio pausado: solo lo que faltaba
+} else if (marConfig.gapRandom) {
+g = Math.round(Math.random() * (marConfig.gapMs / 1000)) * 1000;
+}
+if (g <= 0) { this.inGap = false; this.runPhase(); return; }
+this.inGap = true;
+this.gapEndAt = new Date().getTime() + g;
+this.clearGapTimer();
+Engine.stop(false);
+$('marPhaseLabel').innerHTML = '🔇 SILENCIO';
+$('marPhaseState').innerHTML = 'Descanso';
+$('marPhaseDetail').innerHTML = 'Siguiente: ' + this.labelOf(this.phaseSeq[this.phaseIdx]);
+$('marPhaseDot').style.left = '0%';
+startMarPhaseCountdown(new Date().getTime() + g);
+this.gapTimer = setTimeout(function () {
+self.gapTimer = null;
+if (!self.running || self.paused) { return; }
+self.runPhase();
+}, g);
 },
 
 clearPhaseTimer: function () {
@@ -5592,7 +6238,9 @@ stopMarPhaseCountdown();
 runPhase: function () {
 if (!this.running || this.paused) { return; }
 var phase = this.phaseSeq[this.phaseIdx];
-$('marPhaseLabel').innerHTML = this.phaseLabels[phase];
+this.inGap = false;
+this.clearGapTimer();
+$('marPhaseLabel').innerHTML = this.labelOf(phase);
 $('marPhaseDot').style.left = '0%';
 var self = this;
 
@@ -5724,6 +6372,75 @@ startMarPhaseCountdownIndefinite();
 return;
 }
 
+if (phase === 'chaos') {
+var cdiff = pickRandom(DIFF_POOL);
+if (!this.chaosSaved) { this.chaosSaved = { t: ChaosTest.onTick, s: ChaosTest.onState, e: ChaosTest.onEnd, diff: ChaosTest.diff, dur: ChaosTest.durationMs }; }
+ChaosTest.reset();
+ChaosTest.diff = cdiff;
+ChaosTest.durationMs = marConfig.retoDurMs + 300; // la Maratón lo corta; el nivel de caos sube a lo largo del reto
+ChaosTest.onTick = function (msLeft, inten) { $('marPhaseDot').style.left = Math.round(inten * 100) + '%'; };
+ChaosTest.onState = function (st, inten) { $('marPhaseState').innerHTML = (st === 'silence') ? '🔇 silencio' : '🌪️ ' + Math.round(inten * 100) + '%'; };
+ChaosTest.onEnd = function () {};
+App.mode = 'chaos';
+App.current = ChaosTest;
+var cOk = ChaosTest.start();
+if (!cOk) { $('marPhaseState').innerHTML = '⚠️ Sin audio'; }
+$('marPhaseDetail').innerHTML = 'Caos creciente · ' + DIFF_LABELS[cdiff];
+this.log.push({ phase: 'chaos', text: '🌪️ Caos creciente · ' + DIFF_LABELS[cdiff] + ' · ' + fmtSecShort(marConfig.retoDurMs) });
+this.runTimedPhase(marConfig.retoDurMs, function () { marXCleanup(); Engine.setVolume(self.volPct / 100); self.nextPhase(); });
+return;
+}
+
+if (phase === 'ai') {
+var adiff = pickRandom(DIFF_POOL);
+var afreq = pickRandom(FREQ_POOL);
+if (!this.aiSaved) { this.aiSaved = { t: AiDirectorTest.onTick, s: AiDirectorTest.onState, f: AiDirectorTest.onFreq, e: AiDirectorTest.onEnd, diff: AiDirectorTest.diff, dur: AiDirectorTest.durationMs, maxPct: AiDirectorTest.maxPct, minPct: AiDirectorTest.minPct, freq: AiDirectorTest.freq }; }
+AiDirectorTest.stop();
+AiDirectorTest.diff = adiff;
+AiDirectorTest.freq = afreq;
+AiDirectorTest.durationMs = marConfig.retoDurMs + 60000; // nunca se auto-finaliza: la Maratón lo corta
+AiDirectorTest.maxPct = this.volPct;
+AiDirectorTest.minPct = Math.max(20, Math.round(this.volPct * 0.4));
+AiDirectorTest.onTick = function () {};
+AiDirectorTest.onState = function (st, pct) {
+$('marPhaseState').innerHTML = (st === 'pause') ? '⏸ pausa' : Math.round(pct) + '%';
+var span = Math.max(1, AiDirectorTest.maxPct - AiDirectorTest.minPct);
+$('marPhaseDot').style.left = Math.max(0, Math.min(100, Math.round((pct - AiDirectorTest.minPct) / span * 100))) + '%';
+};
+AiDirectorTest.onFreq = function (hz) { $('marPhaseDetail').innerHTML = '🤖 IA · ' + Math.round(hz) + ' Hz · ' + DIFF_LABELS[adiff]; };
+AiDirectorTest.onEnd = function () {};
+App.mode = 'ai';
+App.current = AiDirectorTest;
+var aOk = AiDirectorTest.start();
+if (aOk === false) { $('marPhaseState').innerHTML = '⚠️ Sin audio'; }
+$('marPhaseDetail').innerHTML = '🤖 IA · ' + (AiDirectorTest.autoFreq ? 'frecuencia automática' : afreq + ' Hz') + ' · ' + DIFF_LABELS[adiff];
+this.log.push({ phase: 'ai', text: '🤖 IA al mando · ' + DIFF_LABELS[adiff] + ' · ' + fmtSecShort(marConfig.retoDurMs) });
+this.runTimedPhase(marConfig.retoDurMs, function () { marXCleanup(); Engine.setVolume(self.volPct / 100); self.nextPhase(); });
+return;
+}
+
+if (phase.indexOf('nw:') === 0) {
+var nkey = phase.substring(3);
+var ndiff = pickRandom(DIFF_POOL);
+if (!NW.mActive) { NW.saved = { dur: NW.durationMs, diff: NW.diff, key: NW.key }; }
+NW.mActive = true;
+NW.key = nkey; NW.diff = ndiff;
+NW.durationMs = marConfig.retoDurMs + 60000; // nunca se auto-finaliza: la Maratón lo corta
+NW.levelMs = marConfig.retoDurMs;
+NW.mVol = this.volPct / 100;
+NW.session = null; // no guarda tiempo propio (lo gestiona la Maratón)
+NW.hook = function (h) { $('marPhaseState').innerHTML = h; };
+NW.hookDot = function (lv) { $('marPhaseDot').style.left = Math.round(lv * 100) + '%'; };
+App.mode = 'nw';
+App.current = NW;
+var nwOk = NW.start();
+if (!nwOk) { $('marPhaseState').innerHTML = '⚠️ Sin audio'; }
+$('marPhaseDetail').innerHTML = NW.defs[nkey].name + ' · ' + NW.diffLabels[ndiff];
+this.log.push({ phase: 'nw', text: NW.defs[nkey].icon + ' ' + NW.defs[nkey].name + ' · ' + NW.diffLabels[ndiff] + ' · ' + fmtSecShort(marConfig.retoDurMs) });
+this.runTimedPhase(marConfig.retoDurMs, function () { marNWCleanup(); Engine.setVolume(self.volPct / 100); self.nextPhase(); });
+return;
+}
+
 if (phase === 'random') {
 RandomTest.selected = { 50: true, 60: true, 70: true, 80: true };
 RandomTest.onMin = 2000; RandomTest.onMax = 8000;
@@ -5756,9 +6473,11 @@ onEnd();
 pause: function () {
 if (!this.running || this.paused) { return; }
 this.paused = true;
+if (this.inGap) { this.gapRemain = Math.max(0, this.gapEndAt - new Date().getTime()); }
 this.clearPhaseTimer();
+this.clearGapTimer();
 Engine.stop(false);
-if (App.current && App.current.stop) { App.current.stop(); }
+if (!this.inGap && App.current && App.current.stop) { App.current.stop(); }
 marTimer.pause();
 $('marPauseBtn').style.display = 'none';
 $('marResumeBtn').style.display = 'inline-block';
@@ -5770,7 +6489,7 @@ this.paused = false;
 marTimer.start();
 $('marPauseBtn').style.display = 'inline-block';
 $('marResumeBtn').style.display = 'none';
-this.runPhase();
+if (this.inGap) { this.gapThen(this.gapRemain || 0); } else { this.runPhase(); }
 },
 
 stop: function () {
@@ -5778,8 +6497,12 @@ if (!this.running) { return; }
 this.running = false;
 this.paused = false;
 this.clearPhaseTimer();
+this.clearGapTimer();
+this.inGap = false;
 Engine.stop(true);
 if (App.current && App.current.stop) { App.current.stop(); }
+marNWCleanup();
+marXCleanup();
 marTimer.pause();
 restoreIndividualCallbacks();
 },
@@ -5787,7 +6510,11 @@ restoreIndividualCallbacks();
 finish: function () {
 this.running = false;
 this.clearPhaseTimer();
+this.clearGapTimer();
+this.inGap = false;
 Engine.stop(false);
+marNWCleanup();
+marXCleanup();
 marTimer.pause();
 if (marSession) { Store.save('marathon', marSession.id, marSession.label, marTimer.value()); }
 renderMarathonSummary();
@@ -5795,6 +6522,34 @@ showMarathonScreen('summary');
 restoreIndividualCallbacks();
 }
 };
+
+/* Deja el reto NW (Latido, Sirena…) como estaba antes de que la Maratón lo usara. */
+function marNWCleanup() {
+if (!NW.mActive) { return; }
+if (NW.running) { NW.running = false; NW.clear(); Engine.stop(false); }
+NW.mActive = false; NW.hook = null; NW.hookDot = null; NW.mVol = 0; NW.levelMs = 0; NW.session = null;
+if (NW.saved) { NW.durationMs = NW.saved.dur; NW.diff = NW.saved.diff; NW.key = NW.saved.key; NW.saved = null; }
+}
+
+/* Devuelve Caos creciente e IA al mando a su estado normal tras usarlos la Maratón. */
+function marXCleanup() {
+if (Marathon.chaosSaved) {
+var cs = Marathon.chaosSaved;
+Marathon.chaosSaved = null;
+ChaosTest.stop();
+ChaosTest.reset();
+ChaosTest.onTick = cs.t; ChaosTest.onState = cs.s; ChaosTest.onEnd = cs.e;
+ChaosTest.diff = cs.diff; ChaosTest.durationMs = cs.dur;
+}
+if (Marathon.aiSaved) {
+var as = Marathon.aiSaved;
+Marathon.aiSaved = null;
+AiDirectorTest.stop();
+AiDirectorTest.onTick = as.t; AiDirectorTest.onState = as.s; AiDirectorTest.onFreq = as.f; AiDirectorTest.onEnd = as.e;
+AiDirectorTest.diff = as.diff; AiDirectorTest.durationMs = as.dur;
+AiDirectorTest.maxPct = as.maxPct; AiDirectorTest.minPct = as.minPct; AiDirectorTest.freq = as.freq;
+}
+}
 
 /* Los callbacks onFrame/onStep/onPhase de cada prueba son globales
 (una única propiedad en el objeto de la prueba). La Maratón los
@@ -5896,9 +6651,11 @@ VolSweepTest.stop();
 BreathTest.stop();
 StairTest.stop();
 RandomTest.stop();
+AiDirectorTest.stop();
 MemoryTest.stop();
 ChaosTest.stop();
 NoReactionTest.stop();
+stopNW(false);
 }
 
 function showMarathonScreen(which) {
@@ -5908,19 +6665,20 @@ $('marathonSummary').style.display = (which === 'summary') ? 'block' : 'none';
 }
 
 function renderMarathonSummary() {
-var byPhase = { test: [], sweep: [], interm: [], volsweep: [], breath: [], stair: [], random: [] };
+var byPhase = { test: [], sweep: [], interm: [], volsweep: [], breath: [], stair: [], random: [], chaos: [], ai: [], nw: [] };
 for (var i = 0; i < Marathon.log.length; i++) {
 byPhase[Marathon.log[i].phase].push(Marathon.log[i].text);
 }
 var titles = {
 test: '🎵 Test Normal', sweep: '🌊 Reto 50 → 80 → 50', interm: '🔁 Intermitente',
-volsweep: '🔊 Volumen Progresivo', breath: '🌬️ Respiración', stair: '🪜 Escalera', random: '🎲 Random'
+volsweep: '🔊 Volumen Progresivo', breath: '🌬️ Respiración', stair: '🪜 Escalera', random: '🎲 Random', chaos: '🌪️ Caos creciente', ai: '🤖 IA al mando', nw: '⚡ Retos sorpresa'
 };
-var order = ['test', 'sweep', 'interm', 'volsweep', 'breath', 'stair', 'random'];
+var order = ['test', 'sweep', 'interm', 'volsweep', 'breath', 'stair', 'random', 'chaos', 'ai', 'nw'];
 var html = '';
 html += '<li>⏱️ Tiempo total<span>' + fmt(marTimer.value()) + '</span><em class="clearfix"></em></li>';
 html += '<li>🔊 Volumen<span>' + Marathon.volPct + '%</span><em class="clearfix"></em></li>';
 html += '<li>🔄 Vueltas<span>' + Marathon.totalLaps + '</span><em class="clearfix"></em></li>';
+html += '<li>🔇 Silencio entre retos<span>' + (marConfig.gapMs === 0 ? 'Sin silencio' : (marConfig.gapRandom ? '0–' : '') + (marConfig.gapMs / 1000) + 's') + '</span><em class="clearfix"></em></li>';
 for (var j = 0; j < order.length; j++) {
 var key = order[j];
 if (!byPhase[key].length) { continue; }
@@ -5933,7 +6691,7 @@ $('marSummaryList').innerHTML = html;
 }
 
 $('marStartBtn').onclick = function () {
-applyMarVol(); applyMarLaps(); applyMarTestDur(); applyMarRetoDur(); applyMarRndDur(); applyMarStairSteps();
+applyMarVol(); applyMarLaps(); applyMarTestDur(); applyMarRetoDur(); applyMarRndDur(); applyMarStairSteps(); applyMarGap(); applyMarExtra();
 Marathon.start();
 };
 $('marPauseBtn').onclick = function () { Marathon.pause(); };
